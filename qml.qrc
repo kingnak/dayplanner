@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>qml/DayItem.qml</file>
+        <file>qml/styles/ShiftComboStyle.qml</file>
+    </qresource>
+</RCC>
