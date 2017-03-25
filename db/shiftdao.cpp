@@ -49,7 +49,7 @@ QString ShiftDAO::keyData(const QString &field)
 
 QString ShiftDAO::tableName()
 {
-    return "Dienst";
+    return "Shift";
 }
 
 

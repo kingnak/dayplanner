@@ -1,20 +1,17 @@
-import QtQuick 2.0
+import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.1
 //import QtQuick.Controls 2.0 as C2
 import "styles"
 
 Rectangle {
-    visible: styleData.visibleMonth
-    enabled: styleData.visibleMonth
-
     property var _data
+    id: root
 
     ColumnLayout {
         anchors.fill: parent
 
         RowLayout {
-            layoutDirection: Qt.LeftToRight
             Layout.fillWidth: true
             height: Math.max(dateText.height, shiftCombo.height)
 
@@ -40,10 +37,23 @@ Rectangle {
             }
         }
 
+        MealList {
+            id: breakfast
+            Layout.fillWidth: true
+            _data: root._data.breakfast
+        }
+
+        MealList {
+            id: lunch
+            Layout.fillWidth: true
+            _data: mealList
+        }
+
+
         Rectangle {
             Layout.fillHeight: true
             Layout.fillWidth: true
-            color: "transparent"
+            color: "green"
         }
     }
 }

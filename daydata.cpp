@@ -5,7 +5,7 @@ DayData::DayData(const QDate &d, DAOFacade *facade, QObject *parent)
     m_date(d),
     m_shift(d, facade)
 {
-
+    m_breakfast = MealList::loadForDateAndType(this, d, 1);
 }
 
 int DayData::shiftIndex() const
@@ -28,4 +28,9 @@ void DayData::setShiftIndex(int i)
             }
         }
     }
+}
+
+MealList *DayData::breakfast() const
+{
+    return m_breakfast;
 }

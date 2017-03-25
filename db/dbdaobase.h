@@ -13,10 +13,10 @@ public:
     DbDAOBase(DataBase *db, DAOBase::State s = DAOBase::New);
 
 protected:
-    //template<typename T>
-    //T data(const QString &name) const;
     template<typename T>
-    T data(const QString &name, const T &def = T()) const;
+    T data(const QString &name) const;
+    template<typename T>
+    T data(const QString &name, const T &def) const;
 
     template<typename T>
     void setData(const QString &name, const T &t);
@@ -37,10 +37,14 @@ protected:
     virtual QString updateQuery();
     virtual QString deleteQuery();
 
+    virtual qint32 idValue() const;
+    virtual void updateIdValue(qint32 id);
     virtual QStringList keyFields();
     virtual QString keyData(const QString &field);
     virtual QStringList orderFields();
     virtual QString tableName();
+
+    virtual bool isAutoId() const;
 
 private:
     QString keyCondition();
@@ -49,7 +53,7 @@ protected:
     DataBase *m_db;
     QSqlRecord m_record;
 };
-/*
+
 template <typename T>
 T DbDAOBase::data(const QString &name) const
 {
@@ -58,9 +62,9 @@ T DbDAOBase::data(const QString &name) const
     }
     return qvariant_cast<T> (m_record.value(name));
 }
-*/
+
 template<typename T>
-T DbDAOBase::data(const QString &name, const T &def /* = T() */) const
+T DbDAOBase::data(const QString &name, const T &def) const
 {
     if (m_record.isEmpty()) {
         return def;

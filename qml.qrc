@@ -3,5 +3,7 @@
         <file>main.qml</file>
         <file>qml/DayItem.qml</file>
         <file>qml/styles/ShiftComboStyle.qml</file>
+        <file>qml/MealList.qml</file>
+        <file>qml/styles/PlaceholderTextEditStyle.qml</file>
     </qresource>
 </RCC>
