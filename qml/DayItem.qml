@@ -43,11 +43,13 @@ Rectangle {
             _data: root._data.breakfast
         }
 
+        /*
         MealList {
             id: lunch
             Layout.fillWidth: true
             _data: mealList
         }
+        */
 
 
         Rectangle {

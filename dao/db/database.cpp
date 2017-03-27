@@ -61,7 +61,7 @@ void DataBase::createConnection()
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
 
 //#define CLEANDB
-//#define LOCALFILE "D:\\priv\\proj\\DayPlanner\\DayPlanner\\db.db"
+#define LOCALFILE "D:\\priv\\proj\\DayPlanner\\DayPlanner\\db.db"
 #ifdef LOCALFILE
 #ifdef CLEANDB
     QFile::remove(LOCALFILE);

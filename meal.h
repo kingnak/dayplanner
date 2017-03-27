@@ -2,14 +2,13 @@
 #define MEAL_H
 
 #include <QObject>
-
-class MealDAO;
+#include "dao/mealdao.h"
 
 class Meal : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(int type READ type)
+    Q_PROPERTY(Type type READ type)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
     Q_PROPERTY(qreal calcFat READ calcFat NOTIFY fatChanged)
     Q_PROPERTY(qint32 fat READ fat WRITE setFat NOTIFY fatChanged)
@@ -19,7 +18,16 @@ public:
     explicit Meal(MealDAO *meal, QObject *parent = 0);
     ~Meal();
 
-    int type() const;
+    enum Type {
+        Breakfast = 1,
+        Lunch,
+        Dinner,
+        Snacks,
+        Other
+    };
+    Q_ENUM(Type)
+
+    Type type() const;
 
     QString name() const;
     void setName(const QString &n);

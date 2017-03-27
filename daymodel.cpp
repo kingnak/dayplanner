@@ -4,9 +4,16 @@
 #include <QDebug>
 #include <algorithm>
 #include "daydata.h"
+#include "dao/db/dbdaofacade.h"
 
 DayModel::DayModel()
 {
+    m_facade = new DbDAOFacade;
+}
+
+DayModel::~DayModel()
+{
+    delete m_facade;
 }
 
 QObject *DayModel::dataForDate(const QDate &date)
@@ -36,7 +43,7 @@ QObject *DayModel::dataForDate(const QDate &date)
 
 QObject *DayModel::loadDay(const QDate &date)
 {
-    DayData *d = new DayData(date, &DAOFacade::instance(), this);
+    DayData *d = new DayData(date, m_facade, this);
     return d;
 }
 

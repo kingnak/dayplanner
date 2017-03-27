@@ -1,5 +1,5 @@
 #include "meal.h"
-#include "db/mealdao.h"
+#include "dao/mealdao.h"
 
 Meal::Meal(QObject *parent)
     : QObject(parent),
@@ -12,7 +12,6 @@ Meal::Meal(MealDAO *meal, QObject *parent)
     : QObject(parent),
       m_meal(meal)
 {
-    if (m_meal) m_meal->load();
 }
 
 Meal::~Meal()
@@ -20,10 +19,10 @@ Meal::~Meal()
     delete m_meal;
 }
 
-int Meal::type() const
+Meal::Type Meal::type() const
 {
-    if (m_meal) return m_meal->type();
-    return 0;
+    if (m_meal) return static_cast<Type> (m_meal->type());
+    return Meal::Type::Other;
 }
 
 QString Meal::name() const

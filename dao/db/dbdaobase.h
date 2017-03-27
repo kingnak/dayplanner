@@ -1,16 +1,16 @@
 #ifndef DBDAOBASE_H
 #define DBDAOBASE_H
 
-#include "daobase.h"
+#include "../daobase.h"
 #include <QSqlRecord>
 #include <QSqlField>
 
 class DataBase;
 
-class DbDAOBase : public DAOBase
+class DbDAOBase : public virtual DAOBase
 {
 public:
-    DbDAOBase(DataBase *db, DAOBase::State s = DAOBase::New);
+    DbDAOBase(DataBase *db, qint32 id = -1, DAOBase::State s = DAOBase::New);
 
 protected:
     template<typename T>
@@ -26,19 +26,20 @@ protected:
     static QString escapeField(const QString &field);
     static QString escapeValue(QString value);
 
+    // DAOBase implementation
     virtual bool doReset();
     virtual bool doLoad();
     virtual bool doInsert();
     virtual bool doUpdate();
     virtual bool doRemove();
 
+    // Should be overridden by subclass if using custom queries
     virtual QString loadQuery();
     virtual QString insertQuery();
     virtual QString updateQuery();
     virtual QString deleteQuery();
 
-    virtual qint32 idValue() const;
-    virtual void updateIdValue(qint32 id);
+    // Must be overriden by subclass for default queries
     virtual QStringList keyFields();
     virtual QString keyData(const QString &field);
     virtual QStringList orderFields();
@@ -48,6 +49,7 @@ protected:
 
 private:
     QString keyCondition();
+    qint32 m_autoId;
 
 protected:
     DataBase *m_db;
@@ -81,5 +83,13 @@ void DbDAOBase::setData(const QString &name, const T &t)
     m_record.setValue(name, QVariant::fromValue<T>(t));
 }
 
+// Helps preventing MSVC C4250 warning (dominant inheritance)
+#define DAO_USE(cls) \
+protected: \
+    virtual bool doReset() { return cls::doReset(); } \
+    virtual bool doLoad() { return cls::doLoad(); } \
+    virtual bool doInsert() { return cls::doInsert(); } \
+    virtual bool doUpdate() { return cls::doUpdate(); } \
+    virtual bool doRemove() { return cls::doRemove(); }
 
 #endif // DBDAOBASE_H

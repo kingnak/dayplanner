@@ -6,12 +6,14 @@
 #include <QDate>
 #include <QString>
 
+class DAOFacade;
+
 class DayModel : public QObject
 {
     Q_OBJECT
 public:
     explicit DayModel();
-
+    ~DayModel();
 
     Q_INVOKABLE QObject *dataForDate(const QDate &date);
     Q_INVOKABLE void clearCache(QDate date);
@@ -26,6 +28,8 @@ private:
 #else
     QMap<QString, QObject*> m_cache;
 #endif
+
+    DAOFacade *m_facade;
 };
 
 #endif // DAYMODEL_H

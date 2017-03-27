@@ -22,25 +22,32 @@ ListView {
     Component {
         id: mealItem
         RowLayout {
+            /*
+            id: row
+            property bool hovered: index == currentIndex
+
             MouseArea {
                 anchors.fill: parent
-                onEntered: currentIndex = index
+                //onEntered: row.hovered = index == currentIndex
+                //onExited: row.hovered = containsMouse
+                //onEntered: currentIndex = index
+                //onExited: if (currentIndex == index) currentIndex = -1
                 hoverEnabled: true
             }
-
+            */
             width: parent.width
             TextField {
                 Layout.fillWidth: true
                 text: name
                 style: PlaceholderTextEditStyle {
-                    showHovered: currentIndex = index
+                    showHovered: true//row.hovered
                 }
             }
             TextField {
                 text: calcFat
                 placeholderText: "Fett"
                 style: PlaceholderTextEditStyle {
-                    showHovered: currentIndex == index
+                    showHovered: true//row.hovered
                 }
             }
             //Text { text: calcProtein + "EW" }
@@ -77,7 +84,7 @@ ListView {
             color: {
                 var c = "transparent";
                 switch (_data.type) {
-                case 1:
+                case Meal.Breakfast:
                     c = "grey";
                 }
                 c;
@@ -88,7 +95,7 @@ ListView {
                 text: {
                     var t = "";
                     switch (_data.type) {
-                    case 1:
+                    case Meal.Breakfast:
                         t = "Frühstück";
                     }
                     t;

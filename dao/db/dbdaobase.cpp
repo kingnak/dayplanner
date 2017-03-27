@@ -14,9 +14,10 @@
     }\
     } while(false)
 
-DbDAOBase::DbDAOBase(DataBase *db, State s)
+DbDAOBase::DbDAOBase(DataBase *db, qint32 id, State s)
     : DAOBase(s),
-      m_db(db)
+      m_db(db),
+      m_autoId(id)
 {
 
 }
@@ -55,7 +56,7 @@ bool DbDAOBase::doInsert()
     if (ok && isAutoId()) {
         QSqlQuery q = m_db->executeQuery("SELECT last_insert_rowid()");
         if (q.next()) {
-            updateIdValue(q.value(0).toInt());
+            m_autoId = q.value(0).toInt();
         } else {
             Q_ASSERT(false);
             return false;
@@ -149,18 +150,6 @@ QString DbDAOBase::deleteQuery()
     return q;
 }
 
-qint32 DbDAOBase::idValue() const
-{
-    VERIFY(false, "DbDAOBase", "Must override idValue if using default queries with auto id");
-    return -1;
-}
-
-void DbDAOBase::updateIdValue(qint32 id)
-{
-    VERIFY(false, "DbDAOBase", "Must override updateIdValue if using default queries with auto id");
-    Q_UNUSED(id)
-}
-
 QStringList DbDAOBase::keyFields()
 {
     if (isAutoId()) {
@@ -173,7 +162,7 @@ QStringList DbDAOBase::keyFields()
 QString DbDAOBase::keyData(const QString &field)
 {
     if (isAutoId()) {
-        return QString::number(idValue());
+        return QString::number(m_autoId);
     }
     return data<QString>(field);
 }

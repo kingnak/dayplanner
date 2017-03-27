@@ -16,14 +16,6 @@ bool DAOBase::save()
 
 bool DAOBase::load()
 {
-    /*
-    if (m_state == New) {
-        return doReset();
-    } else {
-        return doLoad();
-    }
-    */
-    // Try to really load
     if (doLoad()) {
         m_state = Existing;
         return true;

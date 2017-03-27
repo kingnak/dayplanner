@@ -5,8 +5,9 @@
 #include <QString>
 #include <QDate>
 
-#include "db/dao.h"
-#include "meallist.h"
+class ShiftDAO;
+class MealList;
+class DAOFacade;
 
 class DayData : public QObject
 {
@@ -18,6 +19,7 @@ class DayData : public QObject
 
 public:
     explicit DayData(const QDate &d, DAOFacade *facade, QObject *parent = 0);
+    ~DayData();
 
     QDate date() const { return m_date; }
 
@@ -32,7 +34,7 @@ signals:
 
 private:
     QDate m_date;
-    ShiftDAO m_shift;
+    ShiftDAO *m_shift;
     MealList *m_breakfast;
 };
 

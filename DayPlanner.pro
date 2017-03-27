@@ -4,18 +4,27 @@ QT += qml quick sql
 
 #DEFINES += CACHE_MONTH_DATA
 
+win32: {
+    INCLUDEPATH += "C:/Program Files (x86)/Visual Leak Detector/include"
+    LIBS += -L"C:/Program Files (x86)/Visual Leak Detector/lib/win64"
+}
+
 CONFIG += c++11
 
 SOURCES += main.cpp \
     daymodel.cpp \
     daydata.cpp \
-    db/shiftdao.cpp \
-    db/database.cpp \
-    db/daobase.cpp \
-    db/dbdaobase.cpp \
-    db/mealdao.cpp \
+    dao/shiftdao.cpp \
+    dao/db/database.cpp \
+    dao/daobase.cpp \
+    dao/db/dbdaobase.cpp \
+    dao/mealdao.cpp \
     meallist.cpp \
-    meal.cpp
+    meal.cpp \
+    dao/db/shiftdbdao.cpp \
+    dao/db/dbdaofacade.cpp \
+    dao/db/mealdbdao.cpp \
+    dayplannerqmlglobals.cpp
 
 RESOURCES += qml.qrc
 
@@ -35,11 +44,15 @@ include(deployment.pri)
 HEADERS += \
     daymodel.h \
     daydata.h \
-    db/shiftdao.h \
-    db/database.h \
-    db/dao.h \
-    db/daobase.h \
-    db/dbdaobase.h \
-    db/mealdao.h \
+    dao/shiftdao.h \
+    dao/db/database.h \
+    dao/dao.h \
+    dao/daobase.h \
+    dao/db/dbdaobase.h \
+    dao/mealdao.h \
     meallist.h \
-    meal.h
+    meal.h \
+    dao/db/shiftdbdao.h \
+    dao/db/dbdaofacade.h \
+    dao/db/mealdbdao.h \
+    dayplannerqmlglobals.h
