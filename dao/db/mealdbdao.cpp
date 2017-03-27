@@ -66,6 +66,36 @@ void MealDbDAO::setFat(qint32 f)
     setData("fat", f);
 }
 
+qint32 MealDbDAO::protein() const
+{
+    return data<qint32>("protein");
+}
+
+void MealDbDAO::setProtein(qint32 p)
+{
+    setData("protein", p);
+}
+
+qint32 MealDbDAO::carbs() const
+{
+    return data<qint32>("carbs");
+}
+
+void MealDbDAO::setCarbs(qint32 c)
+{
+    setData("carbs", c);
+}
+
+qint32 MealDbDAO::calories() const
+{
+    return data<qint32>("calories");
+}
+
+void MealDbDAO::setCalories(qint32 c)
+{
+    setData("calories", c);
+}
+
 QStringList MealDbDAO::orderFields()
 {
     return QStringList() << "sort";

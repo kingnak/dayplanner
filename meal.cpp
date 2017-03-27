@@ -21,48 +21,100 @@ Meal::~Meal()
 
 Meal::Type Meal::type() const
 {
-    if (m_meal) return static_cast<Type> (m_meal->type());
-    return Meal::Type::Other;
+    return static_cast<Type> (m_meal->type());
 }
 
 QString Meal::name() const
 {
-    if (m_meal) return m_meal->name();
-    return "";
+    return m_meal->name();
 }
 
 void Meal::setName(const QString &n)
 {
     if (n != name()) {
-        if (m_meal) {
-            m_meal->setName(n);
-            if (m_meal->save()) {
-                emit nameChanged(n);
-            }
+        m_meal->setName(n);
+        if (m_meal->save()) {
+            emit nameChanged(n);
         }
     }
 }
 
 qint32 Meal::fat() const
 {
-    if (m_meal) return m_meal->fat();
-    return 0;
+    return m_meal->fat();
 }
 
 void Meal::setFat(const qint32 f)
 {
     if (f != fat()) {
-        if (m_meal) {
-            m_meal->setFat(f);
-            if (m_meal->save()) {
-                emit fatChanged();
-            }
+        m_meal->setFat(f);
+        if (m_meal->save()) {
+            emit fatChanged();
+        }
+    }
+}
+
+qint32 Meal::protein() const
+{
+    return m_meal->protein();
+}
+
+void Meal::setProtein(const qint32 p)
+{
+    if (p != protein()) {
+        m_meal->setProtein(p);
+        if (m_meal->save()) {
+            emit proteinChanged();
+        }
+    }
+}
+
+qint32 Meal::carbs() const
+{
+    return m_meal->carbs();
+}
+
+void Meal::setCarbs(qint32 c)
+{
+    if (c != carbs()) {
+        m_meal->setCarbs(c);
+        if (m_meal->save()) {
+            emit carbsChanged();
+        }
+    }
+}
+
+qint32 Meal::calories() const
+{
+    return m_meal->calories();
+}
+
+void Meal::setCalories(qint32 c)
+{
+    if (c != calories()) {
+        m_meal->setCalories(c);
+        if (m_meal->save()) {
+            emit caloriesChanged();
         }
     }
 }
 
 qreal Meal::calcFat() const
 {
-    if (m_meal) return m_meal->calcFat();
-    return 0;
+    return m_meal->fat() * m_meal->factor();
+}
+
+qreal Meal::calcProtein() const
+{
+    return m_meal->protein() * m_meal->factor();
+}
+
+qreal Meal::calcCarbs() const
+{
+    return m_meal->carbs() * m_meal->factor();
+}
+
+qreal Meal::calcCalories() const
+{
+    return m_meal->calories() * m_meal->factor();
 }

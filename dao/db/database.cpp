@@ -90,7 +90,7 @@ void DataBase::createConnection()
         }
     }
 
-    query.exec("CREATE TABLE Meal (id INTEGER PRIMARY KEY, date DATE, type INT, name TEXT, factor REAL, fat INT, sort INT)");
+    query.exec("CREATE TABLE Meal (id INTEGER PRIMARY KEY, date DATE, type INT, name TEXT, factor REAL, fat INT, protein INT, carbs INT, calories INT, sort INT)");
     for (int i = 0; i < 3; ++i) {
         QString s = QString("INSERT INTO Meal (date, type, name, factor, fat, sort) VALUES ('%1',1,'Essen %2',1,%3,%2)")
                 .arg(QDate::currentDate().toString("yyyy-MM-dd"))

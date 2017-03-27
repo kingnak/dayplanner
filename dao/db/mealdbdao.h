@@ -24,8 +24,21 @@ public:
     qint32 fat() const;
     void setFat(qint32 f);
 
-    qreal calcFat() const;
+    qint32 protein() const;
+    void setProtein(qint32 p);
 
+    qint32 carbs() const;
+    void setCarbs(qint32 c);
+
+    qint32 calories() const;
+    void setCalories(qint32 c);
+
+    /*
+    qreal calcFat() const;
+    qreal calcProtein() const;
+    qreal calcCarbs() const;
+    qreal calcCalories() const;
+    */
     qint32 sort() const;
     void setSort(qint32 sort);
 

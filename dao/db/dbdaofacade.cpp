@@ -31,6 +31,7 @@ MealDAO *DbDAOFacade::createMeal(QDate d, qint32 type)
     MealDbDAO *m = new MealDbDAO(-1, &DataBase::instance());
     m->setDate(d);
     m->setType(type);
+    m->setFactor(1);
 
     QString query = QString("SELECT COUNT(*) FROM Meal WHERE date = '%1' AND type = %2")
             .arg(d.toString("yyyy-MM-dd"))

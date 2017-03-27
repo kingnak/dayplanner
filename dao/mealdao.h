@@ -22,7 +22,14 @@ public:
     virtual qint32 fat() const = 0;
     virtual void setFat(qint32 f) = 0;
 
-    qreal calcFat() const;
+    virtual qint32 protein() const = 0;
+    virtual void setProtein(qint32 p) = 0;
+
+    virtual qint32 carbs() const = 0;
+    virtual void setCarbs(qint32 c) = 0;
+
+    virtual qint32 calories() const = 0;
+    virtual void setCalories(qint32 c) = 0;
 };
 
 #endif // MEALDAO_H

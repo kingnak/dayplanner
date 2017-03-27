@@ -34,7 +34,8 @@ DISTFILES += \
     qml/DayItem.qml \
     qml/MealList.qml \
     qml/styles/ShiftComboStyle.qml \
-    qml/styles/PlaceholderTextEditStyle.qml
+    qml/styles/PlaceholderTextEditStyle.qml \
+    qml/PostfixTextField.qml
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

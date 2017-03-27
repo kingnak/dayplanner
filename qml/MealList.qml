@@ -5,6 +5,7 @@ import org.kingnak.dayplanner 1.0
 import "styles"
 
 ListView {
+    id: root
     clip: true
     implicitHeight: 100
 
@@ -21,38 +22,72 @@ ListView {
 
     Component {
         id: mealItem
-        RowLayout {
-            /*
-            id: row
-            property bool hovered: index == currentIndex
+
+        Rectangle {
+            width: parent.width
+            height: row.height
 
             MouseArea {
                 anchors.fill: parent
-                //onEntered: row.hovered = index == currentIndex
-                //onExited: row.hovered = containsMouse
-                //onEntered: currentIndex = index
-                //onExited: if (currentIndex == index) currentIndex = -1
                 hoverEnabled: true
+                id: mouseArea
             }
-            */
-            width: parent.width
-            TextField {
-                Layout.fillWidth: true
-                text: name
-                style: PlaceholderTextEditStyle {
-                    showHovered: true//row.hovered
+
+            RowLayout {
+                id: row
+                property bool hovered: mouseArea.containsMouse || txtName.hovered || txtFat.hovered || txtProtein.hovered || txtCarbs.hovered || txtCalories.hovered
+                width: parent.width
+
+                TextField {
+                    id: txtName
+                    Layout.fillWidth: true
+                    text: name
+                    style: PlaceholderTextEditStyle {
+                        showHovered: row.hovered
+                    }
                 }
-            }
-            TextField {
-                text: calcFat
-                placeholderText: "Fett"
-                style: PlaceholderTextEditStyle {
-                    showHovered: true//row.hovered
+
+                TextField {
+                    id: txtFat
+                    text: calcFat
+                    style: PlaceholderTextEditStyle {
+                        showHovered: row.hovered
+                        postfix: "F"
+                    }
+                    onEditingFinished: fat = text
                 }
+
+                TextField {
+                    id: txtProtein
+                    text: calcProtein
+                    style: PlaceholderTextEditStyle {
+                        postfix: "EW"
+                        showHovered: row.hovered
+                    }
+                    onEditingFinished: protein = text
+                }
+
+                TextField {
+                    id: txtCarbs
+                    text: calcCarbs
+                    style: PlaceholderTextEditStyle {
+                        postfix: "KH"
+                        showHovered: row.hovered
+                    }
+                    onEditingFinished: carbs = text
+                }
+
+                TextField {
+                    id: txtCalories
+                    text: calcCalories
+                    style: PlaceholderTextEditStyle {
+                        postfix: "kcal"
+                        showHovered: row.hovered
+                    }
+                    onEditingFinished: calories = text
+                }
+
             }
-            //Text { text: calcProtein + "EW" }
-            //Text { text: calcCarb + "KH" }
-            //Text { text: calcCalorie + "kcal" }
         }
     }
 
@@ -78,6 +113,7 @@ ListView {
     Component {
         id: headerBanner
         Rectangle {
+            z: 2
             width: parent.width
             height: txt.height
 
