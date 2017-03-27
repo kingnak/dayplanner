@@ -1,7 +1,7 @@
 #include "mealdbdao.h"
 
 MealDbDAO::MealDbDAO(qint32 id, DataBase *db)
-    : DbDAOBase(db, id)
+    : DbAutoIdDAOBase(db, id)
 {
     load();
 }
@@ -76,7 +76,3 @@ QString MealDbDAO::tableName()
     return "Meal";
 }
 
-bool MealDbDAO::isAutoId() const
-{
-    return true;
-}

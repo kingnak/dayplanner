@@ -14,10 +14,9 @@
     }\
     } while(false)
 
-DbDAOBase::DbDAOBase(DataBase *db, qint32 id, State s)
+DbDAOBase::DbDAOBase(DataBase *db, State s)
     : DAOBase(s),
-      m_db(db),
-      m_autoId(id)
+      m_db(db)
 {
 
 }
@@ -52,17 +51,7 @@ bool DbDAOBase::doLoad()
 bool DbDAOBase::doInsert()
 {
     Q_ASSERT(m_state == New);
-    bool ok = m_db->executeNonQuery(insertQuery());
-    if (ok && isAutoId()) {
-        QSqlQuery q = m_db->executeQuery("SELECT last_insert_rowid()");
-        if (q.next()) {
-            m_autoId = q.value(0).toInt();
-        } else {
-            Q_ASSERT(false);
-            return false;
-        }
-    }
-    return ok;
+    return m_db->executeNonQuery(insertQuery());
 }
 
 bool DbDAOBase::doUpdate()
@@ -152,18 +141,12 @@ QString DbDAOBase::deleteQuery()
 
 QStringList DbDAOBase::keyFields()
 {
-    if (isAutoId()) {
-        return QStringList() << "id";
-    }
     VERIFY(false, "DbDAOBase", "Must override keyFields if using default queries");
     return QStringList();
 }
 
 QString DbDAOBase::keyData(const QString &field)
 {
-    if (isAutoId()) {
-        return QString::number(m_autoId);
-    }
     return data<QString>(field);
 }
 
@@ -176,11 +159,6 @@ QString DbDAOBase::tableName()
 {
     VERIFY(false, "DbDAOBase", "Must override tableName if using default queries");
     return QString::null;
-}
-
-bool DbDAOBase::isAutoId() const
-{
-    return false;
 }
 
 QString DbDAOBase::keyCondition()

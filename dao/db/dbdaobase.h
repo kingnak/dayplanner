@@ -10,7 +10,7 @@ class DataBase;
 class DbDAOBase : public virtual DAOBase
 {
 public:
-    DbDAOBase(DataBase *db, qint32 id = -1, DAOBase::State s = DAOBase::New);
+    DbDAOBase(DataBase *db, DAOBase::State s = DAOBase::New);
 
 protected:
     template<typename T>
@@ -45,11 +45,8 @@ protected:
     virtual QStringList orderFields();
     virtual QString tableName();
 
-    virtual bool isAutoId() const;
-
-private:
+protected:
     QString keyCondition();
-    qint32 m_autoId;
 
 protected:
     DataBase *m_db;

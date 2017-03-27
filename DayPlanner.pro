@@ -24,7 +24,8 @@ SOURCES += main.cpp \
     dao/db/shiftdbdao.cpp \
     dao/db/dbdaofacade.cpp \
     dao/db/mealdbdao.cpp \
-    dayplannerqmlglobals.cpp
+    dayplannerqmlglobals.cpp \
+    dao/db/dbautoiddaobase.cpp
 
 RESOURCES += qml.qrc
 
@@ -55,4 +56,5 @@ HEADERS += \
     dao/db/shiftdbdao.h \
     dao/db/dbdaofacade.h \
     dao/db/mealdbdao.h \
-    dayplannerqmlglobals.h
+    dayplannerqmlglobals.h \
+    dao/db/dbautoiddaobase.h

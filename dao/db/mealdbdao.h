@@ -2,9 +2,9 @@
 #define MEALDBDAO_H
 
 #include "../mealdao.h"
-#include "dbdaobase.h"
+#include "dbautoiddaobase.h"
 
-class MealDbDAO : public MealDAO, private DbDAOBase
+class MealDbDAO : public MealDAO, private DbAutoIdDAOBase
 {
 public:
     MealDbDAO(qint32 id, DataBase *db);
@@ -29,13 +29,11 @@ public:
     qint32 sort() const;
     void setSort(qint32 sort);
 
-    DAO_USE(DbDAOBase)
+    DAO_USE(DbAutoIdDAOBase)
 
 protected:
     virtual QStringList orderFields();
     virtual QString tableName();
-
-    virtual bool isAutoId() const;
 };
 
 #endif // MEALDBDAO_H
