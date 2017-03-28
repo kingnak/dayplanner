@@ -44,6 +44,7 @@ QML_IMPORT_PATH =
 
 # Default rules for deployment.
 include(deployment.pri)
+include(../SortFilterProxyModel/SortFilterProxyModel.pri)
 
 HEADERS += \
     daymodel.h \
