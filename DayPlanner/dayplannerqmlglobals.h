@@ -7,8 +7,9 @@
 class DayPlannerQMLGlobals : public QObject
 {
     Q_OBJECT
-public:
     explicit DayPlannerQMLGlobals(QObject *parent = 0);
+public:
+    static void registerTypes();
 };
 
 #endif // DAYPLANNERQMLGLOBALS_H

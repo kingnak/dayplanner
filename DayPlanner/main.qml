@@ -12,6 +12,11 @@ ApplicationWindow {
     DayModel {
         id: dayModel
     }
+
+    RecipeModel {
+        id: recipeModel
+    }
+
     ListModel {
         id: shiftsModel
         ListElement { text: ""; color: "transparent" }

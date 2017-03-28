@@ -1,6 +1,7 @@
 import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.1
+import QtQuick.Controls.Styles 1.4
 import org.kingnak.dayplanner 1.0
 import "styles"
 
@@ -98,7 +99,7 @@ ListView {
             width: parent.width
             height: inp.height
 
-
+            /*
             TextField {
                 width: parent.width
                 id: inp
@@ -106,6 +107,30 @@ ListView {
                     _data.createMeal(text);
                     text = "";
                 }
+            }
+            */
+            ComboBox {
+                style: ComboBoxStyle {
+                    renderType: Text.NativeRendering
+                }
+
+                width: parent.width
+                id: inp
+                model: recipeModel
+                textRole: "name"
+                editable: true
+                onAccepted: {
+                    _data.createMeal(editText);
+                    currentIndex = -1;
+                    editText = "";
+                }
+                /*
+                onActivated: {
+                    _data.createMeal(textAt(index));
+                    currentIndex = -1;
+                    editText = "";
+                }
+                */
             }
         }
     }

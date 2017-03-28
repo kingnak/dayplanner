@@ -61,7 +61,7 @@ void DataBase::createConnection()
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     bool needInit = false;
 
-#define CLEANDB
+//#define CLEANDB
 #define LOCALFILE QDir(qApp->arguments().value(1)).absoluteFilePath("db.db")
 #ifdef LOCALFILE
     QString s = LOCALFILE;
@@ -95,7 +95,7 @@ void DataBase::createConnection()
             }
         }
         */
-        query.exec("CREATE TABLE Meal (id INTEGER PRIMARY KEY, date DATE, type INT, name TEXT, prescale REAL, factor REAL, fat INT, protein INT, carbs INT, calories INT, sort INT)");
+        query.exec("CREATE TABLE Meal (id INTEGER PRIMARY KEY, date DATE, type INT, name TEXT, prescale REAL, factor REAL, fat REAL, protein REAL, carbs REAL, calories REAL, sort INT, recipeId INT)");
         /*
         for (int i = 0; i < 3; ++i) {
             QString s = QString("INSERT INTO Meal (date, type, name, factor, fat, sort) VALUES ('%1',1,'Essen %2',1,1,%3,%2)")
@@ -108,5 +108,35 @@ void DataBase::createConnection()
             }
         }
         */
+        query.exec("CREATE TABLE Recipe (id INTEGER PRIMARY KEY, name TEXT, quantity INT, fat INT, protein INT, carbs INT, calories INT, url TEXT NULL)");
+
+        QString dataFile = QDir(qApp->arguments().value(1)).absoluteFilePath("data/data.csv");
+        QFile fdata(dataFile);
+        if (fdata.exists() && fdata.open(QIODevice::ReadOnly)) {
+            QTextStream ts(&fdata);
+            ts.setCodec("utf8");
+            QString line;
+            query.exec("BEGIN TRANSACTION");
+            QSqlQuery ins;
+            ins.prepare("INSERT INTO Recipe (name, quantity, fat, protein, carbs, calories) VALUES (?,?,?,?,?,?)");
+            while (!(line = ts.readLine()).isEmpty()) {
+                QStringList parts = line.split(";");
+                ins.addBindValue(parts[0]);
+                ins.addBindValue(parts[2]);
+                ins.addBindValue(parts[5]);
+                ins.addBindValue(parts[4]);
+                ins.addBindValue(parts[6]);
+                ins.addBindValue(parts[3]);
+
+                if (!ins.exec()) {
+                    qWarning() << ins.executedQuery();
+                    qWarning() << ins.lastError().text() << ins.lastError();
+                }
+            }
+            query.exec("COMMIT");
+        } else {
+            qWarning().noquote() << dataFile << "cannot be opened";
+        }
+
     }
 }

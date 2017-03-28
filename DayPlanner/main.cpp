@@ -1,4 +1,4 @@
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include "dayplannerqmlglobals.h"
 
@@ -9,10 +9,9 @@
 
 int main(int argc, char *argv[])
 {
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
 
-    DayPlannerQMLGlobals globals;
-    Q_UNUSED(globals)
+    DayPlannerQMLGlobals::registerTypes();
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
