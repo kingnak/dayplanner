@@ -59,19 +59,23 @@ QSqlRecord DataBase::selectOneRecord(const QString &query, bool warnIfNone)
 void DataBase::createConnection()
 {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    bool needInit = false;
 
-//#define CLEANDB
-#define LOCALFILE "D:\\priv\\proj\\DayPlanner\\DayPlanner\\db.db"
+#define CLEANDB
+#define LOCALFILE QDir(qApp->arguments().value(1)).absoluteFilePath("db.db")
 #ifdef LOCALFILE
+    QString s = LOCALFILE;
 #ifdef CLEANDB
     QFile::remove(LOCALFILE);
 #endif
-    db.setDatabaseName("D:\\priv\\proj\\DayPlanner\\DayPlanner\\db.db");
+    needInit = !QFile::exists(LOCALFILE);
+    db.setDatabaseName(LOCALFILE);
 #else
 #ifndef CLEANDB
 #define CLEANDB
 #endif
     db.setDatabaseName(":memory:");
+    needInit = true;
 #endif
 
     if (!db.open()) {
@@ -79,27 +83,30 @@ void DataBase::createConnection()
         return;
     }
 
-#ifdef CLEANDB
-    QSqlQuery query;
-    query.exec("CREATE TABLE Shift (d DATE PRIMARY KEY, shift INT)");
-    for (int i = 0; i < 70; ++i) {
-        QString q = QString("INSERT INTO Shift VALUES('%1', %2)").arg(QDate::currentDate().addDays(i-35).toString("yyyy-MM-dd")).arg(i%6+1);
-        bool b = query.exec(q);
-        if (!b) {
-            qWarning() << query.lastError().text();
+    if (needInit) {
+        QSqlQuery query;
+        query.exec("CREATE TABLE Shift (d DATE PRIMARY KEY, shift INT)");
+        /*
+        for (int i = 0; i < 70; ++i) {
+            QString q = QString("INSERT INTO Shift VALUES('%1', %2)").arg(QDate::currentDate().addDays(i-35).toString("yyyy-MM-dd")).arg(i%6+1);
+            bool b = query.exec(q);
+            if (!b) {
+                qWarning() << query.lastError().text();
+            }
         }
-    }
-
-    query.exec("CREATE TABLE Meal (id INTEGER PRIMARY KEY, date DATE, type INT, name TEXT, factor REAL, fat INT, protein INT, carbs INT, calories INT, sort INT)");
-    for (int i = 0; i < 3; ++i) {
-        QString s = QString("INSERT INTO Meal (date, type, name, factor, fat, sort) VALUES ('%1',1,'Essen %2',1,%3,%2)")
-                .arg(QDate::currentDate().toString("yyyy-MM-dd"))
-                .arg(i+1)
-                .arg(i*2+4);
-        bool b = query.exec(s);
-        if (!b) {
-            qWarning() << query.lastError().text();
+        */
+        query.exec("CREATE TABLE Meal (id INTEGER PRIMARY KEY, date DATE, type INT, name TEXT, prescale REAL, factor REAL, fat INT, protein INT, carbs INT, calories INT, sort INT)");
+        /*
+        for (int i = 0; i < 3; ++i) {
+            QString s = QString("INSERT INTO Meal (date, type, name, factor, fat, sort) VALUES ('%1',1,'Essen %2',1,1,%3,%2)")
+                    .arg(QDate::currentDate().toString("yyyy-MM-dd"))
+                    .arg(i+1)
+                    .arg(i*2+4);
+            bool b = query.exec(s);
+            if (!b) {
+                qWarning() << query.lastError().text();
+            }
         }
+        */
     }
-#endif
 }
