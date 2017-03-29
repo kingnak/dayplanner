@@ -61,7 +61,7 @@ void DataBase::createConnection()
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     bool needInit = false;
 
-//#define CLEANDB
+#define CLEANDB
 #define LOCALFILE QDir(qApp->arguments().value(1)).absoluteFilePath("db.db")
 #ifdef LOCALFILE
     QString s = LOCALFILE;
@@ -95,7 +95,7 @@ void DataBase::createConnection()
             }
         }
         */
-        query.exec("CREATE TABLE Meal (id INTEGER PRIMARY KEY, date DATE, type INT, name TEXT, prescale REAL, factor REAL, fat REAL, protein REAL, carbs REAL, calories REAL, sort INT, recipeId INT)");
+        query.exec("CREATE TABLE Meal (id INTEGER PRIMARY KEY, date DATE, type INT, name TEXT, factor REAL, fat REAL, protein REAL, carbs REAL, calories REAL, sort INT, recipeId INT NULL)");
         /*
         for (int i = 0; i < 3; ++i) {
             QString s = QString("INSERT INTO Meal (date, type, name, factor, fat, sort) VALUES ('%1',1,'Essen %2',1,1,%3,%2)")
@@ -108,7 +108,7 @@ void DataBase::createConnection()
             }
         }
         */
-        query.exec("CREATE TABLE Recipe (id INTEGER PRIMARY KEY, name TEXT, quantity INT, fat INT, protein INT, carbs INT, calories INT, url TEXT NULL)");
+        query.exec("CREATE TABLE Recipe (id INTEGER PRIMARY KEY, name TEXT, quantity INT, fat REAL, protein REAL, carbs REAL, calories REAL, url TEXT NULL)");
 
         QString dataFile = QDir(qApp->arguments().value(1)).absoluteFilePath("data/data.csv");
         QFile fdata(dataFile);
@@ -122,11 +122,11 @@ void DataBase::createConnection()
             while (!(line = ts.readLine()).isEmpty()) {
                 QStringList parts = line.split(";");
                 ins.addBindValue(parts[0]);
-                ins.addBindValue(parts[2]);
-                ins.addBindValue(parts[5]);
-                ins.addBindValue(parts[4]);
-                ins.addBindValue(parts[6]);
-                ins.addBindValue(parts[3]);
+                ins.addBindValue(parts[2].toInt() / 100);
+                ins.addBindValue(parts[5].toDouble() / 100);
+                ins.addBindValue(parts[4].toDouble() / 100);
+                ins.addBindValue(parts[6].toDouble() / 100);
+                ins.addBindValue(parts[3].toDouble() / 100);
 
                 if (!ins.exec()) {
                     qWarning() << ins.executedQuery();

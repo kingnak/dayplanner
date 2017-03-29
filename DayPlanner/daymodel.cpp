@@ -8,12 +8,11 @@
 
 DayModel::DayModel()
 {
-    m_facade = new DbDAOFacade;
+    m_facade = globalDAOFacade();
 }
 
 DayModel::~DayModel()
 {
-    delete m_facade;
 }
 
 QObject *DayModel::dataForDate(const QDate &date)

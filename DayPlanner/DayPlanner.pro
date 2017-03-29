@@ -26,7 +26,9 @@ SOURCES += main.cpp \
     dao/db/mealdbdao.cpp \
     dayplannerqmlglobals.cpp \
     dao/db/dbautoiddaobase.cpp \
-    recipelist.cpp
+    recipelist.cpp \
+    dao/recipedao.cpp \
+    dao/db/recipedbdao.cpp
 
 RESOURCES += qml.qrc
 
@@ -37,7 +39,8 @@ DISTFILES += \
     qml/styles/ShiftComboStyle.qml \
     qml/styles/PlaceholderTextEditStyle.qml \
     qml/PostfixTextField.qml \
-    data/data.csv
+    data/data.csv \
+    qml/FilterTextInput.qml
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -62,4 +65,6 @@ HEADERS += \
     dao/db/mealdbdao.h \
     dayplannerqmlglobals.h \
     dao/db/dbautoiddaobase.h \
-    recipelist.h
+    recipelist.h \
+    dao/recipedao.h \
+    dao/db/recipedbdao.h

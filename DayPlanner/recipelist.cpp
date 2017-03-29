@@ -1,6 +1,8 @@
 #include "recipelist.h"
 #include <QtSql>
-#include "dao/db/database.h"
+#include "dao/dao.h"
+#include "dao/recipedao.h"
+
 
 RecipeList::RecipeList()
 {
@@ -15,19 +17,21 @@ QVariant RecipeList::data(const QModelIndex &index, int role) const
     switch (role) {
     case Qt::DisplayRole:
     case NameRole:
-        return m_data[index.row()]["name"];
+        return m_data[index.row()]->name();
+    case IdRole:
+        return m_data[index.row()]->id();
     case FatRole:
-        return m_data[index.row()]["fat"];
+        return m_data[index.row()]->fat();
     case ProteinRole:
-        return m_data[index.row()]["protein"];
+        return m_data[index.row()]->protein();
     case CarbsRole:
-        return m_data[index.row()]["carbs"];
+        return m_data[index.row()]->carbs();
     case CaloriesRole:
-        return m_data[index.row()]["calories"];
+        return m_data[index.row()]->calories();
     case QuantityRole:
-        return m_data[index.row()]["quantity"];
+        return m_data[index.row()]->quantity();
     case UrlRole:
-        return m_data[index.row()]["url"];
+        return m_data[index.row()]->url();
     default:
         return QVariant();
     }
@@ -43,6 +47,7 @@ int RecipeList::rowCount(const QModelIndex &parent) const
 QHash<int, QByteArray> RecipeList::roleNames() const
 {
     QHash<int, QByteArray> ret;
+    ret[IdRole] = "itemId";
     ret[NameRole] = "name";
     ret[FatRole] = "fat";
     ret[ProteinRole] = "protein";
@@ -53,18 +58,13 @@ QHash<int, QByteArray> RecipeList::roleNames() const
     return ret;
 }
 
-// TODO: Make in DbDAO
 void RecipeList::load()
 {
     beginResetModel();
+    QList<RecipeDAO*> oldList = m_data;
     m_data.clear();
-    QSqlQuery q = DataBase::instance().executeQuery("SELECT * FROM Recipe ORDER BY name ASC");
-    while (q.next()) {
-        QVariantMap m;
-        for (int i = 0; i < q.record().count(); ++i) {
-            m[q.record().fieldName(i)] = q.record().value(i);
-        }
-        m_data << m;
-    }
+    m_data = globalDAOFacade()->loadRecipes();
     endResetModel();
+
+    qDeleteAll(oldList);
 }

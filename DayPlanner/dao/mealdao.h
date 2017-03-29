@@ -19,17 +19,20 @@ public:
     virtual qreal factor() const = 0;
     virtual void setFactor(qreal fac) = 0;
 
-    virtual qint32 fat() const = 0;
-    virtual void setFat(qint32 f) = 0;
+    virtual qreal fat() const = 0;
+    virtual void setFat(qreal f) = 0;
 
-    virtual qint32 protein() const = 0;
-    virtual void setProtein(qint32 p) = 0;
+    virtual qreal protein() const = 0;
+    virtual void setProtein(qreal p) = 0;
 
-    virtual qint32 carbs() const = 0;
-    virtual void setCarbs(qint32 c) = 0;
+    virtual qreal carbs() const = 0;
+    virtual void setCarbs(qreal c) = 0;
 
-    virtual qint32 calories() const = 0;
-    virtual void setCalories(qint32 c) = 0;
+    virtual qreal calories() const = 0;
+    virtual void setCalories(qreal c) = 0;
+
+    virtual qint32 recipeId() const = 0;
+    virtual void setRecipeId(qint32 id) = 0;
 };
 
 #endif // MEALDAO_H

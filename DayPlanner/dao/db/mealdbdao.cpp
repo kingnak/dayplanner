@@ -56,44 +56,54 @@ void MealDbDAO::setFactor(qreal fac)
     setData("factor", fac);
 }
 
-qint32 MealDbDAO::fat() const
+qreal MealDbDAO::fat() const
 {
-    return data<qint32>("fat");
+    return data<qreal>("fat");
 }
 
-void MealDbDAO::setFat(qint32 f)
+void MealDbDAO::setFat(qreal f)
 {
     setData("fat", f);
 }
 
-qint32 MealDbDAO::protein() const
+qreal MealDbDAO::protein() const
 {
-    return data<qint32>("protein");
+    return data<qreal>("protein");
 }
 
-void MealDbDAO::setProtein(qint32 p)
+void MealDbDAO::setProtein(qreal p)
 {
     setData("protein", p);
 }
 
-qint32 MealDbDAO::carbs() const
+qreal MealDbDAO::carbs() const
 {
-    return data<qint32>("carbs");
+    return data<qreal>("carbs");
 }
 
-void MealDbDAO::setCarbs(qint32 c)
+void MealDbDAO::setCarbs(qreal c)
 {
     setData("carbs", c);
 }
 
-qint32 MealDbDAO::calories() const
+qreal MealDbDAO::calories() const
 {
-    return data<qint32>("calories");
+    return data<qreal>("calories");
 }
 
-void MealDbDAO::setCalories(qint32 c)
+void MealDbDAO::setCalories(qreal c)
 {
     setData("calories", c);
+}
+
+qint32 MealDbDAO::recipeId() const
+{
+    return data<qint32>("recipeId");
+}
+
+void MealDbDAO::setRecipeId(qint32 id)
+{
+    setData("recipeId", id);
 }
 
 QStringList MealDbDAO::orderFields()

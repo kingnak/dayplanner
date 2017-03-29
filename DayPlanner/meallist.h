@@ -26,6 +26,8 @@ public:
     Meal::Type type() const { return m_type; }
 
     Q_INVOKABLE void createMeal(const QString &name);
+    Q_INVOKABLE void createMealForRecipe(qint32 recipeId);
+    Q_INVOKABLE void removeMeal(qint32 idx);
 
 signals:
     void itemsChanged();

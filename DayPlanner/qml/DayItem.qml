@@ -1,7 +1,6 @@
 import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.1
-//import QtQuick.Controls 2.0 as C2
 import "styles"
 
 Rectangle {
@@ -33,7 +32,7 @@ Rectangle {
                 Layout.alignment: Qt.AlignRight
                 currentIndex: _data.shiftIndex
                 onCurrentIndexChanged: _data.shiftIndex = currentIndex
-                style: ShiftComboStyle {}
+                style: ShiftComboStyle { }
             }
         }
 

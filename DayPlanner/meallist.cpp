@@ -1,6 +1,7 @@
 #include "meallist.h"
 #include "dao/dao.h"
 #include "meal.h"
+#include "dao/recipedao.h"
 #include <QtSql>
 
 MealList::MealList(QObject *parent)
@@ -44,6 +45,55 @@ void MealList::createMeal(const QString &name)
     } else {
         delete m;
     }
+}
+
+void MealList::createMealForRecipe(qint32 recipeId)
+{
+    if (recipeId < 0) {
+        return;
+    }
+
+    MealDAO *m = m_facade->createMeal(m_date, m_type);
+    if (!m) {
+        return;
+    }
+
+    RecipeDAO *r = m_facade->loadRecipe(recipeId);
+    if (!r) {
+        return;
+    }
+    if (r->state() == DAOBase::State::New) {
+        delete r;
+        return;
+    }
+
+    m->setName(r->name());
+    m->setFactor(r->quantity());
+    m->setFat(r->fat());
+    m->setProtein(r->protein());
+    m->setCarbs(r->carbs());
+    m->setCalories(r->calories());
+    m->setRecipeId(r->id());
+
+    delete r;
+    r = nullptr;
+
+    if (m->save()) {
+        m_data.append(new Meal(m, this));
+        emit itemsChanged();
+    } else {
+        delete m;
+    }
+}
+
+void MealList::removeMeal(qint32 idx)
+{
+    if (idx < 0 || idx >= m_data.count()) {
+        return;
+    }
+
+    m_data.takeAt(idx)->deleteLater();
+    emit itemsChanged();
 }
 
 Meal *MealList::atFunc(QQmlListProperty<Meal> *p, int i)

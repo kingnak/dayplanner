@@ -5,5 +5,8 @@
         <file>qml/styles/ShiftComboStyle.qml</file>
         <file>qml/MealList.qml</file>
         <file>qml/styles/PlaceholderTextEditStyle.qml</file>
+        <file>qml/FilterTextInput.qml</file>
+        <file>qml/styles/DropdownStyle.qml</file>
+        <file>qml/DoubleField.qml</file>
     </qresource>
 </RCC>

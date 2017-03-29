@@ -9,6 +9,7 @@ public:
     DbAutoIdDAOBase(DataBase *db, qint32 id = -1, DAOBase::State s = DAOBase::New);
 
 protected:
+    qint32 id() const;
     bool doInsert();
     QStringList keyFields();
     QString keyData(const QString &field);

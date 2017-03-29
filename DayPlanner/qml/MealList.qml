@@ -2,6 +2,7 @@ import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
+import SortFilterProxyModel 0.2
 import org.kingnak.dayplanner 1.0
 import "styles"
 
@@ -39,6 +40,12 @@ ListView {
                 property bool hovered: mouseArea.containsMouse || txtName.hovered || txtFat.hovered || txtProtein.hovered || txtCarbs.hovered || txtCalories.hovered
                 width: parent.width
 
+                ToolButton {
+                    text: "X"
+                    //width: 20
+                    onClicked: _data.removeMeal(index)
+                }
+
                 TextField {
                     id: txtName
                     Layout.fillWidth: true
@@ -48,44 +55,59 @@ ListView {
                     }
                 }
 
-                TextField {
+                DoubleField {
+                    id: txtFactor
+                    value: factor
+                    style: PlaceholderTextEditStyle {
+                        showHovered: row.hovered
+                        postfix: "x"
+                    }
+                    onDoubleFinished: factor = val;
+                    onDoubleError: value = factor;
+                }
+
+                DoubleField {
                     id: txtFat
-                    text: calcFat
+                    value: calcFat
                     style: PlaceholderTextEditStyle {
                         showHovered: row.hovered
                         postfix: "F"
                     }
-                    onEditingFinished: fat = text
+                    onDoubleFinished: calcFat = val;
+                    onDoubleError: value = calcFat;
                 }
 
-                TextField {
+                DoubleField {
                     id: txtProtein
-                    text: calcProtein
+                    value: calcProtein
                     style: PlaceholderTextEditStyle {
                         postfix: "EW"
                         showHovered: row.hovered
                     }
-                    onEditingFinished: protein = text
+                    onDoubleFinished: calcProtein = val;
+                    onDoubleError: value = calcProtein;
                 }
 
-                TextField {
+                DoubleField {
                     id: txtCarbs
-                    text: calcCarbs
+                    value: calcCarbs
                     style: PlaceholderTextEditStyle {
                         postfix: "KH"
                         showHovered: row.hovered
                     }
-                    onEditingFinished: carbs = text
+                    onDoubleFinished: calcCarbs = val;
+                    onDoubleError: value = calcCarbs;
                 }
 
-                TextField {
+                DoubleField {
                     id: txtCalories
-                    text: calcCalories
+                    value: calcCalories
                     style: PlaceholderTextEditStyle {
                         postfix: "kcal"
                         showHovered: row.hovered
                     }
-                    onEditingFinished: calories = text
+                    onDoubleFinished: calcCalories = val;
+                    onDoubleError: value = calcCalories;
                 }
 
             }
@@ -99,38 +121,18 @@ ListView {
             width: parent.width
             height: inp.height
 
-            /*
-            TextField {
+            FilterTextInput {
                 width: parent.width
                 id: inp
+                textRole: "name"
+                model: recipeModel
                 onAccepted: {
-                    _data.createMeal(text);
+                    if (selectedItem)
+                        _data.createMealForRecipe(selectedItem.itemId);
+                    else
+                        _data.createMeal(text);
                     text = "";
                 }
-            }
-            */
-            ComboBox {
-                style: ComboBoxStyle {
-                    renderType: Text.NativeRendering
-                }
-
-                width: parent.width
-                id: inp
-                model: recipeModel
-                textRole: "name"
-                editable: true
-                onAccepted: {
-                    _data.createMeal(editText);
-                    currentIndex = -1;
-                    editText = "";
-                }
-                /*
-                onActivated: {
-                    _data.createMeal(textAt(index));
-                    currentIndex = -1;
-                    editText = "";
-                }
-                */
             }
         }
     }

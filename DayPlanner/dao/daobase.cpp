@@ -37,3 +37,8 @@ bool DAOBase::remove()
         return false;
     }
 }
+
+DAOBase::State DAOBase::state() const
+{
+    return m_state;
+}

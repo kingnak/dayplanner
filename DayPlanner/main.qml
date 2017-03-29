@@ -1,13 +1,19 @@
 import QtQuick 2.7
 import QtQuick.Controls 1.5
 import QtQuick.Controls.Styles 1.4
+import QtQuick.Layouts 1.1
 import "qml"
 import org.kingnak.dayplanner 1.0
+
 
 ApplicationWindow {
     id: root
 
     property bool useSingleDayView: true
+    visible: true
+    width: 640
+    height: 480
+    title: qsTr("Hello World")
 
     DayModel {
         id: dayModel
@@ -54,11 +60,6 @@ ApplicationWindow {
         }
     }
 
-    visible: true
-    width: 640
-    height: 480
-    title: qsTr("Hello World")
-
     Loader {
         anchors.fill: parent
         sourceComponent: root.useSingleDayView ? singeDayView : calendar
@@ -88,5 +89,4 @@ ApplicationWindow {
             anchors.fill: parent
         }
     }
-
 }

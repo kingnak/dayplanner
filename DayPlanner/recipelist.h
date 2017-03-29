@@ -5,6 +5,8 @@
 #include <QList>
 #include <QVariantMap>
 
+class RecipeDAO;
+
 class RecipeList : public QAbstractListModel
 {
 public:
@@ -15,7 +17,8 @@ public:
 
     QHash<int, QByteArray> roleNames() const;
     enum {
-        NameRole = Qt::UserRole + 1,
+        IdRole = Qt::UserRole + 1,
+        NameRole,
         FatRole,
         ProteinRole,
         CarbsRole,
@@ -28,7 +31,7 @@ private:
     void load();
 
 private:
-    QList<QVariantMap> m_data;
+    QList<RecipeDAO*> m_data;
 };
 
 #endif // RECIPELIST_H

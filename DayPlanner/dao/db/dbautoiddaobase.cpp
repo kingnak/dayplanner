@@ -9,6 +9,11 @@ DbAutoIdDAOBase::DbAutoIdDAOBase(DataBase *db, qint32 id /* = -1 */, DAOBase::St
 
 }
 
+qint32 DbAutoIdDAOBase::id() const
+{
+    return m_id;
+}
+
 bool DbAutoIdDAOBase::doInsert()
 {
     if (DbDAOBase::doInsert()) {

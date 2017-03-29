@@ -21,17 +21,20 @@ public:
     qreal factor() const;
     void setFactor(qreal fac);
 
-    qint32 fat() const;
-    void setFat(qint32 f);
+    qreal fat() const;
+    void setFat(qreal f);
 
-    qint32 protein() const;
-    void setProtein(qint32 p);
+    qreal protein() const;
+    void setProtein(qreal p);
 
-    qint32 carbs() const;
-    void setCarbs(qint32 c);
+    qreal carbs() const;
+    void setCarbs(qreal c);
 
-    qint32 calories() const;
-    void setCalories(qint32 c);
+    qreal calories() const;
+    void setCalories(qreal c);
+
+    qint32 recipeId() const;
+    void setRecipeId(qint32 id);
 
     /*
     qreal calcFat() const;

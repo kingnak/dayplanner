@@ -2,6 +2,7 @@
 #include "database.h"
 #include "shiftdbdao.h"
 #include "mealdbdao.h"
+#include "recipedbdao.h"
 #include <QtSql>
 
 ShiftDAO *DbDAOFacade::loadShift(QDate d)
@@ -45,4 +46,24 @@ MealDAO *DbDAOFacade::createMeal(QDate d, qint32 type)
     }
 
     return m;
+}
+
+RecipeDAO *DbDAOFacade::loadRecipe(qint32 recipeId)
+{
+    return new RecipeDbDAO(recipeId, &DataBase::instance());
+}
+
+QList<RecipeDAO *> DbDAOFacade::loadRecipes()
+{
+    QString query = QString("SELECT * FROM Recipe ORDER BY name ASC");
+
+    QSqlQuery q = DataBase::instance().executeQuery(query);
+
+    QList<RecipeDAO *> ret;
+    while (q.next()) {
+        RecipeDAO *r = new RecipeDbDAO(q.record().value(0).toInt(), &DataBase::instance());
+        ret << r;
+    }
+
+    return ret;
 }

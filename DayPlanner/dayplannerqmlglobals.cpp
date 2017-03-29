@@ -1,6 +1,8 @@
 #include "dayplannerqmlglobals.h"
 #include <QQmlApplicationEngine>
 
+#include "dao/dao.h"
+#include "dao/db/dbdaofacade.h"
 #include "daymodel.h"
 #include "meal.h"
 #include "meallist.h"
@@ -17,4 +19,9 @@ void DayPlannerQMLGlobals::registerTypes()
     qmlRegisterType<Meal>("org.kingnak.dayplanner", 1, 0, "Meal");
     qmlRegisterType<MealList>("org.kingnak.dayplanner", 1, 0, "MealList");
     qmlRegisterType<RecipeList>("org.kingnak.dayplanner", 1, 0, "RecipeModel");
+}
+
+DAOFacade *globalDAOFacade() {
+    static DbDAOFacade inst_;
+    return &inst_;
 }

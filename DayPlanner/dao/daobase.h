@@ -15,6 +15,8 @@ public:
     bool load();
     bool remove();
 
+    State state() const;
+
 protected:
     virtual bool doReset() { return true; }
     virtual bool doLoad() = 0;

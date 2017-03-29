@@ -39,12 +39,31 @@ void Meal::setName(const QString &n)
     }
 }
 
-qint32 Meal::fat() const
+qreal Meal::factor() const
+{
+    return m_meal->factor();
+}
+
+void Meal::setFactor(qreal f)
+{
+    if (f != factor()) {
+        m_meal->setFactor(f);
+        if (m_meal->save()) {
+            emit factorChanged();
+            emit fatChanged();
+            emit proteinChanged();
+            emit carbsChanged();
+            emit caloriesChanged();
+        }
+    }
+}
+
+qreal Meal::fat() const
 {
     return m_meal->fat();
 }
 
-void Meal::setFat(const qint32 f)
+void Meal::setFat(qreal f)
 {
     if (f != fat()) {
         m_meal->setFat(f);
@@ -54,12 +73,17 @@ void Meal::setFat(const qint32 f)
     }
 }
 
-qint32 Meal::protein() const
+void Meal::updateFat(qreal f)
+{
+    setFat(f/factor());
+}
+
+qreal Meal::protein() const
 {
     return m_meal->protein();
 }
 
-void Meal::setProtein(const qint32 p)
+void Meal::setProtein(qreal p)
 {
     if (p != protein()) {
         m_meal->setProtein(p);
@@ -69,12 +93,17 @@ void Meal::setProtein(const qint32 p)
     }
 }
 
-qint32 Meal::carbs() const
+void Meal::updateProtein(qreal p)
+{
+    setProtein(p/factor());
+}
+
+qreal Meal::carbs() const
 {
     return m_meal->carbs();
 }
 
-void Meal::setCarbs(qint32 c)
+void Meal::setCarbs(qreal c)
 {
     if (c != carbs()) {
         m_meal->setCarbs(c);
@@ -84,12 +113,17 @@ void Meal::setCarbs(qint32 c)
     }
 }
 
-qint32 Meal::calories() const
+void Meal::updateCarbs(qreal c)
+{
+    setCarbs(c/factor());
+}
+
+qreal Meal::calories() const
 {
     return m_meal->calories();
 }
 
-void Meal::setCalories(qint32 c)
+void Meal::setCalories(qreal c)
 {
     if (c != calories()) {
         m_meal->setCalories(c);
@@ -97,6 +131,11 @@ void Meal::setCalories(qint32 c)
             emit caloriesChanged();
         }
     }
+}
+
+void Meal::updateCalories(qreal c)
+{
+    setCalories(c/factor());
 }
 
 qreal Meal::calcFat() const
