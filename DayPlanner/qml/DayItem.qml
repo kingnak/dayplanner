@@ -42,14 +42,17 @@ Rectangle {
             _data: root._data.breakfast
         }
 
-        /*
         MealList {
             id: lunch
             Layout.fillWidth: true
-            _data: mealList
+			_data: root._data.lunch
         }
-        */
 
+		MealList {
+			id: dinner
+			Layout.fillWidth: true
+			_data: root._data.dinner
+		}
 
         Rectangle {
             Layout.fillHeight: true

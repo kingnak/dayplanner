@@ -33,32 +33,6 @@ ApplicationWindow {
         ListElement { text: "N1"; color: "cyan" }
         ListElement { text: "N2"; color: "magenta" }
     }
-    Item {
-        id: mealList
-        property int type: 1
-        property int fatSum: 5
-        property int proteinSum: 9
-        property int carbSum: 4
-        property int calorieSum: 500
-        property var items: ListModel {
-            ListElement {
-                name: "Müsli"
-                factor: 1
-                calcFat: 2
-                calcProtein: 3
-                calcCarb: 2
-                calcCalorie: 200
-            }
-            ListElement {
-                name: "Banane"
-                factor: 1
-                calcFat: 3
-                calcProtein: 6
-                calcCarb: 2
-                calcCalorie: 300
-            }
-        }
-    }
 
     Loader {
         anchors.fill: parent

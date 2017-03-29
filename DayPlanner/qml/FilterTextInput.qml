@@ -128,12 +128,12 @@ TextField {
         var idx = popup.currentIndex
         if (idx !== -1) {
             selectedItem = sorter.get(idx);
-            text = sorter.get(idx).name;
+			//text = sorter.get(idx).name; // <- Will reset selected item for onAccept listeners to -1...
         } else {
             selectedItem = null;
         }
 
-        popup.close();
+		popup.close();
     }
 
     style: TextFieldStyle {

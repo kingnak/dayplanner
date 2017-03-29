@@ -132,6 +132,8 @@ ListView {
                     else
                         _data.createMeal(text);
                     text = "";
+					focus = true;
+					root.positionViewAtEnd();
                 }
             }
         }
@@ -148,6 +150,7 @@ ListView {
                 var c = "transparent";
                 switch (_data.type) {
                 case Meal.Breakfast:
+				default:
                     c = "grey";
                 }
                 c;
@@ -156,12 +159,12 @@ ListView {
             Text {
                 id: txt
                 text: {
-                    var t = "";
                     switch (_data.type) {
-                    case Meal.Breakfast:
-                        t = "Frühstück";
+					case Meal.Breakfast: return "Frühstück";
+					case Meal.Lunch: return "Mittag";
+					case Meal.Dinner: return "Abend";
+					default: return "Anderes";
                     }
-                    t;
                 }
             }
 
