@@ -81,9 +81,14 @@ void Meal::setFat(qreal f)
     }
 }
 
-QString Meal::calcFat() const
+qreal Meal::calcFat() const
 {
-    return formatNumber(fat() * factor());
+	return fat() * factor();
+}
+
+QString Meal::calcFatFormatted() const
+{
+	return formatNumber(calcFat());
 }
 
 void Meal::updateFat(QString f)
@@ -106,9 +111,14 @@ void Meal::setProtein(qreal p)
     }
 }
 
-QString Meal::calcProtein() const
+qreal Meal::calcProtein() const
 {
-    return formatNumber(protein() * factor());
+	return protein() * factor();
+}
+
+QString Meal::calcProteinFormatted() const
+{
+	return formatNumber(calcProtein());
 }
 
 void Meal::updateProtein(QString p)
@@ -131,9 +141,14 @@ void Meal::setCarbs(qreal c)
     }
 }
 
-QString Meal::calcCarbs() const
+qreal Meal::calcCarbs() const
 {
-    return formatNumber(carbs() * factor());
+	return carbs() * factor();
+}
+
+QString Meal::calcCarbsFormatted() const
+{
+	return formatNumber(calcCarbs());
 }
 
 void Meal::updateCarbs(QString c)
@@ -156,9 +171,14 @@ void Meal::setCalories(qreal c)
     }
 }
 
-QString Meal::calcCalories() const
+qreal Meal::calcCalories() const
 {
-    return formatNumber(calories() * factor());
+	return calories() * factor();
+}
+
+QString Meal::calcCaloriesFormatted() const
+{
+	return formatNumber(calcCalories());
 }
 
 void Meal::updateCalories(QString c)

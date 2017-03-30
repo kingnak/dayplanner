@@ -155,19 +155,40 @@ ListView {
                 }
                 c;
             }
-
-            Text {
-                id: txt
-                text: {
-                    switch (_data.type) {
-					case Meal.Breakfast: return "Frühstück";
-					case Meal.Lunch: return "Mittag";
-					case Meal.Dinner: return "Abend";
-					default: return "Anderes";
-                    }
-                }
-            }
-
-        }
-    }
+			RowLayout {
+				width: parent.width
+				Text {
+					Layout.fillWidth: true
+					id: txt
+					text: {
+						switch (_data.type) {
+						case Meal.Breakfast: return "Frühstück";
+						case Meal.Lunch: return "Mittag";
+						case Meal.Dinner: return "Abend";
+						default: return "Anderes";
+						}
+					}
+				}
+				Text {
+					text: "\u03A3 " + _data.sumFat;
+					Layout.minimumWidth: 40 + metrics.boundingRect("F").width
+				}
+				Text {
+					text: "\u03A3 " + _data.sumProtein;
+					Layout.minimumWidth: 40 + metrics.boundingRect("EW").width
+				}
+				Text {
+					text: "\u03A3 " + _data.sumCarbs;
+					Layout.minimumWidth: 40 + metrics.boundingRect("KH").width
+				}
+				Text {
+					text: "\u03A3 " + _data.sumCalories;
+					Layout.minimumWidth: 40 + metrics.boundingRect("kcal \u03A3").width
+				}
+			}
+			FontMetrics {
+				id: metrics
+			}
+		}
+	}
 }

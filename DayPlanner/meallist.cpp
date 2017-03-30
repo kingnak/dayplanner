@@ -25,7 +25,10 @@ MealList *MealList::loadForDateAndType(QObject *parent, DAOFacade *facade, QDate
     for (auto meal : meals) {
         Meal *m = new Meal(meal, ret);
         ret->m_data << m;
+		ret->connectSignals(m);
     }
+
+	ret->notifySumsChanged();
 
     return ret;
 }
@@ -40,8 +43,11 @@ void MealList::createMeal(const QString &name)
     MealDAO *m = m_facade->createMeal(m_date, m_type);
     m->setName(name);
     if (m->save()) {
-        m_data.append(new Meal(m, this));
+		Meal *md = new Meal(m, this);
+		m_data.append(md);
+		connectSignals(md);
         emit itemsChanged();
+		notifySumsChanged();
     } else {
         delete m;
     }
@@ -73,8 +79,11 @@ void MealList::createMealForRecipe(qint32 recipeId)
     m->setRecipeId(r->id());
 
     if (m->save()) {
-        m_data.append(new Meal(m.take(), this));
+		Meal *md = new Meal(m.take(), this);
+		m_data.append(md);
+		connectSignals(md);
         emit itemsChanged();
+		notifySumsChanged();
     }
 }
 
@@ -87,7 +96,45 @@ void MealList::removeMeal(qint32 idx)
     Meal *m = m_data.takeAt(idx);
     m->erase();
     m->deleteLater();
-    emit itemsChanged();
+	m->disconnect();
+	emit itemsChanged();
+	notifySumsChanged();
+}
+
+QString MealList::sumFat() const
+{
+	qreal sum = 0;
+	for (auto m : m_data) {
+		sum += m->calcFat();
+	}
+	return Meal::formatNumber(sum);
+}
+
+QString MealList::sumProtein() const
+{
+	qreal sum = 0;
+	for (auto m : m_data) {
+		sum += m->calcProtein();
+	}
+	return Meal::formatNumber(sum);
+}
+
+QString MealList::sumCarbs() const
+{
+	qreal sum = 0;
+	for (auto m : m_data) {
+		sum += m->calcCarbs();
+	}
+	return Meal::formatNumber(sum);
+}
+
+QString MealList::sumCalories() const
+{
+	qreal sum = 0;
+	for (auto m : m_data) {
+		sum += m->calcCalories();
+	}
+	return Meal::formatNumber(sum);
 }
 
 Meal *MealList::atFunc(QQmlListProperty<Meal> *p, int i)
@@ -98,4 +145,20 @@ Meal *MealList::atFunc(QQmlListProperty<Meal> *p, int i)
 int MealList::countFunc(QQmlListProperty<Meal> *p)
 {
     return static_cast<MealList*> (p->object)->m_data.count();
+}
+
+void MealList::connectSignals(Meal *m)
+{
+	connect(m, &Meal::fatChanged, this, &MealList::sumFatChanged);
+	connect(m, &Meal::proteinChanged, this, &MealList::sumProteinChanged);
+	connect(m, &Meal::carbsChanged, this, &MealList::sumCarbsChanged);
+	connect(m, &Meal::caloriesChanged, this, &MealList::sumCaloriesChanged);
+}
+
+void MealList::notifySumsChanged()
+{
+	emit sumFatChanged();
+	emit sumProteinChanged();
+	emit sumCarbsChanged();
+	emit sumCaloriesChanged();
 }
