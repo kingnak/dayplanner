@@ -53,36 +53,28 @@ void MealList::createMealForRecipe(qint32 recipeId)
         return;
     }
 
-    MealDAO *m = m_facade->createMeal(m_date, m_type);
+    QScopedPointer<MealDAO> m(m_facade->createMeal(m_date, m_type));
     if (!m) {
         return;
     }
 
-    RecipeDAO *r = m_facade->loadRecipe(recipeId);
-    if (!r) {
-        return;
-    }
-    if (r->state() == DAOBase::State::New) {
-        delete r;
+    QScopedPointer<RecipeDAO> r(m_facade->loadRecipe(recipeId));
+    if (!r || r->state() == DAOBase::State::New) {
         return;
     }
 
+    qreal f = qMax(r->quantity(), 1);
     m->setName(r->name());
-    m->setFactor(r->quantity());
-    m->setFat(r->fat());
-    m->setProtein(r->protein());
-    m->setCarbs(r->carbs());
-    m->setCalories(r->calories());
+    m->setFactor(f);
+    m->setFat(r->fat() / f);
+    m->setProtein(r->protein() / f);
+    m->setCarbs(r->carbs() / f);
+    m->setCalories(r->calories() / f);
     m->setRecipeId(r->id());
 
-    delete r;
-    r = nullptr;
-
     if (m->save()) {
-        m_data.append(new Meal(m, this));
+        m_data.append(new Meal(m.take(), this));
         emit itemsChanged();
-    } else {
-        delete m;
     }
 }
 
@@ -92,7 +84,9 @@ void MealList::removeMeal(qint32 idx)
         return;
     }
 
-    m_data.takeAt(idx)->deleteLater();
+    Meal *m = m_data.takeAt(idx);
+    m->erase();
+    m->deleteLater();
     emit itemsChanged();
 }
 

@@ -1,5 +1,6 @@
 #include "meal.h"
 #include "dao/mealdao.h"
+#include <QLocale>
 
 Meal::Meal(QObject *parent)
     : QObject(parent),
@@ -24,6 +25,11 @@ Meal::Type Meal::type() const
     return static_cast<Type> (m_meal->type());
 }
 
+bool Meal::erase()
+{
+    return m_meal->remove();
+}
+
 QString Meal::name() const
 {
     return m_meal->name();
@@ -41,7 +47,9 @@ void Meal::setName(const QString &n)
 
 qreal Meal::factor() const
 {
-    return m_meal->factor();
+    qreal f = m_meal->factor();
+    if (qFuzzyIsNull(f)) return 1;
+    return f;
 }
 
 void Meal::setFactor(qreal f)
@@ -73,9 +81,14 @@ void Meal::setFat(qreal f)
     }
 }
 
-void Meal::updateFat(qreal f)
+QString Meal::calcFat() const
 {
-    setFat(f/factor());
+    return formatNumber(fat() * factor());
+}
+
+void Meal::updateFat(QString f)
+{
+    updateNumber(f, factor(), &Meal::setFat, &Meal::fatChanged);
 }
 
 qreal Meal::protein() const
@@ -93,9 +106,14 @@ void Meal::setProtein(qreal p)
     }
 }
 
-void Meal::updateProtein(qreal p)
+QString Meal::calcProtein() const
 {
-    setProtein(p/factor());
+    return formatNumber(protein() * factor());
+}
+
+void Meal::updateProtein(QString p)
+{
+    updateNumber(p, factor(), &Meal::setProtein, &Meal::proteinChanged);
 }
 
 qreal Meal::carbs() const
@@ -113,9 +131,14 @@ void Meal::setCarbs(qreal c)
     }
 }
 
-void Meal::updateCarbs(qreal c)
+QString Meal::calcCarbs() const
 {
-    setCarbs(c/factor());
+    return formatNumber(carbs() * factor());
+}
+
+void Meal::updateCarbs(QString c)
+{
+    updateNumber(c, factor(), &Meal::setCarbs, &Meal::carbsChanged);
 }
 
 qreal Meal::calories() const
@@ -133,27 +156,38 @@ void Meal::setCalories(qreal c)
     }
 }
 
-void Meal::updateCalories(qreal c)
+QString Meal::calcCalories() const
 {
-    setCalories(c/factor());
+    return formatNumber(calories() * factor());
 }
 
-qreal Meal::calcFat() const
+void Meal::updateCalories(QString c)
 {
-    return m_meal->fat() * m_meal->factor();
+    updateNumber(c, factor(), &Meal::setCalories, &Meal::caloriesChanged);
 }
 
-qreal Meal::calcProtein() const
+QString Meal::formatNumber(qreal q)
 {
-    return m_meal->protein() * m_meal->factor();
+    QLocale l;
+    QString ret = l.toString(q, 'f', 1);
+    int pos = ret.indexOf(l.decimalPoint());
+    if (pos >= 0) {
+        if (ret.mid(pos+1) == "0") {
+            ret = ret.left(pos);
+        }
+    }
+    return ret;
 }
 
-qreal Meal::calcCarbs() const
+bool Meal::updateNumber(const QString &n, qreal f, void (Meal::*setter)(qreal), void (Meal::*emitter)())
 {
-    return m_meal->carbs() * m_meal->factor();
-}
-
-qreal Meal::calcCalories() const
-{
-    return m_meal->calories() * m_meal->factor();
+    bool ok;
+    if (qFuzzyIsNull(f)) f = 1;
+    qreal q = QLocale().toDouble(n, &ok);
+    if (ok) {
+        if (setter) (this->*setter)(q / f);
+    } else {
+        if (emitter) (this->*emitter)();
+    }
+    return ok;
 }

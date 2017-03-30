@@ -36,8 +36,10 @@ DISTFILES += \
     main.qml \
     qml/DayItem.qml \
     qml/MealList.qml \
+    qml/DoubleField.qml \
     qml/styles/ShiftComboStyle.qml \
     qml/styles/PlaceholderTextEditStyle.qml \
+    qml/styles/DropdownStyle.qml \
     qml/PostfixTextField.qml \
     data/data.csv \
     qml/FilterTextInput.qml

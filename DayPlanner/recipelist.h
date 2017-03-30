@@ -11,6 +11,7 @@ class RecipeList : public QAbstractListModel
 {
 public:
     RecipeList();
+    ~RecipeList();
 
     QVariant data(const QModelIndex &index, int role) const;
     int rowCount(const QModelIndex &parent) const;

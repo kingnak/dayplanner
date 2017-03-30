@@ -9,6 +9,11 @@ RecipeList::RecipeList()
     load();
 }
 
+RecipeList::~RecipeList()
+{
+    qDeleteAll(m_data);
+}
+
 QVariant RecipeList::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
