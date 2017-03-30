@@ -28,18 +28,21 @@ Rectangle {
 			MealList {
 				id: breakfast
 				Layout.fillWidth: true
+				Layout.fillHeight: true
 				_data: root._data.breakfast
 			}
 
 			MealList {
 				id: lunch
 				Layout.fillWidth: true
+				Layout.fillHeight: true
 				_data: root._data.lunch
 			}
 
 			MealList {
 				id: dinner
 				Layout.fillWidth: true
+				Layout.fillHeight: true
 				_data: root._data.dinner
 			}
 		}

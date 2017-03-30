@@ -45,7 +45,8 @@ DISTFILES += \
     data/data.csv \
     qml/FilterTextInput.qml \
     qml/DaySummary.qml \
-    qml/DayHeader.qml
+    qml/DayHeader.qml \
+    qml/styles/BaseStyle.qml
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

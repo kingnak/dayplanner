@@ -35,23 +35,26 @@ ApplicationWindow {
 		function mealColor(mealType) {
 			var c = "transparent";
 			switch (mealType) {
-			case Meal.Breakfast:
-			default:
-				c = "grey";
+			case Meal.Breakfast: return "#FFF176";
+			case Meal.Lunch: return "#FF8A65";
+			case Meal.Dinner: return "#9575CD";
+			default: return "#E0E0E0";
 			}
-			return c;
 		}
 	}
 
     ListModel {
         id: shiftsModel
-        ListElement { text: ""; color: "transparent" }
-        ListElement { text: "0"; color: "red" }
-        ListElement { text: "X"; color: "green" }
-        ListElement { text: "A1"; color: "blue" }
-        ListElement { text: "A2"; color: "yellow" }
-        ListElement { text: "N1"; color: "cyan" }
-        ListElement { text: "N2"; color: "magenta" }
+		ListElement { text: "0"; color: "transparent" }
+		ListElement { text: "0"; color: "transparent" }
+		ListElement { text: "X"; color: "#81D4FA" }
+		ListElement { text: "A1"; color: "#81D4FA" }
+		ListElement { text: "A2"; color: "#FFD54F" }
+		ListElement { text: "A3"; color: "#FFD54F" }
+		ListElement { text: "Z1"; color: "#CE93D8" }
+		ListElement { text: "Z2"; color: "#CE93D8" }
+		ListElement { text: "N1"; color: "#CE93D8" }
+		ListElement { text: "N2"; color: "#CE93D8" }
     }
 
 	StackView {

@@ -69,7 +69,7 @@ void MealList::createMealForRecipe(qint32 recipeId)
         return;
     }
 
-    qreal f = qMax(r->quantity(), 1);
+	qreal f = r->quantity() == 0 ? 1 : r->quantity();
     m->setName(r->name());
     m->setFactor(f);
     m->setFat(r->fat() / f);

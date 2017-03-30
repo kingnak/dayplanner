@@ -61,7 +61,7 @@ void DataBase::createConnection()
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     bool needInit = false;
 
-#define CLEANDB
+//#define CLEANDB
 #define LOCALFILE QDir(qApp->arguments().value(1)).absoluteFilePath("db.db")
 #ifdef LOCALFILE
     QString s = LOCALFILE;

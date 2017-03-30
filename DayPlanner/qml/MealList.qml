@@ -20,7 +20,7 @@ ListView {
     header: headerBanner
     headerPositioning: ListView.OverlayHeader
     footer: footerEditor
-    footerPositioning: ListView.InlineFooter
+	footerPositioning: ListView.OverlayFooter
 
     Component {
         id: mealItem
@@ -117,6 +117,7 @@ ListView {
     Component {
         id: footerEditor
         Rectangle {
+			z: 2
             color: "lightGrey";
             width: parent.width
             height: inp.height
