@@ -19,6 +19,7 @@ class DayData : public QObject
     Q_PROPERTY(MealList *breakfast READ breakfast NOTIFY neverNotified)
 	Q_PROPERTY(MealList *lunch READ lunch NOTIFY neverNotified)
 	Q_PROPERTY(MealList *dinner READ dinner NOTIFY neverNotified)
+	Q_PROPERTY(MealList *snack READ snack NOTIFY neverNotified)
 
 public:
     explicit DayData(const QDate &d, DAOFacade *facade, QObject *parent = 0);
@@ -32,6 +33,7 @@ public:
     MealList *breakfast() const;
 	MealList *lunch() const;
 	MealList *dinner() const;
+	MealList *snack() const;
 
 signals:
     void shiftIndexChanged(int idx);

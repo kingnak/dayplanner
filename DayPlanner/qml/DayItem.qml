@@ -45,6 +45,13 @@ Rectangle {
 				Layout.fillHeight: true
 				_data: root._data.dinner
 			}
+
+			MealList {
+				id: snack
+				Layout.fillWidth: true
+				Layout.fillHeight: true
+				_data: root._data.snack
+			}
 		}
 
 		Rectangle { Layout.fillWidth: true; Layout.minimumWidth: 0 }

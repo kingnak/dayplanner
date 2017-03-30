@@ -51,6 +51,12 @@ Rectangle {
 					width: parent.width
 					mealData: _data.dinner
 				}
+
+				MealSummary {
+					visible: !_data.snack.isEmpty
+					width: parent.width
+					mealData: _data.snack
+				}
 			}
 		}
 	}

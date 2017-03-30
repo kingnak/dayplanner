@@ -10,7 +10,8 @@ DayData::DayData(const QDate &d, DAOFacade *facade, QObject *parent)
 {
 	m_meals << MealList::loadForDateAndType(this, facade, d, Meal::Breakfast)
 			<< MealList::loadForDateAndType(this, facade, d, Meal::Lunch)
-			<< MealList::loadForDateAndType(this, facade, d, Meal::Dinner);
+			<< MealList::loadForDateAndType(this, facade, d, Meal::Dinner)
+			<< MealList::loadForDateAndType(this, facade, d, Meal::Snacks);
 }
 
 DayData::~DayData()
@@ -53,4 +54,9 @@ MealList *DayData::lunch() const
 MealList *DayData::dinner() const
 {
 	return m_meals[2];
+}
+
+MealList *DayData::snack() const
+{
+	return m_meals[3];
 }
