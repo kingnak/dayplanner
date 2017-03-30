@@ -86,14 +86,9 @@ qreal Meal::calcFat() const
 	return fat() * factor();
 }
 
-QString Meal::calcFatFormatted() const
+void Meal::updateFat(qreal f)
 {
-	return formatNumber(calcFat());
-}
-
-void Meal::updateFat(QString f)
-{
-    updateNumber(f, factor(), &Meal::setFat, &Meal::fatChanged);
+	setFat(f / factor());
 }
 
 qreal Meal::protein() const
@@ -116,14 +111,9 @@ qreal Meal::calcProtein() const
 	return protein() * factor();
 }
 
-QString Meal::calcProteinFormatted() const
+void Meal::updateProtein(qreal p)
 {
-	return formatNumber(calcProtein());
-}
-
-void Meal::updateProtein(QString p)
-{
-    updateNumber(p, factor(), &Meal::setProtein, &Meal::proteinChanged);
+	setProtein(p / factor());
 }
 
 qreal Meal::carbs() const
@@ -146,14 +136,9 @@ qreal Meal::calcCarbs() const
 	return carbs() * factor();
 }
 
-QString Meal::calcCarbsFormatted() const
+void Meal::updateCarbs(qreal c)
 {
-	return formatNumber(calcCarbs());
-}
-
-void Meal::updateCarbs(QString c)
-{
-    updateNumber(c, factor(), &Meal::setCarbs, &Meal::carbsChanged);
+	setCarbs(c / factor());
 }
 
 qreal Meal::calories() const
@@ -176,38 +161,7 @@ qreal Meal::calcCalories() const
 	return calories() * factor();
 }
 
-QString Meal::calcCaloriesFormatted() const
+void Meal::updateCalories(qreal c)
 {
-	return formatNumber(calcCalories());
-}
-
-void Meal::updateCalories(QString c)
-{
-    updateNumber(c, factor(), &Meal::setCalories, &Meal::caloriesChanged);
-}
-
-QString Meal::formatNumber(qreal q)
-{
-    QLocale l;
-    QString ret = l.toString(q, 'f', 1);
-    int pos = ret.indexOf(l.decimalPoint());
-    if (pos >= 0) {
-        if (ret.mid(pos+1) == "0") {
-            ret = ret.left(pos);
-        }
-    }
-    return ret;
-}
-
-bool Meal::updateNumber(const QString &n, qreal f, void (Meal::*setter)(qreal), void (Meal::*emitter)())
-{
-    bool ok;
-    if (qFuzzyIsNull(f)) f = 1;
-    qreal q = QLocale().toDouble(n, &ok);
-    if (ok) {
-        if (setter) (this->*setter)(q / f);
-    } else {
-        if (emitter) (this->*emitter)();
-    }
-    return ok;
+	setCalories(c / factor());
 }

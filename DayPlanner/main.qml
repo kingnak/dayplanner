@@ -23,6 +23,10 @@ ApplicationWindow {
         id: recipeModel
     }
 
+	Utils {
+		id: utils
+	}
+
     ListModel {
         id: shiftsModel
         ListElement { text: ""; color: "transparent" }

@@ -101,40 +101,40 @@ void MealList::removeMeal(qint32 idx)
 	notifySumsChanged();
 }
 
-QString MealList::sumFat() const
+qreal MealList::sumFat() const
 {
 	qreal sum = 0;
 	for (auto m : m_data) {
 		sum += m->calcFat();
 	}
-	return Meal::formatNumber(sum);
+	return sum;
 }
 
-QString MealList::sumProtein() const
+qreal MealList::sumProtein() const
 {
 	qreal sum = 0;
 	for (auto m : m_data) {
 		sum += m->calcProtein();
 	}
-	return Meal::formatNumber(sum);
+	return sum;
 }
 
-QString MealList::sumCarbs() const
+qreal MealList::sumCarbs() const
 {
 	qreal sum = 0;
 	for (auto m : m_data) {
 		sum += m->calcCarbs();
 	}
-	return Meal::formatNumber(sum);
+	return sum;
 }
 
-QString MealList::sumCalories() const
+qreal MealList::sumCalories() const
 {
 	qreal sum = 0;
 	for (auto m : m_data) {
 		sum += m->calcCalories();
 	}
-	return Meal::formatNumber(sum);
+	return sum;
 }
 
 Meal *MealList::atFunc(QQmlListProperty<Meal> *p, int i)

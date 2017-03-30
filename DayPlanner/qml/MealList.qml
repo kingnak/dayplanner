@@ -170,19 +170,19 @@ ListView {
 					}
 				}
 				Text {
-					text: "\u03A3 " + _data.sumFat;
+					text: "\u03A3 " + utils.formatNumber(_data.sumFat);
 					Layout.minimumWidth: 40 + metrics.boundingRect("F").width
 				}
 				Text {
-					text: "\u03A3 " + _data.sumProtein;
+					text: "\u03A3 " + utils.formatNumber(_data.sumProtein);
 					Layout.minimumWidth: 40 + metrics.boundingRect("EW").width
 				}
 				Text {
-					text: "\u03A3 " + _data.sumCarbs;
+					text: "\u03A3 " + utils.formatNumber(_data.sumCarbs);
 					Layout.minimumWidth: 40 + metrics.boundingRect("KH").width
 				}
 				Text {
-					text: "\u03A3 " + _data.sumCalories;
+					text: "\u03A3 " + utils.formatNumber(_data.sumCalories);
 					Layout.minimumWidth: 40 + metrics.boundingRect("kcal \u03A3").width
 				}
 			}

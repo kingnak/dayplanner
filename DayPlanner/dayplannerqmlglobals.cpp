@@ -7,6 +7,7 @@
 #include "meal.h"
 #include "meallist.h"
 #include "recipelist.h"
+#include "qmlutils.h"
 
 DayPlannerQMLGlobals::DayPlannerQMLGlobals(QObject *parent) : QObject(parent)
 {
@@ -19,6 +20,7 @@ void DayPlannerQMLGlobals::registerTypes()
     qmlRegisterType<Meal>("org.kingnak.dayplanner", 1, 0, "Meal");
     qmlRegisterType<MealList>("org.kingnak.dayplanner", 1, 0, "MealList");
     qmlRegisterType<RecipeList>("org.kingnak.dayplanner", 1, 0, "RecipeModel");
+	qmlRegisterType<QmlUtils>("org.kingnak.dayplanner", 1, 0, "Utils");
 }
 
 DAOFacade *globalDAOFacade() {

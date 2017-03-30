@@ -15,10 +15,10 @@ class MealList : public QObject
 
     Q_PROPERTY(QQmlListProperty<Meal> items READ items NOTIFY itemsChanged)
     Q_PROPERTY(Meal::Type type READ type NOTIFY neverNotify)
-	Q_PROPERTY(QString sumFat READ sumFat NOTIFY sumFatChanged)
-	Q_PROPERTY(QString sumProtein READ sumProtein NOTIFY sumProteinChanged)
-	Q_PROPERTY(QString sumCarbs READ sumCarbs NOTIFY sumCarbsChanged)
-	Q_PROPERTY(QString sumCalories READ sumCalories NOTIFY sumCaloriesChanged)
+	Q_PROPERTY(qreal sumFat READ sumFat NOTIFY sumFatChanged)
+	Q_PROPERTY(qreal sumProtein READ sumProtein NOTIFY sumProteinChanged)
+	Q_PROPERTY(qreal sumCarbs READ sumCarbs NOTIFY sumCarbsChanged)
+	Q_PROPERTY(qreal sumCalories READ sumCalories NOTIFY sumCaloriesChanged)
 
 public:
     MealList(QObject *parent = nullptr);
@@ -33,10 +33,10 @@ public:
     Q_INVOKABLE void createMealForRecipe(qint32 recipeId);
     Q_INVOKABLE void removeMeal(qint32 idx);
 
-	QString sumFat() const;
-	QString sumProtein() const;
-	QString sumCarbs() const;
-	QString sumCalories() const;
+	qreal sumFat() const;
+	qreal sumProtein() const;
+	qreal sumCarbs() const;
+	qreal sumCalories() const;
 
 signals:
     void itemsChanged();
