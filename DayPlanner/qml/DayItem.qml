@@ -7,57 +7,44 @@ Rectangle {
     property var _data
     id: root
 
-    ColumnLayout {
+	GridLayout {
         anchors.fill: parent
+		columns: 3
 
-        RowLayout {
-            Layout.fillWidth: true
-            height: Math.max(dateText.height, shiftCombo.height)
+		Rectangle { Layout.fillWidth: true; Layout.minimumWidth: 0 }
 
-            Rectangle {
-                anchors.fill: parent
-                color: shiftsModel.get(_data.shiftIndex).color
-            }
+		ColumnLayout {
+			Layout.minimumWidth: 400
+			Layout.preferredWidth: 450
+			Layout.maximumWidth: 650
+			Layout.minimumHeight: 400
+			Layout.preferredHeight: 600
+			DayHeader {
+				dayData: _data
+				anchors.left: parent.left
+				anchors.right: parent.right
+			}
 
-            Label {
-                id: dateText
-                text: _data.date.getDate()
-                Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
-                Layout.fillWidth: true
-            }
+			MealList {
+				id: breakfast
+				Layout.fillWidth: true
+				_data: root._data.breakfast
+			}
 
-            ComboBox {
-                id: shiftCombo
-                model: shiftsModel
-                Layout.alignment: Qt.AlignRight
-                currentIndex: _data.shiftIndex
-                onCurrentIndexChanged: _data.shiftIndex = currentIndex
-                style: ShiftComboStyle { }
-            }
-        }
+			MealList {
+				id: lunch
+				Layout.fillWidth: true
+				_data: root._data.lunch
+			}
 
-        MealList {
-            id: breakfast
-            Layout.fillWidth: true
-            _data: root._data.breakfast
-        }
-
-        MealList {
-            id: lunch
-            Layout.fillWidth: true
-			_data: root._data.lunch
-        }
-
-		MealList {
-			id: dinner
-			Layout.fillWidth: true
-			_data: root._data.dinner
+			MealList {
+				id: dinner
+				Layout.fillWidth: true
+				_data: root._data.dinner
+			}
 		}
 
-        Rectangle {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            color: "green"
-        }
+		Rectangle { Layout.fillWidth: true; Layout.minimumWidth: 0 }
+		Rectangle { Layout.fillHeight: true; Layout.columnSpan: 3; Layout.minimumHeight: 0 }
     }
 }

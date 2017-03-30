@@ -19,6 +19,7 @@ class MealList : public QObject
 	Q_PROPERTY(qreal sumProtein READ sumProtein NOTIFY sumProteinChanged)
 	Q_PROPERTY(qreal sumCarbs READ sumCarbs NOTIFY sumCarbsChanged)
 	Q_PROPERTY(qreal sumCalories READ sumCalories NOTIFY sumCaloriesChanged)
+	Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY itemsChanged)
 
 public:
     MealList(QObject *parent = nullptr);
@@ -37,6 +38,8 @@ public:
 	qreal sumProtein() const;
 	qreal sumCarbs() const;
 	qreal sumCalories() const;
+
+	bool isEmpty() const;
 
 signals:
     void itemsChanged();

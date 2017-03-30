@@ -146,28 +146,14 @@ ListView {
             width: parent.width
             height: txt.height
 
-            color: {
-                var c = "transparent";
-                switch (_data.type) {
-                case Meal.Breakfast:
-				default:
-                    c = "grey";
-                }
-                c;
-            }
+			color: utils.mealColor(_data.type)
+
 			RowLayout {
 				width: parent.width
 				Text {
 					Layout.fillWidth: true
 					id: txt
-					text: {
-						switch (_data.type) {
-						case Meal.Breakfast: return "Frühstück";
-						case Meal.Lunch: return "Mittag";
-						case Meal.Dinner: return "Abend";
-						default: return "Anderes";
-						}
-					}
+					text: utils.mealName(_data.type)
 				}
 				Text {
 					text: "\u03A3 " + utils.formatNumber(_data.sumFat);

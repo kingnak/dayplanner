@@ -137,6 +137,11 @@ qreal MealList::sumCalories() const
 	return sum;
 }
 
+bool MealList::isEmpty() const
+{
+	return m_data.isEmpty();
+}
+
 Meal *MealList::atFunc(QQmlListProperty<Meal> *p, int i)
 {
     return static_cast<MealList *> (p->object)->m_data.at(i);

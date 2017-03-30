@@ -43,7 +43,9 @@ DISTFILES += \
     qml/styles/DropdownStyle.qml \
     qml/PostfixTextField.qml \
     data/data.csv \
-    qml/FilterTextInput.qml
+    qml/FilterTextInput.qml \
+    qml/DaySummary.qml \
+    qml/DayHeader.qml
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

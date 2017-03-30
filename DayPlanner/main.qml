@@ -9,9 +9,8 @@ import org.kingnak.dayplanner 1.0
 ApplicationWindow {
     id: root
 
-    property bool useSingleDayView: true
     visible: true
-    width: 640
+	width: 640
     height: 480
     title: qsTr("Hello World")
 
@@ -25,6 +24,23 @@ ApplicationWindow {
 
 	Utils {
 		id: utils
+		function mealName(mealType) {
+			switch (mealType) {
+			case Meal.Breakfast: return "Frühstück";
+			case Meal.Lunch: return "Mittag";
+			case Meal.Dinner: return "Abend";
+			default: return "Anderes";
+			}
+		}
+		function mealColor(mealType) {
+			var c = "transparent";
+			switch (mealType) {
+			case Meal.Breakfast:
+			default:
+				c = "grey";
+			}
+			return c;
+		}
 	}
 
     ListModel {
@@ -38,33 +54,56 @@ ApplicationWindow {
         ListElement { text: "N2"; color: "magenta" }
     }
 
-    Loader {
-        anchors.fill: parent
-        sourceComponent: root.useSingleDayView ? singeDayView : calendar
-    }
+	StackView {
+		id: stack
+		initialItem: calendar
+		anchors.fill: parent
+	}
 
     Component {
         id: calendar
 
         Calendar {
             onVisibleMonthChanged: dayModel.clearCache(new Date(calendar.visibleYear, calendar.visibleMonth, 1))
-            anchors.fill: parent
             style: CalendarStyle {
-                dayDelegate: DayItem {
+				dayDelegate: DaySummary {
                     _data: dayModel.dataForDate(styleData.date)
-                    visible: styleData.visibleMonth
+					opacity: styleData.visibleMonth ? 1 : 0
                     enabled: styleData.visibleMonth
+					onOpenDay: {
+						stack.push({item: singleDayView, properties: {_data:dayModel.dataForDate(d)}});
+					}
                 }
             }
         }
     }
 
     Component {
-        id: singeDayView
+		id: singleDayView
 
-        DayItem {
-            _data: dayModel.dataForDate(new Date())
-            anchors.fill: parent
-        }
+		ColumnLayout {
+			property alias _data: theDay._data
+
+			RowLayout {
+				anchors.left: parent.left
+				anchors.right: parent.right
+
+				ToolButton {
+					text: "< zurück"
+					onClicked: stack.pop();
+				}
+				Rectangle {
+					Layout.fillWidth: true
+					color: "transparent"
+				}
+			}
+
+			DayItem {
+				anchors.left: parent.left
+				anchors.right: parent.right
+				id: theDay
+				Layout.fillHeight: true
+			}
+		}
     }
 }

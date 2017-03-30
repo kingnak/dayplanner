@@ -8,5 +8,8 @@
         <file>qml/FilterTextInput.qml</file>
         <file>qml/styles/DropdownStyle.qml</file>
         <file>qml/DoubleField.qml</file>
+        <file>qml/DayHeader.qml</file>
+        <file>qml/DaySummary.qml</file>
+        <file>qml/MealSummary.qml</file>
     </qresource>
 </RCC>
