@@ -15,6 +15,7 @@ Rectangle {
 
 	ColumnLayout {
 		anchors.fill: parent
+		spacing: 0
 
 		DayHeader {
 			dayData: root._data

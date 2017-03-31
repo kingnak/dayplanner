@@ -12,6 +12,13 @@ DayData::DayData(const QDate &d, DAOFacade *facade, QObject *parent)
 			<< MealList::loadForDateAndType(this, facade, d, Meal::Lunch)
 			<< MealList::loadForDateAndType(this, facade, d, Meal::Dinner)
 			<< MealList::loadForDateAndType(this, facade, d, Meal::Snacks);
+
+	for (auto m : m_meals) {
+		connect(m, &MealList::sumFatChanged, this, &DayData::sumsChanged);
+		connect(m, &MealList::sumProteinChanged, this, &DayData::sumsChanged);
+		connect(m, &MealList::sumCarbsChanged, this, &DayData::sumsChanged);
+		connect(m, &MealList::sumCaloriesChanged, this, &DayData::sumsChanged);
+	}
 }
 
 DayData::~DayData()
@@ -59,4 +66,40 @@ MealList *DayData::dinner() const
 MealList *DayData::snack() const
 {
 	return m_meals[3];
+}
+
+qreal DayData::sumFat() const
+{
+	qreal s = 0;
+	for (MealList *m : m_meals) {
+		s += m->sumFat();
+	}
+	return s;
+}
+
+qreal DayData::sumProtein() const
+{
+	qreal s = 0;
+	for (MealList *m : m_meals) {
+		s += m->sumProtein();
+	}
+	return s;
+}
+
+qreal DayData::sumCarbs() const
+{
+	qreal s = 0;
+	for (MealList *m : m_meals) {
+		s += m->sumCarbs();
+	}
+	return s;
+}
+
+qreal DayData::sumCalories() const
+{
+	qreal s = 0;
+	for (MealList *m : m_meals) {
+		s += m->sumCalories();
+	}
+	return s;
 }

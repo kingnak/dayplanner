@@ -21,6 +21,11 @@ class DayData : public QObject
 	Q_PROPERTY(MealList *dinner READ dinner NOTIFY neverNotified)
 	Q_PROPERTY(MealList *snack READ snack NOTIFY neverNotified)
 
+	Q_PROPERTY(qreal sumFat READ sumFat NOTIFY sumsChanged)
+	Q_PROPERTY(qreal sumProtein READ sumProtein NOTIFY sumsChanged)
+	Q_PROPERTY(qreal sumCarbs READ sumCarbs NOTIFY sumsChanged)
+	Q_PROPERTY(qreal sumCalories READ sumCalories NOTIFY sumsChanged)
+
 public:
     explicit DayData(const QDate &d, DAOFacade *facade, QObject *parent = 0);
     ~DayData();
@@ -35,8 +40,14 @@ public:
 	MealList *dinner() const;
 	MealList *snack() const;
 
+	qreal sumFat() const;
+	qreal sumProtein() const;
+	qreal sumCarbs() const;
+	qreal sumCalories() const;
+
 signals:
     void shiftIndexChanged(int idx);
+	void sumsChanged();
     void neverNotified() /* Should never be used */;
 
 private:

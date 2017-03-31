@@ -7,4 +7,5 @@ ComboBoxStyle {
     background: DropdownStyle {
         showHovered: comboStyle.showHovered
     }
+	font: baseStyle.shiftFont
 }

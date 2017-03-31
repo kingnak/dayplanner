@@ -34,11 +34,9 @@ ApplicationWindow {
 			case Meal.Breakfast: return "Frühstück";
 			case Meal.Lunch: return "Mittag";
 			case Meal.Dinner: return "Abend";
+			case Meal.Snacks: return "Snacks";
 			default: return "Anderes";
 			}
-		}
-		function mealColor(mealType) {
-			return baseStyle.mealColor(mealType);
 		}
 	}
 
@@ -73,29 +71,46 @@ ApplicationWindow {
     Component {
 		id: singleDayView
 
-		ColumnLayout {
+		GridLayout {
 			property alias _data: theDay._data
+			columns: 3
+			rowSpacing: 0
+			columnSpacing: 0
 
-			RowLayout {
-				anchors.left: parent.left
-				anchors.right: parent.right
+			Rectangle { Layout.fillWidth: true; Layout.minimumWidth: 0 }
 
-				ToolButton {
-					text: "< zurück"
-					onClicked: stack.pop();
+			ColumnLayout {
+				spacing: 0
+				Layout.minimumWidth: 400
+				Layout.preferredWidth: 450
+				Layout.maximumWidth: 650
+				Layout.minimumHeight: 400
+				Layout.preferredHeight: 600
+
+				RowLayout {
+					anchors.left: parent.left
+					anchors.right: parent.right
+
+					ToolButton {
+						text: "< zurück"
+						onClicked: stack.pop();
+					}
+					Rectangle {
+						Layout.fillWidth: true
+						color: "transparent"
+					}
 				}
-				Rectangle {
-					Layout.fillWidth: true
-					color: "transparent"
+
+				DayItem {
+					anchors.left: parent.left
+					anchors.right: parent.right
+					id: theDay
+					Layout.fillHeight: true
 				}
 			}
 
-			DayItem {
-				anchors.left: parent.left
-				anchors.right: parent.right
-				id: theDay
-				Layout.fillHeight: true
-			}
+			Rectangle { Layout.fillWidth: true; Layout.minimumWidth: 0 }
+			Rectangle { Layout.fillHeight: true; Layout.columnSpan: 3; Layout.minimumHeight: 5 }
 		}
-    }
+	}
 }

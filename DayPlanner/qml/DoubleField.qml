@@ -8,6 +8,7 @@ TextField {
 
     property string value: ""
 	onValueChanged: text = utils.formatNumber(value)
+	font: baseStyle.editorFont
 
     validator: DoubleValidator { bottom: 0; decimals: 1 }
 	onEditingFinished: if (acceptableInput) doubleFinished(utils.parseNumber(text)); else doubleError(text);

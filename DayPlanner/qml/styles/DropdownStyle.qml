@@ -8,7 +8,7 @@ Rectangle {
     width: control.width
     height: control.height
     implicitHeight: 20
-    implicitWidth: 40
+	implicitWidth: 50
 
     Canvas {
         readonly property color _clr: parent.borderColor

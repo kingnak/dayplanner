@@ -145,36 +145,43 @@ ListView {
         Rectangle {
             z: 2
             width: parent.width
-            height: txt.height
+			height: Math.max(txt.height*1.2, txt.height+6)
 
-			color: utils.mealColor(_data.type)
+			color: baseStyle.mealColor(_data.type)
 
 			RowLayout {
 				width: parent.width
+				anchors.verticalCenter: parent.verticalCenter
 				Text {
 					Layout.fillWidth: true
+					font: baseStyle.headerFont
 					id: txt
 					text: utils.mealName(_data.type)
 				}
 				Text {
+					font: baseStyle.defaultFont
 					text: "\u03A3 " + utils.formatNumber(_data.sumFat);
 					Layout.minimumWidth: 40 + metrics.boundingRect("F").width
 				}
 				Text {
+					font: baseStyle.defaultFont
 					text: "\u03A3 " + utils.formatNumber(_data.sumProtein);
 					Layout.minimumWidth: 40 + metrics.boundingRect("EW").width
 				}
 				Text {
+					font: baseStyle.defaultFont
 					text: "\u03A3 " + utils.formatNumber(_data.sumCarbs);
 					Layout.minimumWidth: 40 + metrics.boundingRect("KH").width
 				}
 				Text {
+					font: baseStyle.defaultFont
 					text: "\u03A3 " + utils.formatNumber(_data.sumCalories);
 					Layout.minimumWidth: 40 + metrics.boundingRect("kcal \u03A3").width
 				}
 			}
 			FontMetrics {
 				id: metrics
+				font: baseStyle.editorFont
 			}
 		}
 	}
