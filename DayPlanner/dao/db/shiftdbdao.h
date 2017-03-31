@@ -24,6 +24,8 @@ protected:
 
     DAO_USE(DbDAOBase)
 
+	virtual void postReset();
+
 private:
     QDate m_date;
 };

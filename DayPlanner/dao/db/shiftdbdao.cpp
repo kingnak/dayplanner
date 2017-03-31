@@ -7,8 +7,7 @@ ShiftDbDAO::ShiftDbDAO(QDate d, DataBase *db)
     : DbDAOBase(db),
       m_date(d)
 {
-	if (!load())
-		setData("d", keyData("d"));
+	load();
 }
 
 QDate ShiftDbDAO::date() const
@@ -41,5 +40,10 @@ QString ShiftDbDAO::keyData(const QString &field)
 
 QString ShiftDbDAO::tableName()
 {
-    return "Shift";
+	return "Shift";
+}
+
+void ShiftDbDAO::postReset()
+{
+	setData("d", keyData("d"));
 }

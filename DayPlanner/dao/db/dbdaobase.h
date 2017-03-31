@@ -33,6 +33,8 @@ protected:
     virtual bool doUpdate();
     virtual bool doRemove();
 
+	virtual void postReset() {}
+
     // Should be overridden by subclass if using custom queries
     virtual QString loadQuery();
     virtual QString insertQuery();
