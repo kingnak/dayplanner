@@ -84,8 +84,21 @@ void DataBase::createConnection()
     }
 
     if (needInit) {
-        QSqlQuery query;
-        query.exec("CREATE TABLE Shift (d DATE PRIMARY KEY, shift INT)");
+		QSqlQuery query;
+		query.exec("CREATE TABLE ShiftList (id INT NOT NULL PRIMARY KEY, name TEXT)");
+		query.exec("INSERT INTO ShiftList (id, name) VALUES "
+				   "(0, '0'), "
+				   "(1, 'X'), "
+				   "(2, 'A1'), "
+				   "(3, 'A2'), "
+				   "(4, 'A3'), "
+				   "(5, 'Z1'), "
+				   "(6, 'Z2'), "
+				   "(7, 'N1'), "
+				   "(8, 'N2')"
+				   );
+
+		query.exec("CREATE TABLE Shift (d DATE NOT NULL PRIMARY KEY, shiftId INT)");
         /*
         for (int i = 0; i < 70; ++i) {
             QString q = QString("INSERT INTO Shift VALUES('%1', %2)").arg(QDate::currentDate().addDays(i-35).toString("yyyy-MM-dd")).arg(i%6+1);

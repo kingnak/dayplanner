@@ -29,7 +29,8 @@ SOURCES += main.cpp \
     recipelist.cpp \
     dao/recipedao.cpp \
     dao/db/recipedbdao.cpp \
-    qmlutils.cpp
+    qmlutils.cpp \
+    shiftlist.cpp
 
 RESOURCES += qml.qrc
 
@@ -74,4 +75,5 @@ HEADERS += \
     recipelist.h \
     dao/recipedao.h \
     dao/db/recipedbdao.h \
-    qmlutils.h
+    qmlutils.h \
+    shiftlist.h

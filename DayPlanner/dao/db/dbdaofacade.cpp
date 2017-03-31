@@ -7,7 +7,19 @@
 
 ShiftDAO *DbDAOFacade::loadShift(QDate d)
 {
-    return new ShiftDbDAO(d, &DataBase::instance());
+	return new ShiftDbDAO(d, &DataBase::instance());
+}
+
+QStringList DbDAOFacade::loadAllShifts()
+{
+	QString query = "SELECT name FROM ShiftList ORDER BY id ASC";
+	QSqlQuery q = DataBase::instance().executeQuery(query);
+
+	QStringList r;
+	while (q.next()) {
+		r << q.record().value("name").toString();
+	}
+	return r;
 }
 
 QList<MealDAO *> DbDAOFacade::loadMeals(QDate d, qint32 type)

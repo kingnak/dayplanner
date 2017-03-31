@@ -3,6 +3,7 @@ import QtQuick.Controls 1.5
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.1
 import "qml"
+import "qml/styles"
 import org.kingnak.dayplanner 1.0
 
 
@@ -20,7 +21,11 @@ ApplicationWindow {
 
     RecipeModel {
         id: recipeModel
-    }
+	}
+
+	BaseStyle {
+		id: baseStyle
+	}
 
 	Utils {
 		id: utils
@@ -33,29 +38,13 @@ ApplicationWindow {
 			}
 		}
 		function mealColor(mealType) {
-			var c = "transparent";
-			switch (mealType) {
-			case Meal.Breakfast: return "#FFF176";
-			case Meal.Lunch: return "#FF8A65";
-			case Meal.Dinner: return "#9575CD";
-			default: return "#E0E0E0";
-			}
+			return baseStyle.mealColor(mealType);
 		}
 	}
 
-    ListModel {
-        id: shiftsModel
-		ListElement { text: "0"; color: "transparent" }
-		ListElement { text: "0"; color: "transparent" }
-		ListElement { text: "X"; color: "#81D4FA" }
-		ListElement { text: "A1"; color: "#81D4FA" }
-		ListElement { text: "A2"; color: "#FFD54F" }
-		ListElement { text: "A3"; color: "#FFD54F" }
-		ListElement { text: "Z1"; color: "#CE93D8" }
-		ListElement { text: "Z2"; color: "#CE93D8" }
-		ListElement { text: "N1"; color: "#CE93D8" }
-		ListElement { text: "N2"; color: "#CE93D8" }
-    }
+	ShiftModel {
+		id: shiftsModel
+	}
 
 	StackView {
 		id: stack

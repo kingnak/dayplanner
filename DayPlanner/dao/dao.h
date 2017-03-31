@@ -13,7 +13,9 @@ class DAOFacade
 public:
     virtual ~DAOFacade() {}
 
+	virtual QStringList loadAllShifts() = 0;
     virtual ShiftDAO *loadShift(QDate d) = 0;
+
     virtual QList<MealDAO *> loadMeals(QDate d, qint32 type) = 0;
     virtual MealDAO *createMeal(QDate d, qint32 type) = 0;
 

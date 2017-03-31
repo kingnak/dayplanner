@@ -11,5 +11,6 @@
         <file>qml/DayHeader.qml</file>
         <file>qml/DaySummary.qml</file>
         <file>qml/MealSummary.qml</file>
+        <file>qml/styles/BaseStyle.qml</file>
     </qresource>
 </RCC>

@@ -44,6 +44,7 @@ protected:
     virtual QString keyData(const QString &field);
     virtual QStringList orderFields();
     virtual QString tableName();
+	virtual QStringList excludeDataFields();
 
 protected:
     QString keyCondition();

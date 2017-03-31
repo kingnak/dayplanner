@@ -7,19 +7,12 @@ Rectangle {
 //	height: layout.height
 	//width: parent.width
 	height: Math.max(dateText.height, shiftCombo.height)
-	color: shiftsModel.get(dayData.shiftIndex).color
+	color: baseStyle.shiftColor(shiftsModel.shiftList[dayData.shiftIndex])
 
 	property var dayData
 	RowLayout {
-		//id: layout
-		//anchors.fill: parent
 		anchors.left: parent.left
 		anchors.right: parent.right
-
-	//	Rectangle {
-	//		anchors.fill: parent
-	//		color: shiftsModel.get(dayData.shiftIndex).color
-	//	}
 
 		Label {
 			id: dateText
@@ -30,9 +23,9 @@ Rectangle {
 
 		ComboBox {
 			id: shiftCombo
-			model: shiftsModel
+			model: shiftsModel.shiftList
 			Layout.alignment: Qt.AlignRight
-			currentIndex: _data.shiftIndex
+			currentIndex: dayData.shiftIndex
 			onCurrentIndexChanged: dayData.shiftIndex = currentIndex
 			style: ShiftComboStyle { }
 		}

@@ -85,8 +85,12 @@ QString DbDAOBase::loadQuery()
 QString DbDAOBase::insertQuery()
 {
     QStringList fields, values;
+	QStringList excludeFields = excludeDataFields();
 
     for (int i = 0; i < m_record.count(); ++i) {
+		if (excludeFields.contains(m_record.fieldName(i))) {
+			continue;
+		}
         fields << escapeField(m_record.fieldName(i));
         values << escapeValue(m_record.value(i).toString());
     }
@@ -108,10 +112,14 @@ QString DbDAOBase::updateQuery()
     QStringList updates;
 
     QStringList keys = keyFields();
+	QStringList excludeFields = excludeDataFields();
     for (int i = 0; i < m_record.count(); ++i) {
         if (keys.contains(m_record.fieldName(i))) {
             continue;
         }
+		if (excludeFields.contains(m_record.fieldName(i))) {
+			continue;
+		}
         updates << QString("%1 = %2").arg(
                        escapeField(m_record.fieldName(i)),
                        escapeValue(data<QString>(m_record.fieldName(i)))
@@ -158,7 +166,12 @@ QStringList DbDAOBase::orderFields()
 QString DbDAOBase::tableName()
 {
     VERIFY(false, "DbDAOBase", "Must override tableName if using default queries");
-    return QString::null;
+	return QString::null;
+}
+
+QStringList DbDAOBase::excludeDataFields()
+{
+	return QStringList();
 }
 
 QString DbDAOBase::keyCondition()

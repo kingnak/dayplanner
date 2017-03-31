@@ -7,7 +7,8 @@ ShiftDbDAO::ShiftDbDAO(QDate d, DataBase *db)
     : DbDAOBase(db),
       m_date(d)
 {
-    load();
+	if (!load())
+		setData("d", keyData("d"));
 }
 
 QDate ShiftDbDAO::date() const
@@ -17,12 +18,12 @@ QDate ShiftDbDAO::date() const
 
 int ShiftDbDAO::shiftIndex() const
 {
-    return data<int>("shift");
+	return data<int>("shiftId");
 }
 
 void ShiftDbDAO::setShiftIndex(int idx)
 {
-    setData("shift", idx);
+	setData("shiftId", idx);
 }
 
 QStringList ShiftDbDAO::keyFields()
