@@ -28,12 +28,12 @@ QtObject {
 		case "0": return "transparent";
 		case "X": return "#FFC107";
 		case "A1": return "#FFC107";
-		case "A2": return "#4CAF50";
-		case "A3": return "#4CAF50";
+		case "A2": return "#FFE57F";
+		case "A3": return "#FFE57F";
 		case "Z1": return "#03A9F4";
 		case "Z2": return "#03A9F4";
-		case "N1": return "#03A9F4";
-		case "N2": return "#03A9F4";
+		case "N1": return "#40C4FF";
+		case "N2": return "#40C4FF";
 		default: return "#9E9E9E";
 		}
 	}

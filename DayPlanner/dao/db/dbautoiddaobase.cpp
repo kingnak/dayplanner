@@ -37,5 +37,6 @@ QStringList DbAutoIdDAOBase::keyFields()
 QString DbAutoIdDAOBase::keyData(const QString &field)
 {
     Q_ASSERT(field == "id");
+	Q_UNUSED(field);
     return QString::number(m_id);
 }
