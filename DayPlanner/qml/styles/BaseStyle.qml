@@ -38,21 +38,32 @@ QtObject {
 		}
 	}
 
+	property color trainingColor: "#512DA8"
+	property color trainingFontColor: "#FFFFFF"
+
 	property font headerFont: Qt.font({
 		weight: Font.Bold,
 		pointSize: 9
 	})
 	property font shiftFont: Qt.font({
-		weight: Font.Normal,
+		weight: Font.Bold,
 		pointSize: 9
 	})
 	property font defaultFont: Qt.font({
 		weight: Font.Normal,
-		pointSize: 8
+		pointSize: 9
 	})
 	property font editorFont: Qt.font({
 		weight: Font.Normal,
-		pointSize: 8
+		pointSize: 9
+	})
+	property font summaryFont: Qt.font({
+		weight: Font.Normal,
+		pointSize: 9
 	})
 
+	function formatSummary(value, type, postfix) {
+		var ret = value + '&nbsp;<font color="grey" size="3">'+type+postfix+'</font>';
+		return ret;
+	}
 }

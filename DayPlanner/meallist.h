@@ -22,7 +22,7 @@ class MealList : public QObject
 	Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY itemsChanged)
 
 public:
-    MealList(QObject *parent = nullptr);
+	explicit MealList(QObject *parent = nullptr);
     ~MealList();
 
     static MealList *loadForDateAndType(QObject *parent, DAOFacade *facade, QDate d, Meal::Type type);

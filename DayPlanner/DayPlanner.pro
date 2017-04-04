@@ -30,7 +30,14 @@ SOURCES += main.cpp \
     dao/recipedao.cpp \
     dao/db/recipedbdao.cpp \
     qmlutils.cpp \
-    shiftlist.cpp
+    shiftlist.cpp \
+    dao/workoutdao.cpp \
+    workout.cpp \
+    dao/db/workoutdbdao.cpp \
+    traininglist.cpp \
+    dao/trainingdao.cpp \
+    dao/db/trainingdbdao.cpp \
+    workoutlist.cpp
 
 RESOURCES += qml.qrc
 
@@ -47,7 +54,9 @@ DISTFILES += \
     qml/FilterTextInput.qml \
     qml/DaySummary.qml \
     qml/DayHeader.qml \
-    qml/styles/BaseStyle.qml
+    qml/styles/BaseStyle.qml \
+    qml/WorkoutList.qml \
+    qml/TrainingSummary.qml
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -76,4 +85,11 @@ HEADERS += \
     dao/recipedao.h \
     dao/db/recipedbdao.h \
     qmlutils.h \
-    shiftlist.h
+    shiftlist.h \
+    dao/workoutdao.h \
+    workout.h \
+    dao/db/workoutdbdao.h \
+    traininglist.h \
+    dao/trainingdao.h \
+    dao/db/trainingdbdao.h \
+    workoutlist.h

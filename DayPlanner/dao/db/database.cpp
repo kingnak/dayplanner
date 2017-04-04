@@ -85,8 +85,8 @@ void DataBase::createConnection()
 
     if (needInit) {
 		QSqlQuery query;
-		query.exec("CREATE TABLE ShiftList (id INT NOT NULL PRIMARY KEY, name TEXT)");
-		query.exec("INSERT INTO ShiftList (id, name) VALUES "
+		bool ok = query.exec("CREATE TABLE ShiftList (id INT NOT NULL PRIMARY KEY, name TEXT)");
+		ok = query.exec("INSERT INTO ShiftList (id, name) VALUES "
 				   "(0, '0'), "
 				   "(1, 'X'), "
 				   "(2, 'A1'), "
@@ -98,7 +98,7 @@ void DataBase::createConnection()
 				   "(8, 'N2')"
 				   );
 
-		query.exec("CREATE TABLE Shift (d DATE NOT NULL PRIMARY KEY, shiftId INT)");
+		ok = query.exec("CREATE TABLE Shift (d DATE NOT NULL PRIMARY KEY, shiftId INT)");
         /*
         for (int i = 0; i < 70; ++i) {
             QString q = QString("INSERT INTO Shift VALUES('%1', %2)").arg(QDate::currentDate().addDays(i-35).toString("yyyy-MM-dd")).arg(i%6+1);
@@ -108,7 +108,7 @@ void DataBase::createConnection()
             }
         }
         */
-        query.exec("CREATE TABLE Meal (id INTEGER PRIMARY KEY, date DATE, type INT, name TEXT, factor REAL, fat REAL, protein REAL, carbs REAL, calories REAL, sort INT, recipeId INT NULL)");
+		ok = query.exec("CREATE TABLE Meal (id INTEGER PRIMARY KEY, date DATE, type INT, name TEXT, factor REAL, fat REAL, protein REAL, carbs REAL, calories REAL, sort INT, recipeId INT NULL, recipeState INT DEFAULT 0)");
         /*
         for (int i = 0; i < 3; ++i) {
             QString s = QString("INSERT INTO Meal (date, type, name, factor, fat, sort) VALUES ('%1',1,'Essen %2',1,1,%3,%2)")
@@ -121,7 +121,7 @@ void DataBase::createConnection()
             }
         }
         */
-        query.exec("CREATE TABLE Recipe (id INTEGER PRIMARY KEY, name TEXT, quantity INT, fat REAL, protein REAL, carbs REAL, calories REAL, url TEXT NULL)");
+		ok = query.exec("CREATE TABLE Recipe (id INTEGER PRIMARY KEY, name TEXT, quantity INT, fat REAL, protein REAL, carbs REAL, calories REAL, url TEXT NULL)");
 
         QString dataFile = QDir(qApp->arguments().value(1)).absoluteFilePath("data/data.csv");
         QFile fdata(dataFile);
@@ -151,5 +151,14 @@ void DataBase::createConnection()
             qWarning().noquote() << dataFile << "cannot be opened";
         }
 
+		ok = query.exec("CREATE TABLE Training (id INTEGER PRIMARY KEY, name TEXT)");
+		ok = query.exec("INSERT INTO Training (name) VALUES "
+				   "('Laufen'),"
+				   "('Crossfit'),"
+				   "('EMS'),"
+				   "('Sonstiges')"
+				   );
+
+		ok = query.exec("CREATE TABLE Workout (id INTEGER PRIMARY KEY, date DATE, name TEXT, info TEXT, trainingId INT NULL, sort INT)");
     }
 }

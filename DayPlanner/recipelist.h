@@ -3,7 +3,7 @@
 
 #include <QAbstractListModel>
 #include <QList>
-#include <QVariantMap>
+#include <QHash>
 
 class RecipeDAO;
 

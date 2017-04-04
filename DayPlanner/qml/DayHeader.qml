@@ -6,7 +6,7 @@ import "styles"
 Rectangle {
 	property var dayData
 
-	id: root
+//	id: root
 	height: cols.height//Math.max(dateText.height, shiftCombo.height)
 	color: baseStyle.shiftColor(shiftsModel.shiftList[dayData.shiftIndex])
 
@@ -43,33 +43,46 @@ Rectangle {
 		}
 
 		Flickable {
-			contentHeight: flw.height
-			contentWidth: flw.width
-			height: flw.height
-			width: root.width
+			contentWidth: txt.width
+			contentHeight: txt.height
+			anchors.left: parent.left
+			anchors.right: parent.right
+			height: txt.height
 			clip: true
+			opacity: (dayData.sumFat > 0 || dayData.sumProtein > 0 || dayData.sumCarbs > 0 || dayData.sumCalories > 0 || dayData.workout.count > 0) ? 1 : 0
 			Row {
-				id: flw
-				//width: root.width
+				id: txt
 				Text {
-					text: "F: " + utils.formatNumber(dayData.sumFat) + ", "
-					visible: dayData.sumFat > 0
+					//text: "F: " + utils.formatNumber(dayData.sumFat) + ", "
+					text: baseStyle.formatSummary(utils.formatNumber(dayData.sumFat), "F", ", ");
+					opacity: dayData.sumFat > 0 ? 1 : 0
+					font: baseStyle.summaryFont
 				}
 				Text {
-					text: "EW: " + utils.formatNumber(dayData.sumProtein) + ", "
-					visible: dayData.sumProtein > 0
-				}
-				Text {
-					text: "KH: " + utils.formatNumber(dayData.sumCarbs) + ", "
+					//text: "KH: " + utils.formatNumber(dayData.sumCarbs) + ", "
+					text: baseStyle.formatSummary(utils.formatNumber(dayData.sumCarbs), "KH", ", ");
 					visible: dayData.sumCarbs > 0
+					font: baseStyle.summaryFont
 				}
 				Text {
-					text: "kcal: " + utils.formatNumber(dayData.sumCalories)
-					visible: dayData.sumCalories > 0
+					//text: "EW: " + utils.formatNumber(dayData.sumProtein) + ", "
+					text: baseStyle.formatSummary(utils.formatNumber(dayData.sumProtein), "EW", ", ");
+					visible: dayData.sumProtein > 0
+					font: baseStyle.summaryFont
 				}
-
+				Text {
+					//text: "kcal: " + utils.formatNumber(dayData.sumCalories)
+					text: baseStyle.formatSummary(utils.formatNumber(dayData.sumCalories), "kcal", "");
+					visible: dayData.sumCalories > 0
+					font: baseStyle.summaryFont
+				}
+				Text {
+					//text: "kcal: " + utils.formatNumber(dayData.sumCalories)
+					text: baseStyle.formatSummary(dayData.workout.count, "T", "");
+					visible: dayData.workout.count > 0
+					font: baseStyle.summaryFont
+				}
 			}
 		}
-
 	}
 }

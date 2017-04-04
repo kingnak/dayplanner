@@ -23,6 +23,10 @@ ApplicationWindow {
         id: recipeModel
 	}
 
+	TrainingModel {
+		id: trainingModel
+	}
+
 	BaseStyle {
 		id: baseStyle
 	}

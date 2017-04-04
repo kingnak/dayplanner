@@ -35,7 +35,7 @@ MealList *MealList::loadForDateAndType(QObject *parent, DAOFacade *facade, QDate
 
 QQmlListProperty<Meal> MealList::items()
 {
-    return QQmlListProperty<Meal> (this, nullptr, MealList::countFunc, MealList::atFunc);
+	return QQmlListProperty<Meal> (this, nullptr, &MealList::countFunc, &MealList::atFunc);
 }
 
 void MealList::createMeal(const QString &name)

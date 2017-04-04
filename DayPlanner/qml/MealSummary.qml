@@ -23,11 +23,11 @@ Column {
 			}
 			Text {
 				font: baseStyle.defaultFont
-				text: "EW: " + utils.formatNumber(mealData.sumProtein) + ", "
+				text: "KH: " + utils.formatNumber(mealData.sumCarbs) + ", "
 			}
 			Text {
 				font: baseStyle.defaultFont
-				text: "KH: " + utils.formatNumber(mealData.sumCarbs) + ", "
+				text: "EW: " + utils.formatNumber(mealData.sumProtein) + ", "
 			}
 			Text {
 				font: baseStyle.defaultFont

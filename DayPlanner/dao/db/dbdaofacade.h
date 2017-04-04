@@ -14,6 +14,12 @@ public:
 
     virtual RecipeDAO *loadRecipe(qint32 recipeId);
     virtual QList<RecipeDAO *> loadRecipes();
+
+	virtual TrainingDAO *loadTraining(qint32 trainingId);
+	virtual QList<TrainingDAO *> loadTrainings();
+
+	virtual QList<WorkoutDAO *> loadWorkouts(QDate d);
+	virtual WorkoutDAO *createWorkout(QDate d);
 };
 
 #endif // DBDAOFACADE_H

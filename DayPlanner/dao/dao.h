@@ -7,6 +7,8 @@ class QDate;
 class ShiftDAO;
 class MealDAO;
 class RecipeDAO;
+class TrainingDAO;
+class WorkoutDAO;
 
 class DAOFacade
 {
@@ -21,6 +23,12 @@ public:
 
     virtual RecipeDAO *loadRecipe(qint32 recipeId) = 0;
     virtual QList<RecipeDAO *> loadRecipes() = 0;
+
+	virtual TrainingDAO *loadTraining(qint32 trainingId) = 0;
+	virtual QList<TrainingDAO *> loadTrainings() = 0;
+
+	virtual QList<WorkoutDAO *> loadWorkouts(QDate d) = 0;
+	virtual WorkoutDAO *createWorkout(QDate d) = 0;
 };
 
 DAOFacade *globalDAOFacade();

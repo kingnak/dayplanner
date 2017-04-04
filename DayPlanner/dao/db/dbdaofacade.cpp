@@ -3,6 +3,8 @@
 #include "shiftdbdao.h"
 #include "mealdbdao.h"
 #include "recipedbdao.h"
+#include "trainingdbdao.h"
+#include "workoutdbdao.h"
 #include <QtSql>
 
 ShiftDAO *DbDAOFacade::loadShift(QDate d)
@@ -77,5 +79,59 @@ QList<RecipeDAO *> DbDAOFacade::loadRecipes()
         ret << r;
     }
 
-    return ret;
+	return ret;
+}
+
+TrainingDAO *DbDAOFacade::loadTraining(qint32 trainingId)
+{
+	return new TrainingDbDAO(trainingId, &DataBase::instance());
+}
+
+QList<TrainingDAO *> DbDAOFacade::loadTrainings()
+{
+	QString query = QString("SELECT * FROM Training ORDER BY name ASC");
+
+	QSqlQuery q = DataBase::instance().executeQuery(query);
+
+	QList<TrainingDAO *> ret;
+	while (q.next()) {
+		TrainingDAO *r = new TrainingDbDAO(q.record().value(0).toInt(), &DataBase::instance());
+		ret << r;
+	}
+
+	return ret;
+}
+
+QList<WorkoutDAO *> DbDAOFacade::loadWorkouts(QDate d)
+{
+	QString query = QString("SELECT id FROM Workout WHERE date = '%1' ORDER BY sort")
+			.arg(d.toString("yyyy-MM-dd"));
+
+	QSqlQuery q = DataBase::instance().executeQuery(query);
+
+	QList<WorkoutDAO *> ret;
+	while (q.next()) {
+		WorkoutDAO *w = new WorkoutDbDAO(q.record().value(0).toInt(), &DataBase::instance());
+		ret << w;
+	}
+
+	return ret;
+}
+
+WorkoutDAO *DbDAOFacade::createWorkout(QDate d)
+{
+	WorkoutDbDAO *w = new WorkoutDbDAO(-1, &DataBase::instance());
+	w->setDate(d);
+
+	QString query = QString("SELECT COUNT(*) FROM Workout WHERE date = '%1'")
+			.arg(d.toString("yyyy-MM-dd"));
+
+	QSqlQuery q = DataBase::instance().executeQuery(query);
+	if (q.next()) {
+		w->setSort(q.record().value(0).toInt());
+	} else {
+		w->setSort(1);
+	}
+
+	return w;
 }

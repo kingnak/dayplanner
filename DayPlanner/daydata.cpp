@@ -1,7 +1,8 @@
 #include "daydata.h"
 #include "dao/dao.h"
 #include "meallist.h"
-#include "dao/db/shiftdbdao.h"
+#include "dao/shiftdao.h"
+#include "workoutlist.h"
 
 DayData::DayData(const QDate &d, DAOFacade *facade, QObject *parent)
 :   QObject(parent),
@@ -12,6 +13,8 @@ DayData::DayData(const QDate &d, DAOFacade *facade, QObject *parent)
 			<< MealList::loadForDateAndType(this, facade, d, Meal::Lunch)
 			<< MealList::loadForDateAndType(this, facade, d, Meal::Dinner)
 			<< MealList::loadForDateAndType(this, facade, d, Meal::Snacks);
+
+	m_workout = WorkoutList::loadForDate(this, facade, d);
 
 	for (auto m : m_meals) {
 		connect(m, &MealList::sumFatChanged, this, &DayData::sumsChanged);
@@ -66,6 +69,11 @@ MealList *DayData::dinner() const
 MealList *DayData::snack() const
 {
 	return m_meals[3];
+}
+
+WorkoutList *DayData::workout() const
+{
+	return m_workout;
 }
 
 qreal DayData::sumFat() const

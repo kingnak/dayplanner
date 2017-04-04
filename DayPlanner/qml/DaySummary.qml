@@ -58,6 +58,12 @@ Rectangle {
 					width: parent.width
 					mealData: _data.snack
 				}
+
+				TrainingSummary {
+					visible: !_data.workout.isEmpty
+					width: parent.width
+					workoutData: _data.workout
+				}
 			}
 		}
 	}

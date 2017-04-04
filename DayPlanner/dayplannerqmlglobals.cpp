@@ -9,6 +9,9 @@
 #include "recipelist.h"
 #include "qmlutils.h"
 #include "shiftlist.h"
+#include "traininglist.h"
+#include "workout.h"
+#include "workoutlist.h"
 
 DayPlannerQMLGlobals::DayPlannerQMLGlobals(QObject *parent) : QObject(parent)
 {
@@ -23,6 +26,9 @@ void DayPlannerQMLGlobals::registerTypes()
     qmlRegisterType<RecipeList>("org.kingnak.dayplanner", 1, 0, "RecipeModel");
 	qmlRegisterType<QmlUtils>("org.kingnak.dayplanner", 1, 0, "Utils");
 	qmlRegisterType<ShiftList>("org.kingnak.dayplanner", 1, 0, "ShiftModel");
+	qmlRegisterType<TrainingList>("org.kingnak.dayplanner", 1, 0, "TrainingModel");
+	qmlRegisterType<Workout>("org.kingnak.dayplanner", 1, 0, "Workout");
+	qmlRegisterType<WorkoutList>("org.kingnak.dayplanner", 1, 0, "WorkoutList");
 }
 
 DAOFacade *globalDAOFacade() {

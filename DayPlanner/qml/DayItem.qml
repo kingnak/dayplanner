@@ -41,4 +41,11 @@ ColumnLayout {
 		Layout.fillHeight: true
 		_data: root._data.snack
 	}
+
+	WorkoutList {
+		id: workouts
+		Layout.fillWidth: true
+		Layout.fillHeight: true
+		_data: root._data.workout
+	}
 }

@@ -9,7 +9,7 @@ import "styles"
 ListView {
     id: root
     clip: true
-    implicitHeight: 100
+	implicitHeight: 100
 
     property var _data
 
@@ -19,8 +19,8 @@ ListView {
 
     header: headerBanner
     headerPositioning: ListView.OverlayHeader
-    footer: footerEditor
-	footerPositioning: ListView.OverlayFooter
+	footer: footerEditor
+	footerPositioning: _data.isEmpty ? ListView.InlineFooter : ListView.OverlayFooter
 
     Component {
         id: mealItem
@@ -42,7 +42,6 @@ ListView {
 
                 ToolButton {
                     text: "X"
-                    //width: 20
                     onClicked: _data.removeMeal(index)
                 }
 
@@ -50,6 +49,7 @@ ListView {
                     id: txtName
                     Layout.fillWidth: true
                     text: name
+					font: baseStyle.editorFont
                     style: PlaceholderTextEditStyle {
                         showHovered: row.hovered
                     }
@@ -58,6 +58,7 @@ ListView {
                 DoubleField {
                     id: txtFactor
                     value: factor
+					font: baseStyle.editorFont
                     style: PlaceholderTextEditStyle {
                         showHovered: row.hovered
                         postfix: "x"
@@ -69,6 +70,7 @@ ListView {
                 DoubleField {
                     id: txtFat
                     value: calcFat
+					font: baseStyle.editorFont
                     style: PlaceholderTextEditStyle {
                         showHovered: row.hovered
                         postfix: "F"
@@ -77,9 +79,23 @@ ListView {
                     onDoubleError: value = calcFat;
                 }
 
+				DoubleField {
+					id: txtCarbs
+					value: calcCarbs
+					font: baseStyle.editorFont
+					style: PlaceholderTextEditStyle {
+						postfix: "KH"
+						showHovered: row.hovered
+					}
+					onDoubleFinished: calcCarbs = val;
+					onDoubleError: value = calcCarbs;
+				}
+
+
                 DoubleField {
                     id: txtProtein
                     value: calcProtein
+					font: baseStyle.editorFont
                     style: PlaceholderTextEditStyle {
                         postfix: "EW"
                         showHovered: row.hovered
@@ -89,19 +105,9 @@ ListView {
                 }
 
                 DoubleField {
-                    id: txtCarbs
-                    value: calcCarbs
-                    style: PlaceholderTextEditStyle {
-                        postfix: "KH"
-                        showHovered: row.hovered
-                    }
-                    onDoubleFinished: calcCarbs = val;
-                    onDoubleError: value = calcCarbs;
-                }
-
-                DoubleField {
                     id: txtCalories
                     value: calcCalories
+					font: baseStyle.editorFont
                     style: PlaceholderTextEditStyle {
                         postfix: "kcal"
                         showHovered: row.hovered
@@ -116,32 +122,33 @@ ListView {
 
     Component {
         id: footerEditor
-        Rectangle {
+		Rectangle {
 			z: 2
-            color: "lightGrey";
-            width: parent.width
-            height: inp.height
+			color: "lightGrey";
+			width: parent.width
+			height: inp.height
 
-            FilterTextInput {
-                width: parent.width
-                id: inp
-                textRole: "name"
-                model: recipeModel
-                onAccepted: {
-                    if (selectedItem)
-                        _data.createMealForRecipe(selectedItem.itemId);
-                    else
-                        _data.createMeal(text);
-                    text = "";
+			FilterTextInput {
+				width: parent.width
+				id: inp
+				textRole: "name"
+				model: recipeModel
+				font: baseStyle.editorFont
+				onAccepted: {
+					if (selectedItem)
+						_data.createMealForRecipe(selectedItem.itemId);
+					else
+						_data.createMeal(text);
+					text = "";
 					focus = true;
 					root.positionViewAtEnd();
-                }
-            }
-        }
+				}
+			}
+		}
     }
 
     Component {
-        id: headerBanner
+		id: headerBanner
         Rectangle {
             z: 2
             width: parent.width
@@ -165,13 +172,13 @@ ListView {
 				}
 				Text {
 					font: baseStyle.defaultFont
-					text: "\u03A3 " + utils.formatNumber(_data.sumProtein);
-					Layout.minimumWidth: 40 + metrics.boundingRect("EW").width
+					text: "\u03A3 " + utils.formatNumber(_data.sumCarbs);
+					Layout.minimumWidth: 40 + metrics.boundingRect("KH").width
 				}
 				Text {
 					font: baseStyle.defaultFont
-					text: "\u03A3 " + utils.formatNumber(_data.sumCarbs);
-					Layout.minimumWidth: 40 + metrics.boundingRect("KH").width
+					text: "\u03A3 " + utils.formatNumber(_data.sumProtein);
+					Layout.minimumWidth: 40 + metrics.boundingRect("EW").width
 				}
 				Text {
 					font: baseStyle.defaultFont
