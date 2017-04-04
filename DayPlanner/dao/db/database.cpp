@@ -62,7 +62,7 @@ void DataBase::createConnection()
     bool needInit = false;
 
 //#define CLEANDB
-#define LOCALFILE QDir(qApp->arguments().value(1)).absoluteFilePath("db.db")
+#define LOCALFILE getDbFile()
 #ifdef LOCALFILE
     QString s = LOCALFILE;
 #ifdef CLEANDB
@@ -160,5 +160,31 @@ void DataBase::createConnection()
 				   );
 
 		ok = query.exec("CREATE TABLE Workout (id INTEGER PRIMARY KEY, date DATE, name TEXT, info TEXT, trainingId INT NULL, sort INT)");
-    }
+	}
+}
+
+QString DataBase::getDbFile()
+{
+	QProcessEnvironment sysEnv = QProcessEnvironment::systemEnvironment();
+	QDir base;
+	if (sysEnv.contains("LOCALAPPDATA")) {
+		// On windows XP, this doesn't exist... not supported
+		base = QDir(sysEnv.value("LOCALAPPDATA"));
+	} else {
+		qWarning() << "Cannot determine configuration directory. Using guessed directory";
+		base = QDir("C:\\ProgramData");
+		if (!base.exists()) {
+			// Try application dir... is probably write protected...
+			base = qApp->applicationDirPath();
+		}
+	}
+
+	if (!base.exists("dayplanner")) {
+		base.mkpath("dayplanner");
+	}
+	if (!base.cd("dayplanner")) {
+		qWarning() << "Cannot create" << base.absoluteFilePath("dayplanner");
+	}
+
+	return base.absoluteFilePath("dayplanner.db");
 }

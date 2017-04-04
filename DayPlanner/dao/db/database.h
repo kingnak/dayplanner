@@ -26,6 +26,7 @@ private:
 
 private:
     static void createConnection();
+	static QString getDbFile();
 };
 
 #endif // DATABASE_H
