@@ -40,6 +40,7 @@ QtObject {
 
 	property color trainingColor: "#512DA8"
 	property color trainingFontColor: "#FFFFFF"
+	property color todayHighlightColor: "#FF3D00"
 
 	property font headerFont: Qt.font({
 		weight: Font.Bold,

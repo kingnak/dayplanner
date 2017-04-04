@@ -13,7 +13,7 @@ ApplicationWindow {
     visible: true
 	width: 640
     height: 480
-    title: qsTr("Hello World")
+	title: qsTr("Day Planner")
 
     DayModel {
         id: dayModel
@@ -61,6 +61,7 @@ ApplicationWindow {
             onVisibleMonthChanged: dayModel.clearCache(new Date(calendar.visibleYear, calendar.visibleMonth, 1))
             style: CalendarStyle {
 				dayDelegate: DaySummary {
+					highlight: styleData.today
                     _data: dayModel.dataForDate(styleData.date)
 					opacity: styleData.visibleMonth ? 1 : 0
                     enabled: styleData.visibleMonth

@@ -5,12 +5,22 @@ import QtQuick.Controls 1.4
 Rectangle {
 	property var _data
 	id: root
+	property bool highlight: false
 	anchors.fill: parent
 	signal openDay(date d)
 
 	MouseArea {
 		anchors.fill: parent
 		onClicked: root.openDay(_data.date)
+	}
+	Rectangle {
+		anchors.left: parent.left
+		anchors.top: parent.top
+		height: parent.height
+		width: 2
+		color: baseStyle.todayHighlightColor
+		visible: highlight
+		z: 2
 	}
 
 	ColumnLayout {
@@ -35,6 +45,7 @@ Rectangle {
 				id: c
 				anchors.left: parent.left
 				width: root.width
+
 				MealSummary {
 					visible: !_data.breakfast.isEmpty
 					width: parent.width
