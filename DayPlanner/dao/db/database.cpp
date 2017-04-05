@@ -156,6 +156,7 @@ void DataBase::createConnection()
 				   "('Laufen'),"
 				   "('Crossfit'),"
 				   "('EMS'),"
+				   "('Bauch'),"
 				   "('Sonstiges')"
 				   );
 
