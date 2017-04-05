@@ -3,7 +3,7 @@ import QtQuick 2.0
 Rectangle {
     id: root
     color: "transparent"
-    property color borderColor: "#c0c0c0"
+	property color borderColor: baseStyle.controlBorderColor
     property bool showHovered: true
     width: control.width
     height: control.height
@@ -32,15 +32,11 @@ Rectangle {
     }
 
     Rectangle {
-        color: borderColor; anchors.left: parent.left; width: 1; height: parent.height; visible: root.showHovered
-    }
-    Rectangle {
-        color: borderColor; anchors.right: parent.right; width: 1; height: parent.height; visible: root.showHovered
-    }
-    Rectangle {
-        color: borderColor; anchors.top: parent.top; height: 1; width: parent.width; visible: root.showHovered
-    }
-    Rectangle {
-        color: borderColor; anchors.bottom: parent.bottom; height: 1; width: parent.width; visible: root.showHovered
+		border.color: parent.borderColor
+		color: "transparent"
+		anchors.left: parent.left
+		width: parent.width
+		height: parent.height
+		visible: root.showHovered
     }
 }

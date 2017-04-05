@@ -13,21 +13,13 @@ Rectangle {
 		anchors.fill: parent
 		onClicked: root.openDay(_data.date)
 	}
-	Rectangle {
-		anchors.left: parent.left
-		anchors.top: parent.top
-		height: parent.height
-		width: 2
-		color: baseStyle.todayHighlightColor
-		visible: highlight
-		z: 2
-	}
 
 	ColumnLayout {
 		anchors.fill: parent
 		spacing: 0
 
 		DayHeader {
+			highlight: root.highlight
 			dayData: root._data
 			anchors.left: parent.left
 			anchors.right: parent.right

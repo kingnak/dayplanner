@@ -5,9 +5,9 @@ import "styles"
 
 Rectangle {
 	property var dayData
+	property bool highlight: false
 
-//	id: root
-	height: cols.height//Math.max(dateText.height, shiftCombo.height)
+	height: cols.height
 	color: baseStyle.shiftColor(shiftsModel.shiftList[dayData.shiftIndex])
 
 	ColumnLayout {
@@ -24,11 +24,36 @@ Rectangle {
 				Layout.preferredWidth: 0
 			}
 
+			Rectangle {
+				width: dateMetrics.width
+				height: width
+				color: "transparent"
+
+				TextMetrics {
+					id: dateMetrics
+					font: dateText.font
+					text: "XX";
+				}
+				Canvas {
+					anchors.fill: parent
+					visible: highlight
+					contextType: "2d"
+					onPaint: {
+						context.fillStyle = baseStyle.todayHighlightColor;
+						context.ellipse(0,0,width,height);
+						context.fill();
+					}
+				}
+
+				Label {
+					id: dateText
+					font: baseStyle.headerFont
+					text: dayData.date.getDate()
+					anchors.centerIn: parent
+				}
+			}
+
 			Label {
-				id: dateText
-				font: baseStyle.headerFont
-				text: dayData.date.getDate()
-				Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
 				Layout.fillWidth: true
 			}
 
@@ -51,36 +76,42 @@ Rectangle {
 			clip: true
 			opacity: (dayData.sumFat > 0 || dayData.sumProtein > 0 || dayData.sumCarbs > 0 || dayData.sumCalories > 0 || dayData.workout.count > 0) ? 1 : 0
 			Row {
+				spacing: 2
 				id: txt
 				Text {
 					//text: "F: " + utils.formatNumber(dayData.sumFat) + ", "
 					text: baseStyle.formatSummary(utils.formatNumber(dayData.sumFat), "F", ", ");
-					opacity: dayData.sumFat > 0 ? 1 : 0
+					visible: dayData.sumFat > 0
 					font: baseStyle.summaryFont
+					textFormat: Text.RichText
 				}
 				Text {
 					//text: "KH: " + utils.formatNumber(dayData.sumCarbs) + ", "
 					text: baseStyle.formatSummary(utils.formatNumber(dayData.sumCarbs), "KH", ", ");
 					visible: dayData.sumCarbs > 0
 					font: baseStyle.summaryFont
+					textFormat: Text.RichText
 				}
 				Text {
 					//text: "EW: " + utils.formatNumber(dayData.sumProtein) + ", "
 					text: baseStyle.formatSummary(utils.formatNumber(dayData.sumProtein), "EW", ", ");
 					visible: dayData.sumProtein > 0
 					font: baseStyle.summaryFont
+					textFormat: Text.RichText
 				}
 				Text {
 					//text: "kcal: " + utils.formatNumber(dayData.sumCalories)
-					text: baseStyle.formatSummary(utils.formatNumber(dayData.sumCalories), "kcal", "");
+					text: baseStyle.formatSummary(utils.formatNumber(dayData.sumCalories), "kcal", ", ");
 					visible: dayData.sumCalories > 0
 					font: baseStyle.summaryFont
+					textFormat: Text.RichText
 				}
 				Text {
 					//text: "kcal: " + utils.formatNumber(dayData.sumCalories)
 					text: baseStyle.formatSummary(dayData.workout.count, "T", "");
-					visible: dayData.workout.count > 0
+					opacity: dayData.workout.count > 0 ? 1 : 0
 					font: baseStyle.summaryFont
+					textFormat: Text.RichText
 				}
 			}
 		}
