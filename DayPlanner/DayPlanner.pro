@@ -1,6 +1,6 @@
 TEMPLATE = app
 
-QT += qml quick sql widgets
+QT += qml quick sql
 
 #DEFINES += CACHE_MONTH_DATA
 
@@ -56,7 +56,9 @@ DISTFILES += \
     qml/DayHeader.qml \
     qml/styles/BaseStyle.qml \
     qml/WorkoutList.qml \
-    qml/TrainingSummary.qml
+    qml/TrainingSummary.qml \
+    qml/MealSummary.qml \
+    qml/styles/SmallButtonStyle.qml
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

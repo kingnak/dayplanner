@@ -14,5 +14,6 @@
         <file>qml/styles/BaseStyle.qml</file>
         <file>qml/WorkoutList.qml</file>
         <file>qml/TrainingSummary.qml</file>
+        <file>qml/styles/SmallButtonStyle.qml</file>
     </qresource>
 </RCC>

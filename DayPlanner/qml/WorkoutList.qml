@@ -42,6 +42,7 @@ ListView {
 				ToolButton {
 					text: "X"
 					onClicked: _data.removeWorkout(index)
+					style: SmallButtonStyle {}
 				}
 
 				TextField {
