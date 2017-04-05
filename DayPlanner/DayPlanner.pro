@@ -2,6 +2,8 @@ TEMPLATE = app
 
 QT += qml quick sql
 
+CONFIG += qtquickcompiler
+
 #DEFINES += CACHE_MONTH_DATA
 
 win32: {
