@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<Installer> 
+    <Name>DayPlanner</Name> 
+    <Version>0.1.0</Version> 
+    <Title>DayPlanner Installer</Title> 
+    <Publisher>King Nak</Publisher> 
+    <StartMenuDir>DayPlanner</StartMenuDir> 
+    <TargetDir>C:/Program Files/DayPlanner</TargetDir> 
+  <AllowSpaceInPath>true</AllowSpaceInPath> 
+  <MaintenanceToolName>DayPlannerUninstaller</MaintenanceToolName> 
+</Installer>
