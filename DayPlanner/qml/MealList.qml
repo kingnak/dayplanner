@@ -42,14 +42,30 @@ ListView {
 
                 ToolButton {
                     text: "X"
+					tooltip: "Löschen"
                     onClicked: _data.removeMeal(index)
 					style: SmallButtonStyle {}
                 }
+
+				ToolButton {
+					text: "+"
+					tooltip: "Als Rezept hinzufügen"
+					onClicked: {
+						// When name was changed, onEditingFinished will be called AFTER this
+						// Force name to be correct
+						name = txtName.text;
+						_data.createRecipeFromMeal(index);
+					}
+					style: SmallButtonStyle {}
+					opacity: isConnectedToRecipe ? 0 : 1
+					enabled: !isConnectedToRecipe
+				}
 
                 TextField {
                     id: txtName
                     Layout.fillWidth: true
                     text: name
+					onEditingFinished: name = text
 					font: baseStyle.editorFont
                     style: PlaceholderTextEditStyle {
                         showHovered: row.hovered
@@ -136,10 +152,11 @@ ListView {
 				model: recipeModel
 				font: baseStyle.editorFont
 				onAccepted: {
-					if (selectedItem)
+					if (selectedItem) {
 						_data.createMealForRecipe(selectedItem.itemId);
-					else
+					} else {
 						_data.createMeal(text);
+					}
 					text = "";
 					focus = true;
 					root.positionViewAtEnd();

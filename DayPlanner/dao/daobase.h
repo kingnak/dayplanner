@@ -8,6 +8,10 @@ public:
         New, Existing
     };
 
+	enum {
+		NoItemIndex = 0
+	};
+
     DAOBase(State s = New) : m_state(s) {}
     virtual ~DAOBase() {}
 

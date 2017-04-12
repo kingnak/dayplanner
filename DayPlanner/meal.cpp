@@ -40,7 +40,7 @@ void Meal::setName(const QString &n)
     if (n != name()) {
         m_meal->setName(n);
         if (m_meal->save()) {
-            emit nameChanged(n);
+			emit nameChanged();
         }
     }
 }
@@ -57,11 +57,7 @@ void Meal::setFactor(qreal f)
     if (f != factor()) {
         m_meal->setFactor(f);
         if (m_meal->save()) {
-            emit factorChanged();
-            emit fatChanged();
-            emit proteinChanged();
-            emit carbsChanged();
-            emit caloriesChanged();
+			notifyValuesChanged();
         }
     }
 }
@@ -73,7 +69,7 @@ qreal Meal::fat() const
 
 void Meal::setFat(qreal f)
 {
-    if (f != fat()) {
+	if (f != fat()) {
         m_meal->setFat(f);
         if (m_meal->save()) {
             emit fatChanged();
@@ -164,4 +160,34 @@ qreal Meal::calcCalories() const
 void Meal::updateCalories(qreal c)
 {
 	setCalories(c / factor());
+}
+
+qint32 Meal::recipeId() const
+{
+	return m_meal->recipeId();
+}
+
+void Meal::setRecipeId(qint32 id)
+{
+	if (id != recipeId()) {
+		m_meal->setRecipeId(id);
+		if (m_meal->save()) {
+			emit recipeIdChanged();
+		}
+	}
+}
+
+bool Meal::isConnectedToRecipe() const
+{
+	return recipeId() != DAOBase::NoItemIndex;
+}
+
+void Meal::notifyValuesChanged()
+{
+	emit nameChanged();
+	emit factorChanged();
+	emit fatChanged();
+	emit proteinChanged();
+	emit carbsChanged();
+	emit caloriesChanged();
 }

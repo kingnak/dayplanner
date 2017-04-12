@@ -130,7 +130,12 @@ TextField {
             selectedItem = sorter.get(idx);
 			//text = sorter.get(idx).name; // <- Will reset selected item for onAccept listeners to -1...
         } else {
-            selectedItem = null;
+			// Try to find a case insensitive match
+			if (sorter.count > 0 && sorter.get(0).name.toLowerCase() === text.toLowerCase()) {
+				selectedItem = sorter.get(0);
+			} else {
+				selectedItem = null;
+			}
         }
 
 		popup.close();

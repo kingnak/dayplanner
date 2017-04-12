@@ -43,7 +43,7 @@ QList<MealDAO *> DbDAOFacade::loadMeals(QDate d, qint32 type)
 
 MealDAO *DbDAOFacade::createMeal(QDate d, qint32 type)
 {
-    MealDbDAO *m = new MealDbDAO(-1, &DataBase::instance());
+	MealDbDAO *m = new MealDbDAO(DataBase::InvalidId, &DataBase::instance());
     m->setDate(d);
     m->setType(type);
     m->setFactor(1);
@@ -80,6 +80,30 @@ QList<RecipeDAO *> DbDAOFacade::loadRecipes()
     }
 
 	return ret;
+}
+
+RecipeDAO *DbDAOFacade::createRecipe(const QString &name)
+{
+	if (QScopedPointer<RecipeDAO>(loadRecipeByName(name)).data()) {
+		return nullptr;
+	}
+
+	RecipeDAO *r = new RecipeDbDAO(DataBase::InvalidId, &DataBase::instance());
+	r->setName(name);
+	return r;
+}
+
+RecipeDAO *DbDAOFacade::loadRecipeByName(const QString &name)
+{
+	QSqlQuery query;
+	query.prepare("SELECT * FROM Recipe WHERE NAME LIKE ?");
+	query.bindValue(0, name);
+	query.exec();
+	if (query.next()) {
+		return new RecipeDbDAO(query.record().value(0).toInt(), &DataBase::instance());
+	}
+
+	return nullptr;
 }
 
 TrainingDAO *DbDAOFacade::loadTraining(qint32 trainingId)
@@ -120,7 +144,7 @@ QList<WorkoutDAO *> DbDAOFacade::loadWorkouts(QDate d)
 
 WorkoutDAO *DbDAOFacade::createWorkout(QDate d)
 {
-	WorkoutDbDAO *w = new WorkoutDbDAO(-1, &DataBase::instance());
+	WorkoutDbDAO *w = new WorkoutDbDAO(DataBase::InvalidId, &DataBase::instance());
 	w->setDate(d);
 
 	QString query = QString("SELECT COUNT(*) FROM Workout WHERE date = '%1'")

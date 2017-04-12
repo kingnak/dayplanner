@@ -7,6 +7,8 @@
 
 class RecipeDAO;
 
+class RecipeNotifier;
+
 class RecipeList : public QAbstractListModel
 {
 public:
@@ -33,6 +35,28 @@ private:
 
 private:
     QList<RecipeDAO*> m_data;
+};
+
+class RecipeNotifier : public QObject
+{
+	Q_OBJECT
+
+private:
+	RecipeNotifier() : QObject(nullptr) {}
+
+public:
+	static RecipeNotifier *instance() {
+		static RecipeNotifier inst_;
+		return &inst_;
+	}
+
+public slots:
+	void notifyChanges() {
+		emit recipesChanged();
+	}
+
+signals:
+	void recipesChanged();
 };
 
 #endif // RECIPELIST_H

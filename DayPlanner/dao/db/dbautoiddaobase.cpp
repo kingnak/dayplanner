@@ -2,7 +2,7 @@
 #include <QtSql>
 #include "database.h"
 
-DbAutoIdDAOBase::DbAutoIdDAOBase(DataBase *db, qint32 id /* = -1 */, DAOBase::State s /* = DAOBase::New */)
+DbAutoIdDAOBase::DbAutoIdDAOBase(DataBase *db, qint32 id, DAOBase::State s /* = DAOBase::New */)
     : DbDAOBase(db, s),
       m_id(id)
 {

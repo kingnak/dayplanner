@@ -2,6 +2,7 @@
 #include "dao/dao.h"
 #include "meal.h"
 #include "dao/recipedao.h"
+#include "recipelist.h"
 #include <QtSql>
 
 MealList::MealList(QObject *parent)
@@ -69,14 +70,7 @@ void MealList::createMealForRecipe(qint32 recipeId)
         return;
     }
 
-	qreal f = r->quantity() == 0 ? 1 : r->quantity();
-    m->setName(r->name());
-    m->setFactor(f);
-    m->setFat(r->fat() / f);
-    m->setProtein(r->protein() / f);
-    m->setCarbs(r->carbs() / f);
-    m->setCalories(r->calories() / f);
-    m->setRecipeId(r->id());
+	updateMealFromRecipe(m.data(), r.data());
 
     if (m->save()) {
 		Meal *md = new Meal(m.take(), this);
@@ -99,6 +93,41 @@ void MealList::removeMeal(qint32 idx)
 	m->disconnect();
 	emit itemsChanged();
 	notifySumsChanged();
+}
+
+bool MealList::createRecipeFromMeal(qint32 idx)
+{
+	if (idx < 0 || idx >= m_data.count()) {
+		return false;
+	}
+
+	Meal *m = m_data[idx];
+	if (m->recipeId() != DAOBase::NoItemIndex) {
+		return false;
+	}
+
+	QScopedPointer<RecipeDAO> r(m_facade->createRecipe(m->name()));
+	if (!r || r->state() != DAOBase::State::New) {
+		if (tryConnectMealToRecipeByName(m)) {
+			m->m_meal->save();
+			m->notifyValuesChanged();
+		}
+		return false;
+	}
+
+	r->setQuantity(qFuzzyIsNull(m->factor()) ? 1 : m->factor());
+	r->setFat(m->calcFat());
+	r->setProtein(m->calcProtein());
+	r->setCarbs(m->calcCarbs());
+	r->setCalories(m->calcCalories());
+
+	if (r->save()) {
+		m->setRecipeId(r->id());
+		RecipeNotifier::instance()->notifyChanges();
+		return true;
+	}
+
+	return false;
 }
 
 qreal MealList::sumFat() const
@@ -166,4 +195,29 @@ void MealList::notifySumsChanged()
 	emit sumProteinChanged();
 	emit sumCarbsChanged();
 	emit sumCaloriesChanged();
+}
+
+void MealList::updateMealFromRecipe(MealDAO *m, RecipeDAO *r, UpdateFields fields)
+{
+	qreal f = r->quantity() == 0 ? 1 : r->quantity();
+	if (fields.testFlag(UpdateField::Name)) m->setName(r->name());
+	if (fields.testFlag(UpdateField::Quantity)) m->setFactor(f);
+	if (fields.testFlag(UpdateField::Id)) m->setRecipeId(r->id());
+	if (fields.testFlag(UpdateField::Values)) {
+		m->setFat(r->fat() / f);
+		m->setProtein(r->protein() / f);
+		m->setCarbs(r->carbs() / f);
+		m->setCalories(r->calories() / f);
+	}
+}
+
+bool MealList::tryConnectMealToRecipeByName(Meal *m, UpdateFields fields)
+{
+	QScopedPointer<RecipeDAO> r(m_facade->loadRecipeByName(m->name()));
+	if (r.data()) {
+		m->setRecipeId(r->id());
+		updateMealFromRecipe(m->m_meal, r.data(), fields);
+		return true;
+	}
+	return false;
 }

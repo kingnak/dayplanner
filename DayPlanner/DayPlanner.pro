@@ -39,7 +39,8 @@ SOURCES += main.cpp \
     traininglist.cpp \
     dao/trainingdao.cpp \
     dao/db/trainingdbdao.cpp \
-    workoutlist.cpp
+    workoutlist.cpp \
+    recipe.cpp
 
 RESOURCES += qml.qrc
 
@@ -96,4 +97,5 @@ HEADERS += \
     traininglist.h \
     dao/trainingdao.h \
     dao/db/trainingdbdao.h \
-    workoutlist.h
+    workoutlist.h \
+    recipe.h

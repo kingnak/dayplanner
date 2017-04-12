@@ -6,6 +6,7 @@
 
 RecipeList::RecipeList()
 {
+	connect(RecipeNotifier::instance(), &RecipeNotifier::recipesChanged, [this]() { this->load(); });
     load();
 }
 

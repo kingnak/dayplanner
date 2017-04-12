@@ -6,7 +6,7 @@
 class DbAutoIdDAOBase : public DbDAOBase
 {
 public:
-    DbAutoIdDAOBase(DataBase *db, qint32 id = -1, DAOBase::State s = DAOBase::New);
+	DbAutoIdDAOBase(DataBase *db, qint32 id, DAOBase::State s = DAOBase::New);
 
 protected:
     qint32 id() const;

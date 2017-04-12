@@ -15,6 +15,10 @@ private:
 public:
     static DataBase &instance();
 
+	enum {
+		InvalidId = -1
+	};
+
     QSqlQuery executeQuery(const QString &query);
     QSqlRecord selectSingleRecord(const QString &query);
     QSqlRecord selectIotaRecord(const QString &query);
