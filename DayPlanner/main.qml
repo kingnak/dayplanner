@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.1
 import "qml"
 import "qml/styles"
 import org.kingnak.dayplanner 1.0
+import SortFilterProxyModel 0.2
 
 
 ApplicationWindow {
@@ -47,6 +48,19 @@ ApplicationWindow {
 	ShiftModel {
 		id: shiftsModel
 	}
+
+	/*
+	// Recipe Editor Test
+	ColumnLayout {
+		anchors.fill: parent
+
+		RecipeList {
+			_data: recipeModel
+			Layout.fillHeight: true
+			Layout.fillWidth: true
+		}
+	}
+	*/
 
 	StackView {
 		id: stack

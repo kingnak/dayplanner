@@ -2,7 +2,7 @@
 #include <QtSql>
 #include "dao/dao.h"
 #include "dao/recipedao.h"
-
+#include "recipe.h"
 
 RecipeList::RecipeList()
 {
@@ -61,7 +61,24 @@ QHash<int, QByteArray> RecipeList::roleNames() const
     ret[CaloriesRole] = "calories";
     ret[QuantityRole] = "quantity";
     ret[UrlRole] = "url";
-    return ret;
+	return ret;
+}
+
+QObject *RecipeList::loadDataForRecipe(qint32 id)
+{
+	if (!m_recipeCache.contains(id)) {
+		Recipe *r =new Recipe(globalDAOFacade()->loadRecipe(id), this);
+		m_recipeCache[id] = r;
+	}
+	return m_recipeCache[id];
+}
+
+void RecipeList::clearRecipeCache()
+{
+	for (QObject *o : m_recipeCache.values()) {
+		o->deleteLater();
+	}
+	m_recipeCache.clear();
 }
 
 void RecipeList::load()

@@ -61,7 +61,8 @@ DISTFILES += \
     qml/WorkoutList.qml \
     qml/TrainingSummary.qml \
     qml/MealSummary.qml \
-    qml/styles/SmallButtonStyle.qml
+    qml/styles/SmallButtonStyle.qml \
+    qml/RecipeList.qml
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

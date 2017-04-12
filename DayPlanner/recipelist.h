@@ -11,6 +11,7 @@ class RecipeNotifier;
 
 class RecipeList : public QAbstractListModel
 {
+	Q_OBJECT
 public:
     RecipeList();
     ~RecipeList();
@@ -30,11 +31,15 @@ public:
         UrlRole
     };
 
+	Q_INVOKABLE QObject *loadDataForRecipe(qint32 id);
+	Q_INVOKABLE void clearRecipeCache();
+
 private:
     void load();
 
 private:
     QList<RecipeDAO*> m_data;
+	QMap<qint32, QObject*> m_recipeCache;
 };
 
 class RecipeNotifier : public QObject
