@@ -49,7 +49,7 @@ ApplicationWindow {
 		id: shiftsModel
 	}
 
-	/*
+
 	// Recipe Editor Test
 	ColumnLayout {
 		anchors.fill: parent
@@ -60,8 +60,8 @@ ApplicationWindow {
 			Layout.fillWidth: true
 		}
 	}
-	*/
 
+	/*
 	StackView {
 		id: stack
 		initialItem: calendar
@@ -132,4 +132,5 @@ ApplicationWindow {
 			Rectangle { Layout.fillHeight: true; Layout.columnSpan: 3; Layout.minimumHeight: 5 }
 		}
 	}
+	*/
 }

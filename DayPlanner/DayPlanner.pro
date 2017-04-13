@@ -40,7 +40,9 @@ SOURCES += main.cpp \
     dao/trainingdao.cpp \
     dao/db/trainingdbdao.cpp \
     workoutlist.cpp \
-    recipe.cpp
+    recipe.cpp \
+    dao/recipestatsdao.cpp \
+    dao/db/recipestatsdbdao.cpp
 
 RESOURCES += qml.qrc
 
@@ -62,7 +64,8 @@ DISTFILES += \
     qml/TrainingSummary.qml \
     qml/MealSummary.qml \
     qml/styles/SmallButtonStyle.qml \
-    qml/RecipeList.qml
+    qml/RecipeList.qml \
+    qml/styles/RangeSlider.qml
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -99,4 +102,6 @@ HEADERS += \
     dao/trainingdao.h \
     dao/db/trainingdbdao.h \
     workoutlist.h \
-    recipe.h
+    recipe.h \
+    dao/recipestatsdao.h \
+    dao/db/recipestatsdbdao.h

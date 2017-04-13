@@ -9,6 +9,7 @@ class MealDAO;
 class RecipeDAO;
 class TrainingDAO;
 class WorkoutDAO;
+class RecipeStatsDAO;
 
 class DAOFacade
 {
@@ -25,6 +26,7 @@ public:
     virtual QList<RecipeDAO *> loadRecipes() = 0;
 	virtual RecipeDAO *createRecipe(const QString &name) = 0;
 	virtual RecipeDAO *loadRecipeByName(const QString &name) = 0;
+	virtual RecipeStatsDAO *loadRecipeStats() = 0;
 
 	virtual TrainingDAO *loadTraining(qint32 trainingId) = 0;
 	virtual QList<TrainingDAO *> loadTrainings() = 0;

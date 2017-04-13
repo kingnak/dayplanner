@@ -2,9 +2,11 @@
 #include <QtSql>
 #include "dao/dao.h"
 #include "dao/recipedao.h"
+#include "dao/recipestatsdao.h"
 #include "recipe.h"
 
 RecipeList::RecipeList()
+	: m_stats(nullptr)
 {
 	connect(RecipeNotifier::instance(), &RecipeNotifier::recipesChanged, [this]() { this->load(); });
     load();
@@ -81,6 +83,14 @@ void RecipeList::clearRecipeCache()
 	m_recipeCache.clear();
 }
 
+QObject *RecipeList::stats()
+{
+	if (!m_stats) {
+		m_stats = new RecipeStats(globalDAOFacade(), this);
+	}
+	return m_stats;
+}
+
 void RecipeList::load()
 {
     beginResetModel();
@@ -90,4 +100,58 @@ void RecipeList::load()
     endResetModel();
 
     qDeleteAll(oldList);
+}
+
+/////////////////////////////////////////////
+
+RecipeStats::~RecipeStats()
+{
+	delete m_stats;
+}
+
+qreal RecipeStats::maxFat() const
+{
+	return m_stats->maxFat();
+}
+
+qreal RecipeStats::minFat() const
+{
+	return m_stats->minFat();
+}
+
+qreal RecipeStats::maxProtein() const
+{
+	return m_stats->maxProtein();
+}
+
+qreal RecipeStats::minProtein() const
+{
+	return m_stats->minProtein();
+}
+
+qreal RecipeStats::maxCarbs() const
+{
+	return m_stats->maxCarbs();
+}
+
+qreal RecipeStats::minCarbs() const
+{
+	return m_stats->minCarbs();
+}
+
+qreal RecipeStats::maxCalories() const
+{
+	return m_stats->maxCalories();
+}
+
+qreal RecipeStats::minCalories() const
+{
+	return m_stats->minCalories();
+}
+
+void RecipeStats::updateStats()
+{
+	delete m_stats;
+	m_stats = m_facade->loadRecipeStats();
+	emit statsChanged();
 }

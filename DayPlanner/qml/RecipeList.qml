@@ -1,20 +1,18 @@
 import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.1
-import QtQuick.Controls 2.0 as Q2
-//import QtQuick.Controls.Styles 1.4
 import SortFilterProxyModel 0.2
-//import org.kingnak.dayplanner 1.0
-//import "styles"
+import "styles"
 
 SplitView {
 	property var _data
+	property var stats: _data.stats()
 	id: root
 
 	SortFilterProxyModel {
 		id: sorter
 		sourceModel: root._data
-		filters:  AllOf {
+		filters: AllOf {
 			RegExpFilter {
 				roleName: "name"
 				pattern: searchText.text
@@ -25,19 +23,53 @@ SplitView {
 				minimumValue: fatRange.first.value
 				maximumValue: fatRange.second.value
 			}
+			RangeFilter {
+				roleName: "carbs"
+				minimumValue: carbsRange.first.value
+				maximumValue: carbsRange.second.value
+			}
+			RangeFilter {
+				roleName: "protein"
+				minimumValue: proteinRange.first.value
+				maximumValue: proteinRange.second.value
+			}
+			RangeFilter {
+				roleName: "calories"
+				minimumValue: caloriesRange.first.value
+				maximumValue: caloriesRange.second.value
+			}
 		}
 	}
 
 	Column {
 		Layout.minimumWidth: 200
-		Text { text: "Fett" }
-		Q2.RangeSlider {
+		Text { text: "Fett"; font: baseStyle.headerFont }
+		RangeSlider {
 			id: fatRange
-			from: 0
-			to: 50
-			second.value: 50
-			first.onValueChanged: console.log("Fett: " + first.value + " - " + second.value)
-			second.onValueChanged: console.log("Fett: " + first.value + " - " + second.value)
+			from: stats.minFat
+			to: stats.maxFat
+			Component.onCompleted: setValues(stats.minFat, stats.maxFat)
+		}
+		Text { text: "Kohlenhydrate"; font: baseStyle.headerFont }
+		RangeSlider {
+			id: carbsRange
+			from: stats.minCarbs
+			to: stats.maxCarbs
+			Component.onCompleted: setValues(stats.minCarbs, stats.maxCarbs)
+		}
+		Text { text: "Eiweiß"; font: baseStyle.headerFont }
+		RangeSlider {
+			id: proteinRange
+			from: stats.minProtein
+			to: stats.maxProtein
+			Component.onCompleted: setValues(stats.minProtein, stats.maxProtein)
+		}
+		Text { text: "Kalorien"; font: baseStyle.headerFont }
+		RangeSlider {
+			id: caloriesRange
+			from: stats.minCalories
+			to: stats.maxCalories
+			Component.onCompleted: setValues(stats.minCalories, stats.maxCalories)
 		}
 	}
 
@@ -99,7 +131,7 @@ SplitView {
 			}
 		}
 	}
-
+/*
 	Grid {
 		id: editor
 		property var obj: recipeModel.loadDataForRecipe(sorter.get(table.currentRow).itemId)
@@ -111,5 +143,5 @@ SplitView {
 		Label { text: "Menge" }
 		DoubleField { text: editor.obj.quantity }
 	}
-
+*/
 }

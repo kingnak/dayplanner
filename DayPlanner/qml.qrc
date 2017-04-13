@@ -16,5 +16,6 @@
         <file>qml/TrainingSummary.qml</file>
         <file>qml/styles/SmallButtonStyle.qml</file>
         <file>qml/RecipeList.qml</file>
+        <file>qml/styles/RangeSlider.qml</file>
     </qresource>
 </RCC>

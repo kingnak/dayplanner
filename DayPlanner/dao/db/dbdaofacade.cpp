@@ -5,6 +5,7 @@
 #include "recipedbdao.h"
 #include "trainingdbdao.h"
 #include "workoutdbdao.h"
+#include "recipestatsdbdao.h"
 #include <QtSql>
 
 ShiftDAO *DbDAOFacade::loadShift(QDate d)
@@ -104,6 +105,18 @@ RecipeDAO *DbDAOFacade::loadRecipeByName(const QString &name)
 	}
 
 	return nullptr;
+}
+
+RecipeStatsDAO *DbDAOFacade::loadRecipeStats()
+{
+	QStringList l;
+	for ( QString f : { "Fat", "Carbs", "Protein", "Calories" } ) {
+		l << QString("MIN(%1) AS min%2, MAX(%1) AS max%2").arg(f.toLower(), f);
+	}
+	QString query = "SELECT " + l.join(", ") + " FROM Recipe";
+	QSqlQuery q = DataBase::instance().executeQuery(query);
+	q.next();
+	return new RecipeStatsDbDAO(q.record());
 }
 
 TrainingDAO *DbDAOFacade::loadTraining(qint32 trainingId)
