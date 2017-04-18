@@ -14,6 +14,8 @@ class RecipeNotifier;
 class RecipeList : public QAbstractListModel
 {
 	Q_OBJECT
+
+	Q_PROPERTY(QObject* stats READ stats NOTIFY statsChanged)
 public:
     RecipeList();
     ~RecipeList();
@@ -35,7 +37,10 @@ public:
 
 	Q_INVOKABLE QObject *loadDataForRecipe(qint32 id);
 	Q_INVOKABLE void clearRecipeCache();
-	Q_INVOKABLE QObject *stats();
+	QObject *stats();
+
+signals:
+	void statsChanged();
 
 private:
     void load();

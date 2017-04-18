@@ -25,12 +25,15 @@ public:
 
     bool executeNonQuery(const QString &query);
 
+	bool fillDefaultRecepies();
+
 private:
     QSqlRecord selectOneRecord(const QString &query, bool warnIfNone);
 
 private:
     static void createConnection();
 	static QString getDbFile();
+	static bool doFillDefaultRecepies();
 };
 
 #endif // DATABASE_H

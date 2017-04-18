@@ -123,33 +123,7 @@ void DataBase::createConnection()
         */
 		ok = query.exec("CREATE TABLE Recipe (id INTEGER PRIMARY KEY, name TEXT, quantity INT, fat REAL, protein REAL, carbs REAL, calories REAL, url TEXT NULL)");
 
-        QString dataFile = QDir(qApp->arguments().value(1)).absoluteFilePath("data/data.csv");
-        QFile fdata(dataFile);
-        if (fdata.exists() && fdata.open(QIODevice::ReadOnly)) {
-            QTextStream ts(&fdata);
-            ts.setCodec("utf8");
-            QString line;
-            query.exec("BEGIN TRANSACTION");
-            QSqlQuery ins;
-            ins.prepare("INSERT INTO Recipe (name, quantity, fat, protein, carbs, calories) VALUES (?,?,?,?,?,?)");
-            while (!(line = ts.readLine()).isEmpty()) {
-                QStringList parts = line.split(";");
-                ins.addBindValue(parts[0]);
-                ins.addBindValue(parts[2].toInt() / 100);
-                ins.addBindValue(parts[5].toDouble() / 100);
-                ins.addBindValue(parts[4].toDouble() / 100);
-                ins.addBindValue(parts[6].toDouble() / 100);
-                ins.addBindValue(parts[3].toDouble() / 100);
-
-                if (!ins.exec()) {
-                    qWarning() << ins.executedQuery();
-                    qWarning() << ins.lastError().text() << ins.lastError();
-                }
-            }
-            query.exec("COMMIT");
-        } else {
-            qWarning().noquote() << dataFile << "cannot be opened";
-        }
+		doFillDefaultRecepies();
 
 		ok = query.exec("CREATE TABLE Training (id INTEGER PRIMARY KEY, name TEXT)");
 		ok = query.exec("INSERT INTO Training (name) VALUES "
@@ -188,4 +162,53 @@ QString DataBase::getDbFile()
 	}
 
 	return base.absoluteFilePath("dayplanner.db");
+}
+
+bool DataBase::fillDefaultRecepies()
+{
+	return DataBase::doFillDefaultRecepies();
+}
+
+bool DataBase::doFillDefaultRecepies()
+{
+	QSqlQuery query;
+	QString dataFile = ":/data/data.csv";
+	QFile fdata(dataFile);
+	if (fdata.exists() && fdata.open(QIODevice::ReadOnly)) {
+		QTextStream ts(&fdata);
+		ts.setCodec("utf8");
+		QString line;
+		query.exec("BEGIN TRANSACTION");
+		QSqlQuery ins;
+		ins.prepare("INSERT INTO Recipe (name, quantity, fat, protein, carbs, calories) VALUES (?,?,?,?,?,?)");
+		QSqlQuery check;
+		check.prepare("SELECT COUNT(*) FROM Recipe WHERE name LIKE ?");
+		while (!(line = ts.readLine()).isEmpty()) {
+			QStringList parts = line.split(";");
+
+			check.addBindValue(parts[0]);
+			check.exec();
+			if (check.next() && check.record().value(0).toInt() == 0) {
+
+				ins.addBindValue(parts[0]);
+				ins.addBindValue(parts[2].toInt() / 100);
+				ins.addBindValue(parts[5].toDouble() / 100);
+				ins.addBindValue(parts[4].toDouble() / 100);
+				ins.addBindValue(parts[6].toDouble() / 100);
+				ins.addBindValue(parts[3].toDouble() / 100);
+
+				if (!ins.exec()) {
+					qWarning() << ins.executedQuery();
+					qWarning() << ins.lastError().text() << ins.lastError();
+				}
+			} else {
+				qDebug() << parts[0] << "already in DB";
+			}
+		}
+		query.exec("COMMIT");
+		return true;
+	} else {
+		qWarning().noquote() << dataFile << "cannot be opened";
+		return false;
+	}
 }

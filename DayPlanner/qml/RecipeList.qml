@@ -6,7 +6,7 @@ import "styles"
 
 SplitView {
 	property var _data
-	property var stats: _data.stats()
+	property var stats: _data.stats
 	id: root
 
 	SortFilterProxyModel {

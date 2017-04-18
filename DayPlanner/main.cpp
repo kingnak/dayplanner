@@ -1,6 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include "dayplannerqmlglobals.h"
+#include "dao/db/database.h"
 
 //#define WITH_VLD
 #ifdef WITH_VLD
@@ -10,6 +11,10 @@
 int main(int argc, char *argv[])
 {
 	QGuiApplication app(argc, argv);
+
+	if (app.arguments().value(1) == "--fill-default-recepies") {
+		DataBase::instance().fillDefaultRecepies();
+	}
 
     DayPlannerQMLGlobals::registerTypes();
 
