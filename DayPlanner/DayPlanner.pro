@@ -65,7 +65,9 @@ DISTFILES += \
     qml/MealSummary.qml \
     qml/styles/SmallButtonStyle.qml \
     qml/RecipeList.qml \
-    qml/styles/RangeSlider.qml
+    qml/styles/RangeSlider.qml \
+    qml/RecipeEditor.qml \
+    qml/RecipeFilter.qml
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

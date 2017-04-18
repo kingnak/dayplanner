@@ -18,5 +18,7 @@
         <file>qml/RecipeList.qml</file>
         <file>qml/styles/RangeSlider.qml</file>
         <file>data/data.csv</file>
+        <file>qml/RecipeEditor.qml</file>
+        <file>qml/RecipeFilter.qml</file>
     </qresource>
 </RCC>
