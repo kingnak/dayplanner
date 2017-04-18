@@ -1,4 +1,5 @@
 #include "recipe.h"
+#include "recipelist.h"
 
 Recipe::Recipe(QObject *parent)
 	: QObject(parent),
@@ -33,9 +34,7 @@ void Recipe::setName(const QString &n)
 {
 	if (n != name()) {
 		m_recipe->setName(n);
-		if (m_recipe->save()) {
-			emit nameChanged();
-		}
+		emit nameChanged();
 	}
 }
 
@@ -48,9 +47,7 @@ void Recipe::setQuantity(qint32 q)
 {
 	if (q != quantity()) {
 		m_recipe->setQuantity(q);
-		if (m_recipe->save()) {
-			emit quantityChanged();
-		}
+		emit quantityChanged();
 	}
 }
 
@@ -63,9 +60,7 @@ void Recipe::setFat(qreal f)
 {
 	if (f != fat()) {
 		m_recipe->setFat(f);
-		if (m_recipe->save()) {
-			emit fatChanged();
-		}
+		emit fatChanged();
 	}
 }
 
@@ -78,9 +73,7 @@ void Recipe::setProtein(qreal p)
 {
 	if (p != protein()) {
 		m_recipe->setProtein(p);
-		if (m_recipe->save()) {
-			emit proteinChanged();
-		}
+		emit proteinChanged();
 	}
 }
 
@@ -93,9 +86,7 @@ void Recipe::setCarbs(qreal c)
 {
 	if (c != carbs()) {
 		m_recipe->setCarbs(c);
-		if (m_recipe->save()) {
-			emit carbsChanged();
-		}
+		emit carbsChanged();
 	}
 }
 
@@ -108,9 +99,7 @@ void Recipe::setCalories(qreal c)
 {
 	if (c != calories()) {
 		m_recipe->setCalories(c);
-		if (m_recipe->save()) {
-			emit caloriesChanged();
-		}
+		emit caloriesChanged();
 	}
 }
 
@@ -123,8 +112,39 @@ void Recipe::setUrl(const QString &u)
 {
 	if (u != url()) {
 		m_recipe->setUrl(u);
-		if (m_recipe->save()) {
-			emit urlChanged();
-		}
+		emit urlChanged();
 	}
+}
+
+bool Recipe::save()
+{
+	if (m_recipe->save()) {
+		RecipeNotifier::instance()->recipesChanged();
+		return true;
+	}
+	return false;
+}
+
+bool Recipe::reset()
+{
+	if (m_recipe->load()) {
+		emit nameChanged();
+		emit fatChanged();
+		emit proteinChanged();
+		emit carbsChanged();
+		emit caloriesChanged();
+		emit urlChanged();
+		return true;
+	}
+	return false;
+}
+
+void Recipe::calcTo100()
+{
+	qreal f = m_recipe->quantity() == 0 ? 100 : m_recipe->quantity();
+	setFat(fat()*100.0/f);
+	setProtein(protein()*100.0/f);
+	setCarbs(carbs()*100.0/f);
+	setCalories(calories()*100.0/f);
+	setQuantity(100);
 }

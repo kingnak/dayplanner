@@ -17,6 +17,7 @@ public:
 	virtual RecipeDAO *createRecipe(const QString &name);
 	virtual RecipeDAO *loadRecipeByName(const QString &name);
 	virtual RecipeStatsDAO *loadRecipeStats();
+	virtual bool removeRecipe(qint32 recipeId);
 
 	virtual TrainingDAO *loadTraining(qint32 trainingId);
 	virtual QList<TrainingDAO *> loadTrainings();

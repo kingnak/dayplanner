@@ -12,9 +12,51 @@ ApplicationWindow {
     id: root
 
     visible: true
-	width: 640
-    height: 480
+	width: 800
+	height: 600
 	title: qsTr("Day Planner")
+
+	toolBar: ToolBar {
+		style: ToolBarStyle {
+			padding.top: 0
+		}
+		height: 24
+		RowLayout {
+			anchors.fill: parent
+			Item {
+				Layout.fillWidth: true
+			}
+
+			ToolButton {
+				id: gotoRecepies
+				style: SmallButtonStyle{}
+				iconSource: "qrc:///icons/recepies"
+				onClicked: {
+					stack.pop({item: calendar, immediate:true});
+					stack.push({item: recipeEditorStackView, replace: true});
+					gotoCalendar.enabled = true;
+					gotoCalendar.visible = true;
+					gotoRecepies.enabled = false;
+					gotoRecepies.visible = false;
+				}
+			}
+			ToolButton {
+				id: gotoCalendar
+				style: SmallButtonStyle{}
+				iconSource: "qrc:///icons/calendar"
+				enabled: false
+				visible: false
+				onClicked: {
+					stack.pop({item: recipeEditorStackView, immediate:true});
+					stack.push({item: calendar, replace: true});
+					gotoCalendar.enabled = false;
+					gotoCalendar.visible = false;
+					gotoRecepies.enabled = true;
+					gotoRecepies.visible = true;
+				}
+			}
+		}
+	}
 
     DayModel {
         id: dayModel
@@ -49,19 +91,6 @@ ApplicationWindow {
 		id: shiftsModel
 	}
 
-
-	// Recipe Editor Test
-	ColumnLayout {
-		anchors.fill: parent
-
-		RecipeList {
-			_data: recipeModel
-			Layout.fillHeight: true
-			Layout.fillWidth: true
-		}
-	}
-
-	/*
 	StackView {
 		id: stack
 		initialItem: calendar
@@ -132,5 +161,17 @@ ApplicationWindow {
 			Rectangle { Layout.fillHeight: true; Layout.columnSpan: 3; Layout.minimumHeight: 5 }
 		}
 	}
-	*/
+
+	Component {
+		id: recipeEditorStackView
+		ColumnLayout {
+			//anchors.fill: parent
+
+			RecipeList {
+				_data: recipeModel
+				Layout.fillHeight: true
+				Layout.fillWidth: true
+			}
+		}
+	}
 }

@@ -47,6 +47,10 @@ public:
 	QString url() const;
 	void setUrl(const QString &u);
 
+	Q_INVOKABLE bool save();
+	Q_INVOKABLE bool reset();
+	Q_INVOKABLE void calcTo100();
+
 signals:
 	void notNotified();
 	void nameChanged();

@@ -119,6 +119,14 @@ RecipeStatsDAO *DbDAOFacade::loadRecipeStats()
 	return new RecipeStatsDbDAO(q.record());
 }
 
+bool DbDAOFacade::removeRecipe(qint32 recipeId)
+{
+	QString query = QString("UPDATE Meal SET RecipeId = 0 WHERE RecipeId = %1").arg(recipeId);
+	DataBase::instance().executeNonQuery(query);
+	query = QString("DELETE FROM Recipe WHERE id = %1").arg(recipeId);
+	return DataBase::instance().executeNonQuery(query);
+}
+
 TrainingDAO *DbDAOFacade::loadTraining(qint32 trainingId)
 {
 	return new TrainingDbDAO(trainingId, &DataBase::instance());

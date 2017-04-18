@@ -37,6 +37,7 @@ public:
 
 	Q_INVOKABLE QObject *loadDataForRecipe(qint32 id);
 	Q_INVOKABLE void clearRecipeCache();
+	Q_INVOKABLE void removeRecipe(qint32 id);
 	QObject *stats();
 
 signals:

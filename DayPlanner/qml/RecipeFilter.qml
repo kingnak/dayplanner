@@ -96,6 +96,7 @@ SplitView {
 			TableViewColumn {
 				role: "itemId"
 				delegate: editDelegate
+				width: 35
 			}
 
 			TableViewColumn {
@@ -132,11 +133,13 @@ SplitView {
 					spacing: 0
 					ToolButton {
 						style: SmallButtonStyle{}
+						height: 15
 						text: "X"
 						onClicked: theList.deleteRecipe(styleData.value)
 					}
 					ToolButton {
 						style: SmallButtonStyle{}
+						height: 15
 						text: "E"
 						onClicked: theList.editRecipe(styleData.value)
 					}

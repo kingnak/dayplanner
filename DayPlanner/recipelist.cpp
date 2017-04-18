@@ -83,6 +83,12 @@ void RecipeList::clearRecipeCache()
 	m_recipeCache.clear();
 }
 
+void RecipeList::removeRecipe(qint32 id)
+{
+	globalDAOFacade()->removeRecipe(id);
+	RecipeNotifier::instance()->recipesChanged();
+}
+
 QObject *RecipeList::stats()
 {
 	if (!m_stats) {
