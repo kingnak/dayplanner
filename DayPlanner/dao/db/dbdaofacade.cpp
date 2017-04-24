@@ -6,6 +6,7 @@
 #include "trainingdbdao.h"
 #include "workoutdbdao.h"
 #include "ingredientstatsdbdao.h"
+#include "recipetemplatedbdao.h"
 #include <QtSql>
 
 ShiftDAO *DbDAOFacade::loadShift(QDate d)
@@ -125,6 +126,21 @@ bool DbDAOFacade::removeIngredient(qint32 ingredientId)
 	DataBase::instance().executeNonQuery(query);
 	query = QString("DELETE FROM Ingredient WHERE id = %1").arg(ingredientId);
 	return DataBase::instance().executeNonQuery(query);
+}
+
+QList<RecipeTemplateDAO *> DbDAOFacade::loadRecipeTemplates()
+{
+	QString query = QString("SELECT * FROM RecipeTemplate ORDER BY name ASC");
+
+	QSqlQuery q = DataBase::instance().executeQuery(query);
+
+	QList<RecipeTemplateDAO *> ret;
+	while (q.next()) {
+		RecipeTemplateDAO *r = new RecipeTemplateDbDAO(q.record().value(0).toInt(), &DataBase::instance());
+		ret << r;
+	}
+
+	return ret;
 }
 
 TrainingDAO *DbDAOFacade::loadTraining(qint32 trainingId)

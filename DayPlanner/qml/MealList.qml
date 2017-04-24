@@ -149,11 +149,14 @@ ListView {
 				width: parent.width
 				id: inp
 				textRole: "name"
-				model: ingredientModel
+				model: uniformModel
 				font: baseStyle.editorFont
 				onAccepted: {
 					if (selectedItem) {
-						_data.createMealForIngredient(selectedItem.itemId);
+						if (selectedItem.objectType === UniformRecipeIngredientModel.Ingredient)
+							_data.createMealForIngredient(selectedItem.itemId);
+						else if (selectedItem.objectType === UniformRecipeIngredientModel.Recipe)
+							console.log("Selected Recipe " + selectedItem.itemId);
 					} else {
 						_data.createMeal(text);
 					}

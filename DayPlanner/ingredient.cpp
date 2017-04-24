@@ -38,16 +38,29 @@ void Ingredient::setName(const QString &n)
 	}
 }
 
-qint32 Ingredient::quantity() const
+qint32 Ingredient::referenceQuantity() const
 {
-	return m_ingredient->quantity();
+	return m_ingredient->referenceQuantity();
 }
 
-void Ingredient::setQuantity(qint32 q)
+void Ingredient::setReferenceQuantity(qint32 q)
 {
-	if (q != quantity()) {
-		m_ingredient->setQuantity(q);
-		emit quantityChanged();
+	if (q != referenceQuantity()) {
+		m_ingredient->setReferenceQuantity(q);
+		emit referenceQuantityChanged();
+	}
+}
+
+qint32 Ingredient::defaultQuantity() const
+{
+	return m_ingredient->defaultQuantity();
+}
+
+void Ingredient::setDefaultQuantity(qint32 q)
+{
+	if (q != defaultQuantity()) {
+		m_ingredient->setDefaultQuantity(q);
+		emit defaultQuantityChanged();
 	}
 }
 
@@ -103,19 +116,6 @@ void Ingredient::setCalories(qreal c)
 	}
 }
 
-QString Ingredient::url() const
-{
-	return m_ingredient->url();
-}
-
-void Ingredient::setUrl(const QString &u)
-{
-	if (u != url()) {
-		m_ingredient->setUrl(u);
-		emit urlChanged();
-	}
-}
-
 bool Ingredient::save()
 {
 	if (m_ingredient->save()) {
@@ -133,7 +133,6 @@ bool Ingredient::reset()
 		emit proteinChanged();
 		emit carbsChanged();
 		emit caloriesChanged();
-		emit urlChanged();
 		return true;
 	}
 	return false;
@@ -141,10 +140,10 @@ bool Ingredient::reset()
 
 void Ingredient::calcTo100()
 {
-	qreal f = m_ingredient->quantity() == 0 ? 100 : m_ingredient->quantity();
+	qreal f = m_ingredient->referenceQuantity() == 0 ? 100 : m_ingredient->referenceQuantity();
 	setFat(fat()*100.0/f);
 	setProtein(protein()*100.0/f);
 	setCarbs(carbs()*100.0/f);
 	setCalories(calories()*100.0/f);
-	setQuantity(100);
+	setReferenceQuantity(100);
 }

@@ -115,11 +115,13 @@ bool MealList::createIngredientFromMeal(qint32 idx)
 		return false;
 	}
 
-	r->setQuantity(qFuzzyIsNull(m->factor()) ? 1 : m->factor());
-	r->setFat(m->calcFat());
-	r->setProtein(m->calcProtein());
-	r->setCarbs(m->calcCarbs());
-	r->setCalories(m->calcCalories());
+	r->setDefaultQuantity(qFuzzyIsNull(m->factor()) ? 1 : m->factor());
+	r->setReferenceQuantity(100);
+	qreal f = qreal(r->defaultQuantity())/r->referenceQuantity();
+	r->setFat(m->calcFat()/f);
+	r->setProtein(m->calcProtein()/f);
+	r->setCarbs(m->calcCarbs()/f);
+	r->setCalories(m->calcCalories()/f);
 
 	if (r->save()) {
 		m->setIngredientId(r->id());
@@ -199,11 +201,11 @@ void MealList::notifySumsChanged()
 
 void MealList::updateMealFromIngredient(MealDAO *m, IngredientDAO *r, UpdateFields fields)
 {
-	qreal f = r->quantity() == 0 ? 1 : r->quantity();
 	if (fields.testFlag(UpdateField::Name)) m->setName(r->name());
-	if (fields.testFlag(UpdateField::Quantity)) m->setFactor(f);
+	if (fields.testFlag(UpdateField::Quantity)) m->setFactor(r->defaultQuantity());
 	if (fields.testFlag(UpdateField::Id)) m->setIngredientId(r->id());
 	if (fields.testFlag(UpdateField::Values)) {
+		qreal f = r->referenceQuantity() == 0 ? 1 : r->referenceQuantity();
 		m->setFat(r->fat() / f);
 		m->setProtein(r->protein() / f);
 		m->setCarbs(r->carbs() / f);

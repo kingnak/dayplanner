@@ -21,14 +21,24 @@ void IngredientDbDAO::setName(const QString &n)
     setData("name", n);
 }
 
-qint32 IngredientDbDAO::quantity() const
+qint32 IngredientDbDAO::referenceQuantity() const
 {
-    return data<qint32>("quantity");
+	return data<qint32>("refQuantity");
 }
 
-void IngredientDbDAO::setQuantity(qint32 q)
+void IngredientDbDAO::setReferenceQuantity(qint32 q)
 {
-    setData("quantity", q);
+	setData("refQuantity", q);
+}
+
+qint32 IngredientDbDAO::defaultQuantity() const
+{
+	return data<qint32>("defaultQuantity");
+}
+
+void IngredientDbDAO::setDefaultQuantity(qint32 q)
+{
+	setData("defaultQuantity", q);
 }
 
 qreal IngredientDbDAO::fat() const
@@ -69,16 +79,6 @@ qreal IngredientDbDAO::calories() const
 void IngredientDbDAO::setCalories(qreal c)
 {
     setData("calories", c);
-}
-
-QString IngredientDbDAO::url() const
-{
-    return data<QString>("url");
-}
-
-void IngredientDbDAO::setUrl(const QString &u)
-{
-    setData("url", u);
 }
 
 QStringList IngredientDbDAO::orderFields()

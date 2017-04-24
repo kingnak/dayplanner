@@ -36,10 +36,10 @@ QVariant IngredientList::data(const QModelIndex &index, int role) const
         return m_data[index.row()]->carbs();
     case CaloriesRole:
         return m_data[index.row()]->calories();
-    case QuantityRole:
-        return m_data[index.row()]->quantity();
-    case UrlRole:
-        return m_data[index.row()]->url();
+	case ReferenceQuantityRole:
+		return m_data[index.row()]->referenceQuantity();
+	case DefaultQuantityRole:
+		return m_data[index.row()]->defaultQuantity();
     default:
         return QVariant();
     }
@@ -61,8 +61,8 @@ QHash<int, QByteArray> IngredientList::roleNames() const
     ret[ProteinRole] = "protein";
     ret[CarbsRole] = "carbs";
     ret[CaloriesRole] = "calories";
-    ret[QuantityRole] = "quantity";
-    ret[UrlRole] = "url";
+	ret[ReferenceQuantityRole] = "quantity";
+	ret[DefaultQuantityRole] = "defaultQuantity";
 	return ret;
 }
 

@@ -13,11 +13,13 @@ public:
     virtual MealDAO *createMeal(QDate d, qint32 type);
 
     virtual IngredientDAO *loadIngredient(qint32 ingredientId);
-    virtual QList<IngredientDAO *> loadIngredients();
+	virtual QList<IngredientDAO *> loadIngredients();
 	virtual IngredientDAO *createIngredient(const QString &name);
 	virtual IngredientDAO *loadIngredientByName(const QString &name);
 	virtual IngredientStatsDAO *loadIngredientStats();
 	virtual bool removeIngredient(qint32 ingredientId);
+
+	virtual QList<RecipeTemplateDAO *> loadRecipeTemplates();
 
 	virtual TrainingDAO *loadTraining(qint32 trainingId);
 	virtual QList<TrainingDAO *> loadTrainings();

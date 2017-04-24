@@ -58,18 +58,6 @@ ApplicationWindow {
 		}
 	}
 
-    DayModel {
-        id: dayModel
-    }
-
-    IngredientModel {
-        id: ingredientModel
-	}
-
-	TrainingModel {
-		id: trainingModel
-	}
-
 	BaseStyle {
 		id: baseStyle
 	}
@@ -85,10 +73,6 @@ ApplicationWindow {
 			default: return "Anderes";
 			}
 		}
-	}
-
-	ShiftModel {
-		id: shiftsModel
 	}
 
 	StackView {

@@ -57,8 +57,11 @@ TextField {
     SortFilterProxyModel {
         id: sorter
         sourceModel: null
+		filterRoleName: "name"
         filterPattern: root.text
         filterCaseSensitivity: Qt.CaseInsensitive
+		sortRoleName: "name"
+		sortCaseSensitivity: Qt.CaseInsensitive
     }
 
     Q2.Popup {

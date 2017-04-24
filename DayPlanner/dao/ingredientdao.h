@@ -12,8 +12,11 @@ public:
     virtual QString name() const = 0;
     virtual void setName(const QString &n) = 0;
 
-    virtual qint32 quantity() const = 0;
-    virtual void setQuantity(qint32 q) = 0;
+	virtual qint32 referenceQuantity() const = 0;
+	virtual void setReferenceQuantity(qint32 q) = 0;
+
+	virtual qint32 defaultQuantity() const = 0;
+	virtual void setDefaultQuantity(qint32 q) = 0;
 
     virtual qreal fat() const = 0;
     virtual void setFat(qreal f) = 0;
@@ -26,9 +29,6 @@ public:
 
     virtual qreal calories() const = 0;
     virtual void setCalories(qreal c) = 0;
-
-    virtual QString url() const = 0;
-    virtual void setUrl(const QString &u) = 0;
 };
 
 #endif // INGREDIENTDAO_H

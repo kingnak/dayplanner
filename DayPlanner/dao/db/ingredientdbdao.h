@@ -14,8 +14,11 @@ public:
     virtual QString name() const;
     virtual void setName(const QString &n);
 
-    virtual qint32 quantity() const;
-    virtual void setQuantity(qint32 q);
+	virtual qint32 referenceQuantity() const;
+	virtual void setReferenceQuantity(qint32 q);
+
+	virtual qint32 defaultQuantity() const;
+	virtual void setDefaultQuantity(qint32 q);
 
     virtual qreal fat() const;
     virtual void setFat(qreal f);
@@ -28,9 +31,6 @@ public:
 
     virtual qreal calories() const;
     virtual void setCalories(qreal c);
-
-    virtual QString url() const;
-    virtual void setUrl(const QString &u);
 
     DAO_USE(DbAutoIdDAOBase)
 

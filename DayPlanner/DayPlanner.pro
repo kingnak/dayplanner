@@ -42,7 +42,11 @@ SOURCES += main.cpp \
     workoutlist.cpp \
     ingredient.cpp \
     dao/ingredientstatsdao.cpp \
-    dao/db/ingredientstatsdbdao.cpp
+    dao/db/ingredientstatsdbdao.cpp \
+    recipetemplatelist.cpp \
+    dao/recipetemplatedao.cpp \
+    dao/db/recipetemplatedbdao.cpp \
+    ingrecuniformmodel.cpp
 
 RESOURCES += qml.qrc
 
@@ -106,4 +110,8 @@ HEADERS += \
     workoutlist.h \
     ingredient.h \
     dao/ingredientstatsdao.h \
-    dao/db/ingredientstatsdbdao.h
+    dao/db/ingredientstatsdbdao.h \
+    recipetemplatelist.h \
+    dao/recipetemplatedao.h \
+    dao/db/recipetemplatedbdao.h \
+    ingrecuniformmodel.h

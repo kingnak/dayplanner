@@ -8,12 +8,12 @@ GridLayout {
 
 	function _passThroughValues() {
 		editor.ingredient.name = txtName.text;
-		editor.ingredient.quantity = txtQuantity.text;
+		editor.ingredient.referenceQuantity = txtQuantity.text;
+		editor.ingredient.defaultQuantity = txtDefQuantity.text;
 		editor.ingredient.fat = txtFat.text;
 		editor.ingredient.protein = txtProtein.text;
 		editor.ingredient.carbs = txtCarbs.text;
 		editor.ingredient.calories = txtCalories.text;
-		editor.ingredient.url = txtUrl.text;
 	}
 
 	id: editor
@@ -22,9 +22,11 @@ GridLayout {
 	TextField { text: editor.ingredient.name; id: txtName }
 	Label { text: "Menge" }
 	Column {
-		DoubleField { text: editor.ingredient.quantity; id: txtQuantity; }
+		DoubleField { text: editor.ingredient.referenceQuantity; id: txtQuantity; }
 		Button { text: "Auf 100 umrechnen"; onClicked: { _passThroughValues(); editor.ingredient.calcTo100(); } }
 	}
+	Label { text: "Standard Menge" }
+	DoubleField { text: editor.ingredient.defaultQuantity; id: txtDefQuantity; }
 	Label { text: "Fett" }
 	DoubleField { text: editor.ingredient.fat; id: txtFat; }
 	Label { text: "Eiweiß" }
@@ -33,8 +35,6 @@ GridLayout {
 	DoubleField { text: editor.ingredient.carbs; id: txtCarbs; }
 	Label { text: "Kalorien" }
 	DoubleField { text: editor.ingredient.calories; id: txtCalories; }
-	Label { text: "URL" }
-	TextField { text: editor.ingredient.url; id: txtUrl; }
 	Column {
 		Button {
 			text: "Zurück"

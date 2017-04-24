@@ -37,7 +37,11 @@ QSqlRecord DataBase::selectIotaRecord(const QString &query)
 bool DataBase::executeNonQuery(const QString &query)
 {
     QSqlQuery q;
-    return q.exec(query);
+	bool b = q.exec(query);
+	if (!b) {
+		qWarning() << "Error " << q.lastError().text() << " in query: " << query;
+	}
+	return b;
 }
 
 QSqlRecord DataBase::selectOneRecord(const QString &query, bool warnIfNone)
@@ -99,29 +103,9 @@ void DataBase::createConnection()
 				   );
 
 		ok = query.exec("CREATE TABLE Shift (d DATE NOT NULL PRIMARY KEY, shiftId INT)");
-        /*
-        for (int i = 0; i < 70; ++i) {
-            QString q = QString("INSERT INTO Shift VALUES('%1', %2)").arg(QDate::currentDate().addDays(i-35).toString("yyyy-MM-dd")).arg(i%6+1);
-            bool b = query.exec(q);
-            if (!b) {
-                qWarning() << query.lastError().text();
-            }
-        }
-        */
-		ok = query.exec("CREATE TABLE Meal (id INTEGER PRIMARY KEY, date DATE, type INT, name TEXT, factor REAL, fat REAL, protein REAL, carbs REAL, calories REAL, sort INT, ingredientId INT NULL, ingredientState INT DEFAULT 0)");
-        /*
-        for (int i = 0; i < 3; ++i) {
-            QString s = QString("INSERT INTO Meal (date, type, name, factor, fat, sort) VALUES ('%1',1,'Essen %2',1,1,%3,%2)")
-                    .arg(QDate::currentDate().toString("yyyy-MM-dd"))
-                    .arg(i+1)
-                    .arg(i*2+4);
-            bool b = query.exec(s);
-            if (!b) {
-                qWarning() << query.lastError().text();
-            }
-        }
-        */
-		ok = query.exec("CREATE TABLE Ingredient (id INTEGER PRIMARY KEY, name TEXT, quantity INT, fat REAL, protein REAL, carbs REAL, calories REAL, url TEXT NULL)");
+		ok = query.exec("CREATE TABLE Meal (id INTEGER PRIMARY KEY, date DATE, type INT, name TEXT, factor REAL, fat REAL, protein REAL, carbs REAL, calories REAL, sort INT, ingredientId INT NULL)");
+		ok = query.exec("CREATE TABLE Ingredient (id INTEGER PRIMARY KEY, name TEXT, refQuantity INT, defaultQuantity INT, fat REAL, protein REAL, carbs REAL, calories REAL)");
+		ok = query.exec("CREATE TABLE RecipeTemplate (id INTEGER PRIMARY KEY, name TEXT, refServing INT, defaultServing INT, fat REAL, protein REAL, carbs REAl, calories REAL, url TEXT NULL, note TEXT NULL, ingredientListId INT DEFAULT 0)");
 
 		doFillDefaultIngredients();
 
@@ -180,7 +164,14 @@ bool DataBase::doFillDefaultIngredients()
 		QString line;
 		query.exec("BEGIN TRANSACTION");
 		QSqlQuery ins;
-		ins.prepare("INSERT INTO Ingredient (name, quantity, fat, protein, carbs, calories) VALUES (?,?,?,?,?,?)");
+		ins.prepare("INSERT INTO Ingredient (name, refQuantity, defaultQuantity, fat, protein, carbs, calories) VALUES (?,?,?,?,?,?,?)");
+
+		/// TEST
+		QSqlQuery insR;
+		insR.prepare("INSERT INTO RecipeTemplate (name, refServing, defaultServing, fat, protein, carbs, calories) VALUES (?,?,?,?,?,?,?)");
+
+
+
 		QSqlQuery check;
 		check.prepare("SELECT COUNT(*) FROM Ingredient WHERE name LIKE ?");
 		while (!(line = ts.readLine()).isEmpty()) {
@@ -192,10 +183,21 @@ bool DataBase::doFillDefaultIngredients()
 
 				ins.addBindValue(parts[0]);
 				ins.addBindValue(parts[2].toInt() / 100);
+				ins.addBindValue(parts[2].toInt() / 100);
 				ins.addBindValue(parts[5].toDouble() / 100);
 				ins.addBindValue(parts[4].toDouble() / 100);
 				ins.addBindValue(parts[6].toDouble() / 100);
 				ins.addBindValue(parts[3].toDouble() / 100);
+
+				/// TEST
+				insR.addBindValue(parts[0]);
+				insR.addBindValue(1);
+				insR.addBindValue(1);
+				insR.addBindValue(parts[5].toDouble() / 100);
+				insR.addBindValue(parts[4].toDouble() / 100);
+				insR.addBindValue(parts[6].toDouble() / 100);
+				insR.addBindValue(parts[3].toDouble() / 100);
+				insR.exec();
 
 				if (!ins.exec()) {
 					qWarning() << ins.executedQuery();

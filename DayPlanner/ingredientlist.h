@@ -28,11 +28,11 @@ public:
         IdRole = Qt::UserRole + 1,
         NameRole,
         FatRole,
-        ProteinRole,
-        CarbsRole,
-        CaloriesRole,
-        QuantityRole,
-        UrlRole
+		ProteinRole,
+		CarbsRole,
+		CaloriesRole,
+		ReferenceQuantityRole,
+		DefaultQuantityRole
     };
 
 	Q_INVOKABLE QObject *loadDataForIngredient(qint32 id);

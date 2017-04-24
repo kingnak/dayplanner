@@ -13,6 +13,8 @@ SplitView {
 
 	SortFilterProxyModel {
 		id: sorter
+		sortRoleName: "name"
+		sortCaseSensitivity: Qt.CaseInsensitive
 		filters: AllOf {
 			RegExpFilter {
 				roleName: "name"
