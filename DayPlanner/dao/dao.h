@@ -11,6 +11,9 @@ class TrainingDAO;
 class WorkoutDAO;
 class IngredientStatsDAO;
 class RecipeTemplateDAO;
+class IngredientListItemDAO;
+class IngredientListDAO;
+class RecipeDAO;
 
 class DAOFacade
 {
@@ -31,6 +34,11 @@ public:
 	virtual bool removeIngredient(qint32 ingredientId) = 0;
 
 	virtual QList<RecipeTemplateDAO *> loadRecipeTemplates() = 0;
+
+	virtual QList<IngredientListItemDAO *> loadIngredientListItems(qint32 listId) = 0;
+
+	virtual IngredientListDAO *createIngredientList() = 0;
+	virtual RecipeDAO *createRecipe() = 0;
 
 	virtual TrainingDAO *loadTraining(qint32 trainingId) = 0;
 	virtual QList<TrainingDAO *> loadTrainings() = 0;

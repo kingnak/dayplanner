@@ -35,6 +35,7 @@ public:
     Q_INVOKABLE void createMealForIngredient(qint32 ingredientId);
     Q_INVOKABLE void removeMeal(qint32 idx);
 	Q_INVOKABLE bool createIngredientFromMeal(qint32 idx);
+	Q_INVOKABLE bool createRecipeFromMeal(qint32 idx);
 
 	qreal sumFat() const;
 	qreal sumProtein() const;

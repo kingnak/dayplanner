@@ -27,6 +27,7 @@ Meal::Type Meal::type() const
 
 bool Meal::erase()
 {
+	// TODO: Remove recipe if it has one
     return m_meal->remove();
 }
 
@@ -169,10 +170,12 @@ qint32 Meal::ingredientId() const
 
 void Meal::setIngredientId(qint32 id)
 {
+	Q_ASSERT(!isConnected());
 	if (id != ingredientId()) {
 		m_meal->setIngredientId(id);
 		if (m_meal->save()) {
 			emit ingredientIdChanged();
+			emit connectedChanged();
 		}
 	}
 }
@@ -180,6 +183,33 @@ void Meal::setIngredientId(qint32 id)
 bool Meal::isConnectedToIngredient() const
 {
 	return ingredientId() != DAOBase::NoItemIndex;
+}
+
+qint32 Meal::recipeId() const
+{
+	return m_meal->recipeId();
+}
+
+void Meal::setRecipeId(qint32 id)
+{
+	Q_ASSERT(!isConnected());
+	if (id != recipeId()) {
+		m_meal->setRecipeId(id);
+		if (m_meal->save()) {
+			emit recipeIdChanged();
+			emit connectedChanged();
+		}
+	}
+}
+
+bool Meal::isConnectedToRecipe() const
+{
+	return recipeId() != DAOBase::NoItemIndex;
+}
+
+bool Meal::isConnected() const
+{
+	return isConnectedToIngredient() || isConnectedToRecipe();
 }
 
 void Meal::notifyValuesChanged()

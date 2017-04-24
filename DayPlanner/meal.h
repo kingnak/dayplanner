@@ -21,6 +21,8 @@ class Meal : public QObject
 	Q_PROPERTY(qreal calcCalories READ calcCalories WRITE updateCalories NOTIFY caloriesChanged)
     Q_PROPERTY(qreal calories READ calories WRITE setCalories NOTIFY caloriesChanged)
 	Q_PROPERTY(bool isConnectedToIngredient READ isConnectedToIngredient NOTIFY ingredientIdChanged)
+	Q_PROPERTY(bool isConnectedToRecipe READ isConnectedToRecipe NOTIFY recipeIdChanged)
+	Q_PROPERTY(bool isConnected READ isConnected NOTIFY connectedChanged)
 
 public:
     explicit Meal(QObject *parent = 0);
@@ -70,6 +72,12 @@ public:
 	void setIngredientId(qint32 id);
 	bool isConnectedToIngredient() const;
 
+	qint32 recipeId() const;
+	void setRecipeId(qint32 id);
+	bool isConnectedToRecipe() const;
+
+	bool isConnected() const;
+
 signals:
 	void nameChanged();
     void factorChanged();
@@ -78,6 +86,8 @@ signals:
     void carbsChanged();
     void caloriesChanged();
 	void ingredientIdChanged();
+	void recipeIdChanged();
+	void connectedChanged();
 
 private:
 	void notifyValuesChanged();

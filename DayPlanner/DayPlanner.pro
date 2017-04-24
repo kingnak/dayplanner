@@ -46,7 +46,15 @@ SOURCES += main.cpp \
     recipetemplatelist.cpp \
     dao/recipetemplatedao.cpp \
     dao/db/recipetemplatedbdao.cpp \
-    ingrecuniformmodel.cpp
+    ingrecuniformmodel.cpp \
+    dao/ingredientlistitemdao.cpp \
+    dao/db/ingredientlistitemdbdao.cpp \
+    ingredientitemlist.cpp \
+    ingredientlistitem.cpp \
+    dao/ingredientlistdao.cpp \
+    dao/db/ingredientlistdbdao.cpp \
+    dao/recipedao.cpp \
+    dao/db/recipedbdao.cpp
 
 RESOURCES += qml.qrc
 
@@ -71,7 +79,10 @@ DISTFILES += \
     qml/IngredientList.qml \
     qml/styles/RangeSlider.qml \
     qml/IngredientEditor.qml \
-    qml/IngredientFilter.qml
+    qml/IngredientFilter.qml \
+    qml/IngredientEditorDelegate.qml \
+    qml/IngredientEditorListSelector.qml \
+    qml/IngredientEditorHeader.qml
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -114,4 +125,12 @@ HEADERS += \
     recipetemplatelist.h \
     dao/recipetemplatedao.h \
     dao/db/recipetemplatedbdao.h \
-    ingrecuniformmodel.h
+    ingrecuniformmodel.h \
+    dao/ingredientlistitemdao.h \
+    dao/db/ingredientlistitemdbdao.h \
+    ingredientitemlist.h \
+    ingredientlistitem.h \
+    dao/ingredientlistdao.h \
+    dao/db/ingredientlistdbdao.h \
+    dao/recipedao.h \
+    dao/db/recipedbdao.h

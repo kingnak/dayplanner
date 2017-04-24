@@ -20,6 +20,9 @@
         <file>data/data.csv</file>
         <file>qml/IngredientEditor.qml</file>
         <file>qml/IngredientFilter.qml</file>
+        <file>qml/IngredientEditorDelegate.qml</file>
+        <file>qml/IngredientEditorListSelector.qml</file>
+        <file>qml/IngredientEditorHeader.qml</file>
     </qresource>
     <qresource prefix="/icons">
         <file alias="delete">images/Action-cancel-icon.png</file>

@@ -36,6 +36,9 @@ public:
     qint32 ingredientId() const;
     void setIngredientId(qint32 id);
 
+	qint32 recipeId() const;
+	void setRecipeId(qint32 id);
+
     /*
     qreal calcFat() const;
     qreal calcProtein() const;

@@ -7,6 +7,9 @@
 #include "workoutdbdao.h"
 #include "ingredientstatsdbdao.h"
 #include "recipetemplatedbdao.h"
+#include "ingredientlistitemdbdao.h"
+#include "ingredientlistdbdao.h"
+#include "recipedbdao.h"
 #include <QtSql>
 
 ShiftDAO *DbDAOFacade::loadShift(QDate d)
@@ -137,6 +140,37 @@ QList<RecipeTemplateDAO *> DbDAOFacade::loadRecipeTemplates()
 	QList<RecipeTemplateDAO *> ret;
 	while (q.next()) {
 		RecipeTemplateDAO *r = new RecipeTemplateDbDAO(q.record().value(0).toInt(), &DataBase::instance());
+		ret << r;
+	}
+
+	return ret;
+}
+
+IngredientListDAO *DbDAOFacade::createIngredientList()
+{
+	IngredientListDbDAO *ret = new IngredientListDbDAO(&DataBase::instance(), -1);
+	ret->save();
+	return ret;
+}
+
+RecipeDAO *DbDAOFacade::createRecipe()
+{
+	RecipeDAO *ret = new RecipeDbDAO(-1, &DataBase::instance());
+	IngredientListDAO *lst = createIngredientList();
+	ret->setIngredientListId(lst->id());
+	delete lst;
+	return ret;
+}
+
+QList<IngredientListItemDAO *> DbDAOFacade::loadIngredientListItems(qint32 listId)
+{
+	QString query = QString("SELECT * FROM IngredientListItem WHERE ingredientListId = %1 ORDER BY sort ASC").arg(listId);
+
+	QSqlQuery q = DataBase::instance().executeQuery(query);
+
+	QList<IngredientListItemDAO *> ret;
+	while (q.next()) {
+		IngredientListItemDAO *r = new IngredientListItemDbDAO(q.record().value(0).toInt(), &DataBase::instance());
 		ret << r;
 	}
 

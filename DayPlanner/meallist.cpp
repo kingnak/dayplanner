@@ -3,6 +3,7 @@
 #include "meal.h"
 #include "dao/ingredientdao.h"
 #include "ingredientlist.h"
+#include "dao/recipedao.h"
 #include <QtSql>
 
 MealList::MealList(QObject *parent)
@@ -102,7 +103,7 @@ bool MealList::createIngredientFromMeal(qint32 idx)
 	}
 
 	Meal *m = m_data[idx];
-	if (m->ingredientId() != DAOBase::NoItemIndex) {
+	if (m->isConnected()) {
 		return false;
 	}
 
@@ -129,6 +130,33 @@ bool MealList::createIngredientFromMeal(qint32 idx)
 		return true;
 	}
 
+	return false;
+}
+
+bool MealList::createRecipeFromMeal(qint32 idx)
+{
+	if (idx < 0 || idx >= m_data.count()) {
+		return false;
+	}
+
+	Meal *m = m_data[idx];
+	if (m->isConnected()) {
+		return false;
+	}
+
+	QScopedPointer<RecipeDAO> r(m_facade->createRecipe());
+	r->setName(m->name());
+	r->setDefaultServing(1);
+	r->setReferenceServing(1);
+	r->setFat(m->calcFat());
+	r->setProtein(m->calcProtein());
+	r->setCarbs(m->calcCarbs());
+	r->setCalories(m->calcCalories());
+
+	if (r->save()) {
+		m->setRecipeId(r->id());
+		return true;
+	}
 	return false;
 }
 

@@ -103,7 +103,17 @@ qint32 MealDbDAO::ingredientId() const
 
 void MealDbDAO::setIngredientId(qint32 id)
 {
-    setData("ingredientId", id);
+	setData("ingredientId", id);
+}
+
+qint32 MealDbDAO::recipeId() const
+{
+	return data<qint32>("recipeId");
+}
+
+void MealDbDAO::setRecipeId(qint32 id)
+{
+	setData("recipeId", id);
 }
 
 QStringList MealDbDAO::orderFields()

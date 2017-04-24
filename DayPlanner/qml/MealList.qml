@@ -24,193 +24,53 @@ ListView {
 
     Component {
         id: mealItem
-
-        Rectangle {
-            width: parent.width
-            height: row.height
-
-            MouseArea {
-                anchors.fill: parent
-                hoverEnabled: true
-                id: mouseArea
-            }
-
-            RowLayout {
-                id: row
-                property bool hovered: mouseArea.containsMouse || txtName.hovered || txtFat.hovered || txtProtein.hovered || txtCarbs.hovered || txtCalories.hovered
-                width: parent.width
-
-                ToolButton {
-                    text: "X"
-					tooltip: "Löschen"
-                    onClicked: _data.removeMeal(index)
-					style: SmallButtonStyle {}
-                }
-
-				ToolButton {
-					text: "+"
-					tooltip: "Als Rezept hinzufügen"
-					onClicked: {
-						// When name was changed, onEditingFinished will be called AFTER this
-						// Force name to be correct
-						name = txtName.text;
+		IngredientEditorDelegate {
+			width: parent.width
+			onRemoveItem: _data.removeMeal(idx)
+			addMenuEnabled: !isConnected
+			addMenu: Menu {
+				onAboutToShow: applyName()
+				MenuItem {
+					text: "Neue Zutat"
+					onTriggered: {
 						_data.createIngredientFromMeal(index);
 					}
-					style: SmallButtonStyle {}
-					opacity: isConnectedToIngredient ? 0 : 1
-					enabled: !isConnectedToIngredient
 				}
-
-                TextField {
-                    id: txtName
-                    Layout.fillWidth: true
-                    text: name
-					onEditingFinished: name = text
-					font: baseStyle.editorFont
-                    style: PlaceholderTextEditStyle {
-                        showHovered: row.hovered
-                    }
-                }
-
-                DoubleField {
-                    id: txtFactor
-                    value: factor
-					font: baseStyle.editorFont
-                    style: PlaceholderTextEditStyle {
-                        showHovered: row.hovered
-                        postfix: "x"
-                    }
-                    onDoubleFinished: factor = val;
-                    onDoubleError: value = factor;
-                }
-
-                DoubleField {
-                    id: txtFat
-                    value: calcFat
-					font: baseStyle.editorFont
-                    style: PlaceholderTextEditStyle {
-                        showHovered: row.hovered
-                        postfix: "F"
-                    }
-                    onDoubleFinished: calcFat = val;
-                    onDoubleError: value = calcFat;
-                }
-
-				DoubleField {
-					id: txtCarbs
-					value: calcCarbs
-					font: baseStyle.editorFont
-					style: PlaceholderTextEditStyle {
-						postfix: "KH"
-						showHovered: row.hovered
+				MenuItem {
+					text: "Neues Rezept"
+					onTriggered: {
+						_data.createRecipeFromMeal(index);
 					}
-					onDoubleFinished: calcCarbs = val;
-					onDoubleError: value = calcCarbs;
 				}
+			}
+		}
 
-
-                DoubleField {
-                    id: txtProtein
-                    value: calcProtein
-					font: baseStyle.editorFont
-                    style: PlaceholderTextEditStyle {
-                        postfix: "EW"
-                        showHovered: row.hovered
-                    }
-                    onDoubleFinished: calcProtein = val;
-                    onDoubleError: value = calcProtein;
-                }
-
-                DoubleField {
-                    id: txtCalories
-                    value: calcCalories
-					font: baseStyle.editorFont
-                    style: PlaceholderTextEditStyle {
-                        postfix: "kcal"
-                        showHovered: row.hovered
-                    }
-                    onDoubleFinished: calcCalories = val;
-                    onDoubleError: value = calcCalories;
-                }
-
-            }
-        }
     }
 
     Component {
         id: footerEditor
-		Rectangle {
-			z: 2
-			color: "lightGrey";
-			width: parent.width
-			height: inp.height
-
-			FilterTextInput {
-				width: parent.width
-				id: inp
-				textRole: "name"
-				model: uniformModel
-				font: baseStyle.editorFont
-				onAccepted: {
-					if (selectedItem) {
-						if (selectedItem.objectType === UniformRecipeIngredientModel.Ingredient)
-							_data.createMealForIngredient(selectedItem.itemId);
-						else if (selectedItem.objectType === UniformRecipeIngredientModel.Recipe)
-							console.log("Selected Recipe " + selectedItem.itemId);
-					} else {
-						_data.createMeal(text);
-					}
-					text = "";
-					focus = true;
-					root.positionViewAtEnd();
-				}
+		IngredientEditorListSelector {
+			model: uniformModel
+			onExistingItemSelected: {
+				if (item.objectType === UniformRecipeIngredientModel.Ingredient)
+					_data.createMealForIngredient(item.itemId);
+				else if (item.objectType === UniformRecipeIngredientModel.Recipe)
+					console.log("Selected Recipe " + item.itemId);
+				root.positionViewAtEnd();
+			}
+			onNewItemSelected: {
+				_data.createMeal(name);
+				root.positionViewAtEnd();
 			}
 		}
     }
 
     Component {
 		id: headerBanner
-        Rectangle {
-            z: 2
-            width: parent.width
-			height: Math.max(txt.height*1.2, txt.height+6)
-
-			color: baseStyle.mealColor(_data.type)
-
-			RowLayout {
-				width: parent.width
-				anchors.verticalCenter: parent.verticalCenter
-				Text {
-					Layout.fillWidth: true
-					font: baseStyle.headerFont
-					id: txt
-					text: utils.mealName(_data.type)
-				}
-				Text {
-					font: baseStyle.defaultFont
-					text: "\u03A3 " + utils.formatNumber(_data.sumFat);
-					Layout.minimumWidth: 40 + metrics.boundingRect("F").width
-				}
-				Text {
-					font: baseStyle.defaultFont
-					text: "\u03A3 " + utils.formatNumber(_data.sumCarbs);
-					Layout.minimumWidth: 40 + metrics.boundingRect("KH").width
-				}
-				Text {
-					font: baseStyle.defaultFont
-					text: "\u03A3 " + utils.formatNumber(_data.sumProtein);
-					Layout.minimumWidth: 40 + metrics.boundingRect("EW").width
-				}
-				Text {
-					font: baseStyle.defaultFont
-					text: "\u03A3 " + utils.formatNumber(_data.sumCalories);
-					Layout.minimumWidth: 40 + metrics.boundingRect("kcal \u03A3").width
-				}
-			}
-			FontMetrics {
-				id: metrics
-				font: baseStyle.editorFont
-			}
+		IngredientEditorHeader {
+			backgroundColor: baseStyle.mealColor(_data.type)
+			title: utils.mealName(_data.type)
+			itemData: _data
 		}
 	}
 }
