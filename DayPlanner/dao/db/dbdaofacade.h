@@ -12,12 +12,12 @@ public:
     virtual QList<MealDAO *> loadMeals(QDate d, qint32 type);
     virtual MealDAO *createMeal(QDate d, qint32 type);
 
-    virtual RecipeDAO *loadRecipe(qint32 recipeId);
-    virtual QList<RecipeDAO *> loadRecipes();
-	virtual RecipeDAO *createRecipe(const QString &name);
-	virtual RecipeDAO *loadRecipeByName(const QString &name);
-	virtual RecipeStatsDAO *loadRecipeStats();
-	virtual bool removeRecipe(qint32 recipeId);
+    virtual IngredientDAO *loadIngredient(qint32 ingredientId);
+    virtual QList<IngredientDAO *> loadIngredients();
+	virtual IngredientDAO *createIngredient(const QString &name);
+	virtual IngredientDAO *loadIngredientByName(const QString &name);
+	virtual IngredientStatsDAO *loadIngredientStats();
+	virtual bool removeIngredient(qint32 ingredientId);
 
 	virtual TrainingDAO *loadTraining(qint32 trainingId);
 	virtual QList<TrainingDAO *> loadTrainings();

@@ -25,7 +25,7 @@ public:
 
     bool executeNonQuery(const QString &query);
 
-	bool fillDefaultRecepies();
+	bool fillDefaultIngredients();
 
 private:
     QSqlRecord selectOneRecord(const QString &query, bool warnIfNone);
@@ -33,7 +33,7 @@ private:
 private:
     static void createConnection();
 	static QString getDbFile();
-	static bool doFillDefaultRecepies();
+	static bool doFillDefaultIngredients();
 };
 
 #endif // DATABASE_H

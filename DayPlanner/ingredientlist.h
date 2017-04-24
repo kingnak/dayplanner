@@ -1,24 +1,24 @@
-#ifndef RECIPELIST_H
-#define RECIPELIST_H
+#ifndef INGREDIENTLIST_H
+#define INGREDIENTLIST_H
 
 #include <QAbstractListModel>
 #include <QList>
 #include <QHash>
 
 class DAOFacade;
-class RecipeDAO;
-class RecipeStatsDAO;
-class RecipeStats;
-class RecipeNotifier;
+class IngredientDAO;
+class IngredientStatsDAO;
+class IngredientStats;
+class IngredientNotifier;
 
-class RecipeList : public QAbstractListModel
+class IngredientList : public QAbstractListModel
 {
 	Q_OBJECT
 
 	Q_PROPERTY(QObject* stats READ stats NOTIFY statsChanged)
 public:
-    RecipeList();
-    ~RecipeList();
+    IngredientList();
+    ~IngredientList();
 
     QVariant data(const QModelIndex &index, int role) const;
     int rowCount(const QModelIndex &parent) const;
@@ -35,9 +35,9 @@ public:
         UrlRole
     };
 
-	Q_INVOKABLE QObject *loadDataForRecipe(qint32 id);
-	Q_INVOKABLE void clearRecipeCache();
-	Q_INVOKABLE void removeRecipe(qint32 id);
+	Q_INVOKABLE QObject *loadDataForIngredient(qint32 id);
+	Q_INVOKABLE void clearIngredientCache();
+	Q_INVOKABLE void removeIngredient(qint32 id);
 	QObject *stats();
 
 signals:
@@ -47,34 +47,34 @@ private:
     void load();
 
 private:
-    QList<RecipeDAO*> m_data;
-	QMap<qint32, QObject*> m_recipeCache;
-	RecipeStats *m_stats;
+    QList<IngredientDAO*> m_data;
+	QMap<qint32, QObject*> m_ingredientCache;
+	IngredientStats *m_stats;
 };
 
-class RecipeNotifier : public QObject
+class IngredientNotifier : public QObject
 {
 	Q_OBJECT
 
 private:
-	RecipeNotifier() : QObject(nullptr) {}
+	IngredientNotifier() : QObject(nullptr) {}
 
 public:
-	static RecipeNotifier *instance() {
-		static RecipeNotifier inst_;
+	static IngredientNotifier *instance() {
+		static IngredientNotifier inst_;
 		return &inst_;
 	}
 
 public slots:
 	void notifyChanges() {
-		emit recipesChanged();
+		emit ingredientsChanged();
 	}
 
 signals:
-	void recipesChanged();
+	void ingredientsChanged();
 };
 
-class RecipeStats : public QObject
+class IngredientStats : public QObject
 {
 	Q_OBJECT
 
@@ -88,16 +88,16 @@ class RecipeStats : public QObject
 	Q_PROPERTY(qreal minCalories READ minCalories NOTIFY statsChanged)
 
 public:
-	RecipeStats(DAOFacade *facade, QObject *parent = nullptr)
+	IngredientStats(DAOFacade *facade, QObject *parent = nullptr)
 		: QObject(parent),
 		  m_stats(nullptr),
 		  m_facade(facade)
 	{
-		connect(RecipeNotifier::instance(), &RecipeNotifier::recipesChanged, this, &RecipeStats::updateStats);
+		connect(IngredientNotifier::instance(), &IngredientNotifier::ingredientsChanged, this, &IngredientStats::updateStats);
 		updateStats();
 	}
 
-	~RecipeStats();
+	~IngredientStats();
 
 	qreal maxFat() const;
 	qreal minFat() const;
@@ -115,8 +115,8 @@ private slots:
 	void updateStats();
 
 private:
-	RecipeStatsDAO *m_stats;
+	IngredientStatsDAO *m_stats;
 	DAOFacade *m_facade;
 };
 
-#endif // RECIPELIST_H
+#endif // INGREDIENTLIST_H

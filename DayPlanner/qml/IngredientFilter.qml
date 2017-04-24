@@ -8,8 +8,8 @@ SplitView {
 	property alias model: sorter.sourceModel
 
 	id: theList
-	signal deleteRecipe(int id)
-	signal editRecipe(int id)
+	signal deleteIngredient(int id)
+	signal editIngredient(int id)
 
 	SortFilterProxyModel {
 		id: sorter
@@ -135,13 +135,13 @@ SplitView {
 						style: SmallButtonStyle{}
 						height: 15
 						text: "X"
-						onClicked: theList.deleteRecipe(styleData.value)
+						onClicked: theList.deleteIngredient(styleData.value)
 					}
 					ToolButton {
 						style: SmallButtonStyle{}
 						height: 15
 						text: "E"
-						onClicked: theList.editRecipe(styleData.value)
+						onClicked: theList.editIngredient(styleData.value)
 					}
 				}
 			}

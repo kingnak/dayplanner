@@ -1,12 +1,12 @@
-#ifndef RECIPE_H
-#define RECIPE_H
+#ifndef INGREDIENT_H
+#define INGREDIENT_H
 
 #include <QObject>
-#include "dao/recipedao.h"
+#include "dao/ingredientdao.h"
 
 class Meal;
 
-class Recipe : public QObject
+class Ingredient : public QObject
 {
 	Q_OBJECT
 
@@ -20,9 +20,9 @@ class Recipe : public QObject
 	Q_PROPERTY(QString url READ url WRITE setUrl NOTIFY urlChanged)
 
 public:
-	explicit Recipe(QObject *parent = 0);
-	explicit Recipe(RecipeDAO *recipe, QObject *parent = 0);
-	~Recipe();
+	explicit Ingredient(QObject *parent = 0);
+	explicit Ingredient(IngredientDAO *ingredient, QObject *parent = 0);
+	~Ingredient();
 
 	qint32 id() const;
 
@@ -62,7 +62,7 @@ signals:
 	void urlChanged();
 
 private:
-	RecipeDAO *m_recipe;
+	IngredientDAO *m_ingredient;
 };
 
-#endif // RECIPE_H
+#endif // INGREDIENT_H

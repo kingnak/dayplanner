@@ -28,9 +28,9 @@ SOURCES += main.cpp \
     dao/db/mealdbdao.cpp \
     dayplannerqmlglobals.cpp \
     dao/db/dbautoiddaobase.cpp \
-    recipelist.cpp \
-    dao/recipedao.cpp \
-    dao/db/recipedbdao.cpp \
+    ingredientlist.cpp \
+    dao/ingredientdao.cpp \
+    dao/db/ingredientdbdao.cpp \
     qmlutils.cpp \
     shiftlist.cpp \
     dao/workoutdao.cpp \
@@ -40,9 +40,9 @@ SOURCES += main.cpp \
     dao/trainingdao.cpp \
     dao/db/trainingdbdao.cpp \
     workoutlist.cpp \
-    recipe.cpp \
-    dao/recipestatsdao.cpp \
-    dao/db/recipestatsdbdao.cpp
+    ingredient.cpp \
+    dao/ingredientstatsdao.cpp \
+    dao/db/ingredientstatsdbdao.cpp
 
 RESOURCES += qml.qrc
 
@@ -64,10 +64,10 @@ DISTFILES += \
     qml/TrainingSummary.qml \
     qml/MealSummary.qml \
     qml/styles/SmallButtonStyle.qml \
-    qml/RecipeList.qml \
+    qml/IngredientList.qml \
     qml/styles/RangeSlider.qml \
-    qml/RecipeEditor.qml \
-    qml/RecipeFilter.qml
+    qml/IngredientEditor.qml \
+    qml/IngredientFilter.qml
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -92,9 +92,9 @@ HEADERS += \
     dao/db/mealdbdao.h \
     dayplannerqmlglobals.h \
     dao/db/dbautoiddaobase.h \
-    recipelist.h \
-    dao/recipedao.h \
-    dao/db/recipedbdao.h \
+    ingredientlist.h \
+    dao/ingredientdao.h \
+    dao/db/ingredientdbdao.h \
     qmlutils.h \
     shiftlist.h \
     dao/workoutdao.h \
@@ -104,6 +104,6 @@ HEADERS += \
     dao/trainingdao.h \
     dao/db/trainingdbdao.h \
     workoutlist.h \
-    recipe.h \
-    dao/recipestatsdao.h \
-    dao/db/recipestatsdbdao.h
+    ingredient.h \
+    dao/ingredientstatsdao.h \
+    dao/db/ingredientstatsdbdao.h

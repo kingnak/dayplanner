@@ -12,8 +12,8 @@ int main(int argc, char *argv[])
 {
 	QGuiApplication app(argc, argv);
 
-	if (app.arguments().value(1) == "--fill-default-recepies") {
-		DataBase::instance().fillDefaultRecepies();
+	if (app.arguments().value(1) == "--fill-default-ingredients") {
+		DataBase::instance().fillDefaultIngredients();
 	}
 
     DayPlannerQMLGlobals::registerTypes();

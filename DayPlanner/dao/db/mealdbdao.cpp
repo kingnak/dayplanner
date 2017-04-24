@@ -96,14 +96,14 @@ void MealDbDAO::setCalories(qreal c)
     setData("calories", c);
 }
 
-qint32 MealDbDAO::recipeId() const
+qint32 MealDbDAO::ingredientId() const
 {
-    return data<qint32>("recipeId");
+    return data<qint32>("ingredientId");
 }
 
-void MealDbDAO::setRecipeId(qint32 id)
+void MealDbDAO::setIngredientId(qint32 id)
 {
-    setData("recipeId", id);
+    setData("ingredientId", id);
 }
 
 QStringList MealDbDAO::orderFields()

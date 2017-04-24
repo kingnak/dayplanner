@@ -1,10 +1,10 @@
-#ifndef RECIPEDAO_H
-#define RECIPEDAO_H
+#ifndef INGREDIENTDAO_H
+#define INGREDIENTDAO_H
 
 #include "daobase.h"
 #include <QString>
 
-class RecipeDAO : public virtual DAOBase
+class IngredientDAO : public virtual DAOBase
 {
 public:
     virtual qint32 id() const = 0;
@@ -31,4 +31,4 @@ public:
     virtual void setUrl(const QString &u) = 0;
 };
 
-#endif // RECIPEDAO_H
+#endif // INGREDIENTDAO_H

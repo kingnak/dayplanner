@@ -2,10 +2,10 @@
 #include "database.h"
 #include "shiftdbdao.h"
 #include "mealdbdao.h"
-#include "recipedbdao.h"
+#include "ingredientdbdao.h"
 #include "trainingdbdao.h"
 #include "workoutdbdao.h"
-#include "recipestatsdbdao.h"
+#include "ingredientstatsdbdao.h"
 #include <QtSql>
 
 ShiftDAO *DbDAOFacade::loadShift(QDate d)
@@ -63,67 +63,67 @@ MealDAO *DbDAOFacade::createMeal(QDate d, qint32 type)
     return m;
 }
 
-RecipeDAO *DbDAOFacade::loadRecipe(qint32 recipeId)
+IngredientDAO *DbDAOFacade::loadIngredient(qint32 ingredientId)
 {
-    return new RecipeDbDAO(recipeId, &DataBase::instance());
+    return new IngredientDbDAO(ingredientId, &DataBase::instance());
 }
 
-QList<RecipeDAO *> DbDAOFacade::loadRecipes()
+QList<IngredientDAO *> DbDAOFacade::loadIngredients()
 {
-    QString query = QString("SELECT * FROM Recipe ORDER BY name ASC");
+    QString query = QString("SELECT * FROM Ingredient ORDER BY name ASC");
 
     QSqlQuery q = DataBase::instance().executeQuery(query);
 
-    QList<RecipeDAO *> ret;
+    QList<IngredientDAO *> ret;
     while (q.next()) {
-        RecipeDAO *r = new RecipeDbDAO(q.record().value(0).toInt(), &DataBase::instance());
+        IngredientDAO *r = new IngredientDbDAO(q.record().value(0).toInt(), &DataBase::instance());
         ret << r;
     }
 
 	return ret;
 }
 
-RecipeDAO *DbDAOFacade::createRecipe(const QString &name)
+IngredientDAO *DbDAOFacade::createIngredient(const QString &name)
 {
-	if (QScopedPointer<RecipeDAO>(loadRecipeByName(name)).data()) {
+	if (QScopedPointer<IngredientDAO>(loadIngredientByName(name)).data()) {
 		return nullptr;
 	}
 
-	RecipeDAO *r = new RecipeDbDAO(DataBase::InvalidId, &DataBase::instance());
+	IngredientDAO *r = new IngredientDbDAO(DataBase::InvalidId, &DataBase::instance());
 	r->setName(name);
 	return r;
 }
 
-RecipeDAO *DbDAOFacade::loadRecipeByName(const QString &name)
+IngredientDAO *DbDAOFacade::loadIngredientByName(const QString &name)
 {
 	QSqlQuery query;
-	query.prepare("SELECT * FROM Recipe WHERE NAME LIKE ?");
+	query.prepare("SELECT * FROM Ingredient WHERE NAME LIKE ?");
 	query.bindValue(0, name);
 	query.exec();
 	if (query.next()) {
-		return new RecipeDbDAO(query.record().value(0).toInt(), &DataBase::instance());
+		return new IngredientDbDAO(query.record().value(0).toInt(), &DataBase::instance());
 	}
 
 	return nullptr;
 }
 
-RecipeStatsDAO *DbDAOFacade::loadRecipeStats()
+IngredientStatsDAO *DbDAOFacade::loadIngredientStats()
 {
 	QStringList l;
 	for ( QString f : { "Fat", "Carbs", "Protein", "Calories" } ) {
 		l << QString("MIN(%1) AS min%2, MAX(%1) AS max%2").arg(f.toLower(), f);
 	}
-	QString query = "SELECT " + l.join(", ") + " FROM Recipe";
+	QString query = "SELECT " + l.join(", ") + " FROM Ingredient";
 	QSqlQuery q = DataBase::instance().executeQuery(query);
 	q.next();
-	return new RecipeStatsDbDAO(q.record());
+	return new IngredientStatsDbDAO(q.record());
 }
 
-bool DbDAOFacade::removeRecipe(qint32 recipeId)
+bool DbDAOFacade::removeIngredient(qint32 ingredientId)
 {
-	QString query = QString("UPDATE Meal SET RecipeId = 0 WHERE RecipeId = %1").arg(recipeId);
+	QString query = QString("UPDATE Meal SET IngredientId = 0 WHERE IngredientId = %1").arg(ingredientId);
 	DataBase::instance().executeNonQuery(query);
-	query = QString("DELETE FROM Recipe WHERE id = %1").arg(recipeId);
+	query = QString("DELETE FROM Ingredient WHERE id = %1").arg(ingredientId);
 	return DataBase::instance().executeNonQuery(query);
 }
 

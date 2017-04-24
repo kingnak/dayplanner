@@ -1,23 +1,23 @@
-#include "recipelist.h"
+#include "ingredientlist.h"
 #include <QtSql>
 #include "dao/dao.h"
-#include "dao/recipedao.h"
-#include "dao/recipestatsdao.h"
-#include "recipe.h"
+#include "dao/ingredientdao.h"
+#include "dao/ingredientstatsdao.h"
+#include "ingredient.h"
 
-RecipeList::RecipeList()
+IngredientList::IngredientList()
 	: m_stats(nullptr)
 {
-	connect(RecipeNotifier::instance(), &RecipeNotifier::recipesChanged, [this]() { this->load(); });
+	connect(IngredientNotifier::instance(), &IngredientNotifier::ingredientsChanged, [this]() { this->load(); });
     load();
 }
 
-RecipeList::~RecipeList()
+IngredientList::~IngredientList()
 {
     qDeleteAll(m_data);
 }
 
-QVariant RecipeList::data(const QModelIndex &index, int role) const
+QVariant IngredientList::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
         return QVariant();
@@ -45,14 +45,14 @@ QVariant RecipeList::data(const QModelIndex &index, int role) const
     }
 }
 
-int RecipeList::rowCount(const QModelIndex &parent) const
+int IngredientList::rowCount(const QModelIndex &parent) const
 {
     if (parent.isValid())
         return 0;
     return m_data.count();
 }
 
-QHash<int, QByteArray> RecipeList::roleNames() const
+QHash<int, QByteArray> IngredientList::roleNames() const
 {
     QHash<int, QByteArray> ret;
     ret[IdRole] = "itemId";
@@ -66,43 +66,43 @@ QHash<int, QByteArray> RecipeList::roleNames() const
 	return ret;
 }
 
-QObject *RecipeList::loadDataForRecipe(qint32 id)
+QObject *IngredientList::loadDataForIngredient(qint32 id)
 {
-	if (!m_recipeCache.contains(id)) {
-		Recipe *r =new Recipe(globalDAOFacade()->loadRecipe(id), this);
-		m_recipeCache[id] = r;
+	if (!m_ingredientCache.contains(id)) {
+		Ingredient *r =new Ingredient(globalDAOFacade()->loadIngredient(id), this);
+		m_ingredientCache[id] = r;
 	}
-	return m_recipeCache[id];
+	return m_ingredientCache[id];
 }
 
-void RecipeList::clearRecipeCache()
+void IngredientList::clearIngredientCache()
 {
-	for (QObject *o : m_recipeCache.values()) {
+	for (QObject *o : m_ingredientCache.values()) {
 		o->deleteLater();
 	}
-	m_recipeCache.clear();
+	m_ingredientCache.clear();
 }
 
-void RecipeList::removeRecipe(qint32 id)
+void IngredientList::removeIngredient(qint32 id)
 {
-	globalDAOFacade()->removeRecipe(id);
-	RecipeNotifier::instance()->recipesChanged();
+	globalDAOFacade()->removeIngredient(id);
+	IngredientNotifier::instance()->ingredientsChanged();
 }
 
-QObject *RecipeList::stats()
+QObject *IngredientList::stats()
 {
 	if (!m_stats) {
-		m_stats = new RecipeStats(globalDAOFacade(), this);
+		m_stats = new IngredientStats(globalDAOFacade(), this);
 	}
 	return m_stats;
 }
 
-void RecipeList::load()
+void IngredientList::load()
 {
     beginResetModel();
-    QList<RecipeDAO*> oldList = m_data;
+    QList<IngredientDAO*> oldList = m_data;
     m_data.clear();
-    m_data = globalDAOFacade()->loadRecipes();
+    m_data = globalDAOFacade()->loadIngredients();
     endResetModel();
 
     qDeleteAll(oldList);
@@ -110,54 +110,54 @@ void RecipeList::load()
 
 /////////////////////////////////////////////
 
-RecipeStats::~RecipeStats()
+IngredientStats::~IngredientStats()
 {
 	delete m_stats;
 }
 
-qreal RecipeStats::maxFat() const
+qreal IngredientStats::maxFat() const
 {
 	return m_stats->maxFat();
 }
 
-qreal RecipeStats::minFat() const
+qreal IngredientStats::minFat() const
 {
 	return m_stats->minFat();
 }
 
-qreal RecipeStats::maxProtein() const
+qreal IngredientStats::maxProtein() const
 {
 	return m_stats->maxProtein();
 }
 
-qreal RecipeStats::minProtein() const
+qreal IngredientStats::minProtein() const
 {
 	return m_stats->minProtein();
 }
 
-qreal RecipeStats::maxCarbs() const
+qreal IngredientStats::maxCarbs() const
 {
 	return m_stats->maxCarbs();
 }
 
-qreal RecipeStats::minCarbs() const
+qreal IngredientStats::minCarbs() const
 {
 	return m_stats->minCarbs();
 }
 
-qreal RecipeStats::maxCalories() const
+qreal IngredientStats::maxCalories() const
 {
 	return m_stats->maxCalories();
 }
 
-qreal RecipeStats::minCalories() const
+qreal IngredientStats::minCalories() const
 {
 	return m_stats->minCalories();
 }
 
-void RecipeStats::updateStats()
+void IngredientStats::updateStats()
 {
 	delete m_stats;
-	m_stats = m_facade->loadRecipeStats();
+	m_stats = m_facade->loadIngredientStats();
 	emit statsChanged();
 }

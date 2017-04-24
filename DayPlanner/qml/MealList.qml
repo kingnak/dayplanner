@@ -54,11 +54,11 @@ ListView {
 						// When name was changed, onEditingFinished will be called AFTER this
 						// Force name to be correct
 						name = txtName.text;
-						_data.createRecipeFromMeal(index);
+						_data.createIngredientFromMeal(index);
 					}
 					style: SmallButtonStyle {}
-					opacity: isConnectedToRecipe ? 0 : 1
-					enabled: !isConnectedToRecipe
+					opacity: isConnectedToIngredient ? 0 : 1
+					enabled: !isConnectedToIngredient
 				}
 
                 TextField {
@@ -149,11 +149,11 @@ ListView {
 				width: parent.width
 				id: inp
 				textRole: "name"
-				model: recipeModel
+				model: ingredientModel
 				font: baseStyle.editorFont
 				onAccepted: {
 					if (selectedItem) {
-						_data.createMealForRecipe(selectedItem.itemId);
+						_data.createMealForIngredient(selectedItem.itemId);
 					} else {
 						_data.createMeal(text);
 					}

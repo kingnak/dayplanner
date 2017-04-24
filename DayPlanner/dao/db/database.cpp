@@ -108,7 +108,7 @@ void DataBase::createConnection()
             }
         }
         */
-		ok = query.exec("CREATE TABLE Meal (id INTEGER PRIMARY KEY, date DATE, type INT, name TEXT, factor REAL, fat REAL, protein REAL, carbs REAL, calories REAL, sort INT, recipeId INT NULL, recipeState INT DEFAULT 0)");
+		ok = query.exec("CREATE TABLE Meal (id INTEGER PRIMARY KEY, date DATE, type INT, name TEXT, factor REAL, fat REAL, protein REAL, carbs REAL, calories REAL, sort INT, ingredientId INT NULL, ingredientState INT DEFAULT 0)");
         /*
         for (int i = 0; i < 3; ++i) {
             QString s = QString("INSERT INTO Meal (date, type, name, factor, fat, sort) VALUES ('%1',1,'Essen %2',1,1,%3,%2)")
@@ -121,9 +121,9 @@ void DataBase::createConnection()
             }
         }
         */
-		ok = query.exec("CREATE TABLE Recipe (id INTEGER PRIMARY KEY, name TEXT, quantity INT, fat REAL, protein REAL, carbs REAL, calories REAL, url TEXT NULL)");
+		ok = query.exec("CREATE TABLE Ingredient (id INTEGER PRIMARY KEY, name TEXT, quantity INT, fat REAL, protein REAL, carbs REAL, calories REAL, url TEXT NULL)");
 
-		doFillDefaultRecepies();
+		doFillDefaultIngredients();
 
 		ok = query.exec("CREATE TABLE Training (id INTEGER PRIMARY KEY, name TEXT)");
 		ok = query.exec("INSERT INTO Training (name) VALUES "
@@ -164,12 +164,12 @@ QString DataBase::getDbFile()
 	return base.absoluteFilePath("dayplanner.db");
 }
 
-bool DataBase::fillDefaultRecepies()
+bool DataBase::fillDefaultIngredients()
 {
-	return DataBase::doFillDefaultRecepies();
+	return DataBase::doFillDefaultIngredients();
 }
 
-bool DataBase::doFillDefaultRecepies()
+bool DataBase::doFillDefaultIngredients()
 {
 	QSqlQuery query;
 	QString dataFile = ":/data/data.csv";
@@ -180,9 +180,9 @@ bool DataBase::doFillDefaultRecepies()
 		QString line;
 		query.exec("BEGIN TRANSACTION");
 		QSqlQuery ins;
-		ins.prepare("INSERT INTO Recipe (name, quantity, fat, protein, carbs, calories) VALUES (?,?,?,?,?,?)");
+		ins.prepare("INSERT INTO Ingredient (name, quantity, fat, protein, carbs, calories) VALUES (?,?,?,?,?,?)");
 		QSqlQuery check;
-		check.prepare("SELECT COUNT(*) FROM Recipe WHERE name LIKE ?");
+		check.prepare("SELECT COUNT(*) FROM Ingredient WHERE name LIKE ?");
 		while (!(line = ts.readLine()).isEmpty()) {
 			QStringList parts = line.split(";");
 

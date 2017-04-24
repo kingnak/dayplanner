@@ -8,7 +8,7 @@
 #include "meal.h"
 
 class DAOFacade;
-class RecipeDAO;
+class IngredientDAO;
 
 class MealList : public QObject
 {
@@ -32,9 +32,9 @@ public:
     Meal::Type type() const { return m_type; }
 
     Q_INVOKABLE void createMeal(const QString &name);
-    Q_INVOKABLE void createMealForRecipe(qint32 recipeId);
+    Q_INVOKABLE void createMealForIngredient(qint32 ingredientId);
     Q_INVOKABLE void removeMeal(qint32 idx);
-	Q_INVOKABLE bool createRecipeFromMeal(qint32 idx);
+	Q_INVOKABLE bool createIngredientFromMeal(qint32 idx);
 
 	qreal sumFat() const;
 	qreal sumProtein() const;
@@ -65,8 +65,8 @@ private:
 	};
 	Q_DECLARE_FLAGS(UpdateFields, UpdateField)
 
-	void updateMealFromRecipe(MealDAO *m, RecipeDAO *r, UpdateFields fields = UpdateField::All);
-	bool tryConnectMealToRecipeByName(Meal *m, UpdateFields fields = UpdateField::All);
+	void updateMealFromIngredient(MealDAO *m, IngredientDAO *r, UpdateFields fields = UpdateField::All);
+	bool tryConnectMealToIngredientByName(Meal *m, UpdateFields fields = UpdateField::All);
 
 private:
     QList<Meal *> m_data;

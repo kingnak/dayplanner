@@ -28,16 +28,16 @@ ApplicationWindow {
 			}
 
 			ToolButton {
-				id: gotoRecepies
+				id: gotoIngredients
 				style: SmallButtonStyle{}
-				iconSource: "qrc:///icons/recepies"
+				iconSource: "qrc:///icons/ingredients"
 				onClicked: {
 					stack.pop({item: calendar, immediate:true});
-					stack.push({item: recipeEditorStackView, replace: true});
+					stack.push({item: ingredientEditorStackView, replace: true});
 					gotoCalendar.enabled = true;
 					gotoCalendar.visible = true;
-					gotoRecepies.enabled = false;
-					gotoRecepies.visible = false;
+					gotoIngredients.enabled = false;
+					gotoIngredients.visible = false;
 				}
 			}
 			ToolButton {
@@ -47,12 +47,12 @@ ApplicationWindow {
 				enabled: false
 				visible: false
 				onClicked: {
-					stack.pop({item: recipeEditorStackView, immediate:true});
+					stack.pop({item: ingredientEditorStackView, immediate:true});
 					stack.push({item: calendar, replace: true});
 					gotoCalendar.enabled = false;
 					gotoCalendar.visible = false;
-					gotoRecepies.enabled = true;
-					gotoRecepies.visible = true;
+					gotoIngredients.enabled = true;
+					gotoIngredients.visible = true;
 				}
 			}
 		}
@@ -62,8 +62,8 @@ ApplicationWindow {
         id: dayModel
     }
 
-    RecipeModel {
-        id: recipeModel
+    IngredientModel {
+        id: ingredientModel
 	}
 
 	TrainingModel {
@@ -163,12 +163,12 @@ ApplicationWindow {
 	}
 
 	Component {
-		id: recipeEditorStackView
+		id: ingredientEditorStackView
 		ColumnLayout {
 			//anchors.fill: parent
 
-			RecipeList {
-				_data: recipeModel
+			IngredientList {
+				_data: ingredientModel
 				Layout.fillHeight: true
 				Layout.fillWidth: true
 			}

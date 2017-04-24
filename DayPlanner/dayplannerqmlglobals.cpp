@@ -6,7 +6,7 @@
 #include "daymodel.h"
 #include "meal.h"
 #include "meallist.h"
-#include "recipelist.h"
+#include "ingredientlist.h"
 #include "qmlutils.h"
 #include "shiftlist.h"
 #include "traininglist.h"
@@ -23,7 +23,7 @@ void DayPlannerQMLGlobals::registerTypes()
     qmlRegisterType<DayModel>("org.kingnak.dayplanner", 1, 0, "DayModel");
     qmlRegisterType<Meal>("org.kingnak.dayplanner", 1, 0, "Meal");
     qmlRegisterType<MealList>("org.kingnak.dayplanner", 1, 0, "MealList");
-    qmlRegisterType<RecipeList>("org.kingnak.dayplanner", 1, 0, "RecipeModel");
+    qmlRegisterType<IngredientList>("org.kingnak.dayplanner", 1, 0, "IngredientModel");
 	qmlRegisterType<QmlUtils>("org.kingnak.dayplanner", 1, 0, "Utils");
 	qmlRegisterType<ShiftList>("org.kingnak.dayplanner", 1, 0, "ShiftModel");
 	qmlRegisterType<TrainingList>("org.kingnak.dayplanner", 1, 0, "TrainingModel");

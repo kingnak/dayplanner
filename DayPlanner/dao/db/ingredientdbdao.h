@@ -1,13 +1,13 @@
-#ifndef RECIPEDBDAO_H
-#define RECIPEDBDAO_H
+#ifndef INGREDIENTDBDAO_H
+#define INGREDIENTDBDAO_H
 
 #include "dbautoiddaobase.h"
-#include "../recipedao.h"
+#include "../ingredientdao.h"
 
-class RecipeDbDAO : public RecipeDAO, private DbAutoIdDAOBase
+class IngredientDbDAO : public IngredientDAO, private DbAutoIdDAOBase
 {
 public:
-    RecipeDbDAO(qint32 id, DataBase *db);
+    IngredientDbDAO(qint32 id, DataBase *db);
 
     virtual qint32 id() const;
 
@@ -39,4 +39,4 @@ protected:
     virtual QString tableName();
 };
 
-#endif // RECIPEDBDAO_H
+#endif // INGREDIENTDBDAO_H

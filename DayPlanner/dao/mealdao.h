@@ -31,8 +31,8 @@ public:
     virtual qreal calories() const = 0;
     virtual void setCalories(qreal c) = 0;
 
-    virtual qint32 recipeId() const = 0;
-    virtual void setRecipeId(qint32 id) = 0;
+    virtual qint32 ingredientId() const = 0;
+    virtual void setIngredientId(qint32 id) = 0;
 };
 
 #endif // MEALDAO_H

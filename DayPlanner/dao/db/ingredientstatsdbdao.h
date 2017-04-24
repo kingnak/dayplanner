@@ -1,13 +1,13 @@
-#ifndef RECIPESTATSDBDAO_H
-#define RECIPESTATSDBDAO_H
+#ifndef INGREDIENTSTATSDBDAO_H
+#define INGREDIENTSTATSDBDAO_H
 
-#include "../recipestatsdao.h"
+#include "../ingredientstatsdao.h"
 #include <QSqlRecord>
 
-class RecipeStatsDbDAO : public RecipeStatsDAO
+class IngredientStatsDbDAO : public IngredientStatsDAO
 {
 public:
-	RecipeStatsDbDAO(const QSqlRecord &rec);
+	IngredientStatsDbDAO(const QSqlRecord &rec);
 
 	qreal maxFat() const { return getData("maxFat"); }
 	qreal minFat() const { return getData("minFat"); }
@@ -25,4 +25,4 @@ private:
 	QSqlRecord m_record;
 };
 
-#endif // RECIPESTATSDBDAO_H
+#endif // INGREDIENTSTATSDBDAO_H

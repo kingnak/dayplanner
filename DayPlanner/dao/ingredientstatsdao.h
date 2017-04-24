@@ -1,12 +1,12 @@
-#ifndef RECIPESTATSDAO_H
-#define RECIPESTATSDAO_H
+#ifndef INGREDIENTSTATSDAO_H
+#define INGREDIENTSTATSDAO_H
 
 #include <QtGlobal>
 
-class RecipeStatsDAO
+class IngredientStatsDAO
 {
 public:
-	virtual ~RecipeStatsDAO() {}
+	virtual ~IngredientStatsDAO() {}
 
 	virtual qreal maxFat() const = 0;
 	virtual qreal minFat() const = 0;
@@ -18,4 +18,4 @@ public:
 	virtual qreal minCalories() const = 0;
 };
 
-#endif // RECIPESTATSDAO_H
+#endif // INGREDIENTSTATSDAO_H

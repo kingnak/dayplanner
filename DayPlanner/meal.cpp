@@ -162,24 +162,24 @@ void Meal::updateCalories(qreal c)
 	setCalories(c / factor());
 }
 
-qint32 Meal::recipeId() const
+qint32 Meal::ingredientId() const
 {
-	return m_meal->recipeId();
+	return m_meal->ingredientId();
 }
 
-void Meal::setRecipeId(qint32 id)
+void Meal::setIngredientId(qint32 id)
 {
-	if (id != recipeId()) {
-		m_meal->setRecipeId(id);
+	if (id != ingredientId()) {
+		m_meal->setIngredientId(id);
 		if (m_meal->save()) {
-			emit recipeIdChanged();
+			emit ingredientIdChanged();
 		}
 	}
 }
 
-bool Meal::isConnectedToRecipe() const
+bool Meal::isConnectedToIngredient() const
 {
-	return recipeId() != DAOBase::NoItemIndex;
+	return ingredientId() != DAOBase::NoItemIndex;
 }
 
 void Meal::notifyValuesChanged()

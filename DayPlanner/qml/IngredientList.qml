@@ -19,14 +19,14 @@ Item {
 	Component {
 		id: recList
 		ColumnLayout {
-			RecipeFilter {
+			IngredientFilter {
 				Layout.fillHeight: true
 				Layout.fillWidth: true
 				model: root._data
-				onEditRecipe: recStack.push({item: recEditor, properties: {recipe: recipeModel.loadDataForRecipe(id)}})
-				onDeleteRecipe: {
-					confirmClose.recipeName = recipeModel.loadDataForRecipe(id).name;
-					confirmClose.recipeId = id;
+				onEditIngredient: recStack.push({item: recEditor, properties: {ingredient: ingredientModel.loadDataForIngredient(id)}})
+				onDeleteIngredient: {
+					confirmClose.ingredientName = ingredientModel.loadDataForIngredient(id).name;
+					confirmClose.ingredientId = id;
 					confirmClose.open();
 				}
 			}
@@ -36,7 +36,7 @@ Item {
 				}
 				Button {
 					text: "Neu"
-					onClicked: recStack.push({item: recEditor, properties: {recipe: recipeModel.loadDataForRecipe(-1)}})
+					onClicked: recStack.push({item: recEditor, properties: {ingredient: ingredientModel.loadDataForIngredient(-1)}})
 				}
 				Item {
 					Layout.minimumWidth: 5
@@ -51,20 +51,20 @@ Item {
 
 	Component {
 		id: recEditor
-		RecipeEditor {
+		IngredientEditor {
 			onClose: recStack.pop();
 		}
 	}
 
 	MessageDialog {
 		id: confirmClose
-		property string recipeName: ""
-		property int recipeId: -1
-		text: "Rezept " + confirmClose.recipeName + " wirklich löschen?"
+		property string ingredientName: ""
+		property int ingredientId: -1
+		text: "Rezept " + confirmClose.ingredientName + " wirklich löschen?"
 		standardButtons: StandardButton.Yes | StandardButton.No
 		onButtonClicked: {
 			if (clickedButton == StandardButton.Yes) {
-				recipeModel.removeRecipe(recipeId);
+				ingredientModel.removeIngredient(ingredientId);
 			}
 		}
 	}

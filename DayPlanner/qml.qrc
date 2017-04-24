@@ -15,11 +15,11 @@
         <file>qml/WorkoutList.qml</file>
         <file>qml/TrainingSummary.qml</file>
         <file>qml/styles/SmallButtonStyle.qml</file>
-        <file>qml/RecipeList.qml</file>
+        <file>qml/IngredientList.qml</file>
         <file>qml/styles/RangeSlider.qml</file>
         <file>data/data.csv</file>
-        <file>qml/RecipeEditor.qml</file>
-        <file>qml/RecipeFilter.qml</file>
+        <file>qml/IngredientEditor.qml</file>
+        <file>qml/IngredientFilter.qml</file>
     </qresource>
     <qresource prefix="/icons">
         <file alias="delete">images/Action-cancel-icon.png</file>
@@ -27,7 +27,7 @@
         <file alias="edit">images/Action-edit-icon.png</file>
         <file alias="settings">images/Action-run-icon.png</file>
         <file>images/Action-viewmag-icon.png</file>
-        <file alias="recepies">images/Action-viewmag-icon-16.png</file>
+        <file alias="ingredients">images/Action-viewmag-icon-16.png</file>
         <file alias="calendar">images/App-date-icon.png</file>
     </qresource>
 </RCC>
