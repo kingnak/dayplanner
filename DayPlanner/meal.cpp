@@ -46,17 +46,17 @@ void Meal::setName(const QString &n)
     }
 }
 
-qreal Meal::factor() const
+qreal Meal::quantity() const
 {
-    qreal f = m_meal->factor();
+    qreal f = m_meal->quantity();
     if (qFuzzyIsNull(f)) return 1;
     return f;
 }
 
-void Meal::setFactor(qreal f)
+void Meal::setQuantity(qreal f)
 {
-    if (f != factor()) {
-        m_meal->setFactor(f);
+    if (f != quantity()) {
+        m_meal->setQuantity(f);
         if (m_meal->save()) {
 			notifyValuesChanged();
         }
@@ -80,12 +80,12 @@ void Meal::setFat(qreal f)
 
 qreal Meal::calcFat() const
 {
-	return fat() * factor();
+	return fat() * quantity();
 }
 
 void Meal::updateFat(qreal f)
 {
-	setFat(f / factor());
+	setFat(f / quantity());
 }
 
 qreal Meal::protein() const
@@ -105,12 +105,12 @@ void Meal::setProtein(qreal p)
 
 qreal Meal::calcProtein() const
 {
-	return protein() * factor();
+	return protein() * quantity();
 }
 
 void Meal::updateProtein(qreal p)
 {
-	setProtein(p / factor());
+	setProtein(p / quantity());
 }
 
 qreal Meal::carbs() const
@@ -130,12 +130,12 @@ void Meal::setCarbs(qreal c)
 
 qreal Meal::calcCarbs() const
 {
-	return carbs() * factor();
+	return carbs() * quantity();
 }
 
 void Meal::updateCarbs(qreal c)
 {
-	setCarbs(c / factor());
+	setCarbs(c / quantity());
 }
 
 qreal Meal::calories() const
@@ -155,12 +155,12 @@ void Meal::setCalories(qreal c)
 
 qreal Meal::calcCalories() const
 {
-	return calories() * factor();
+	return calories() * quantity();
 }
 
 void Meal::updateCalories(qreal c)
 {
-	setCalories(c / factor());
+	setCalories(c / quantity());
 }
 
 qint32 Meal::ingredientId() const
@@ -215,7 +215,7 @@ bool Meal::isConnected() const
 void Meal::notifyValuesChanged()
 {
 	emit nameChanged();
-	emit factorChanged();
+	emit quantityChanged();
 	emit fatChanged();
 	emit proteinChanged();
 	emit carbsChanged();

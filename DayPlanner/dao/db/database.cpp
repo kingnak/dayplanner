@@ -103,12 +103,12 @@ void DataBase::createConnection()
 				   );
 
 		ok = query.exec("CREATE TABLE Shift (d DATE NOT NULL PRIMARY KEY, shiftId INT)");
-		ok = query.exec("CREATE TABLE Meal (id INTEGER PRIMARY KEY, date DATE, type INT, name TEXT, factor REAL, fat REAL, protein REAL, carbs REAL, calories REAL, sort INT, ingredientId INT NULL, recipeId INT NULL)");
+		ok = query.exec("CREATE TABLE Meal (id INTEGER PRIMARY KEY, date DATE, type INT, name TEXT, quantity REAL, fat REAL, protein REAL, carbs REAL, calories REAL, sort INT, ingredientId INT NULL, recipeId INT NULL)");
 		ok = query.exec("CREATE TABLE Ingredient (id INTEGER PRIMARY KEY, name TEXT, refQuantity INT, defaultQuantity INT, fat REAL, protein REAL, carbs REAL, calories REAL)");
 		ok = query.exec("CREATE TABLE RecipeTemplate (id INTEGER PRIMARY KEY, name TEXT, refServing INT, defaultServing INT, fat REAL, protein REAL, carbs REAl, calories REAL, url TEXT NULL, note TEXT NULL, ingredientListId INT DEFAULT 0)");
 		ok = query.exec("CREATE TABLE Recipe (id INTEGER PRIMARY KEY, name TEXT, refServing INT, defaultServing INT, fat REAL, protein REAL, carbs REAl, calories REAL, url TEXT NULL, note TEXT NULL, ingredientListId INT DEFAULT 0, templateId INT DEFAULT 0)");
 		ok = query.exec("CREATE TABLE IngredientList (id INTEGER PRIMARY KEY)");
-		ok = query.exec("CREATE TABLE IngredientListItem (id INTEGER PRIMARY KEY, ingredientListId INT, sort INT, name TEXT, factor REAL, fat REAL, protein REAL, carbs REAL, calories REAL, ingredientId INT)");
+		ok = query.exec("CREATE TABLE IngredientListItem (id INTEGER PRIMARY KEY, ingredientListId INT, sort INT, name TEXT, quantity INT, fat REAL, protein REAL, carbs REAL, calories REAL, ingredientId INT)");
 
 		doFillDefaultIngredients();
 

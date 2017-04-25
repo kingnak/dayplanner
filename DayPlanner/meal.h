@@ -11,7 +11,7 @@ class Meal : public QObject
     Q_PROPERTY(Type type READ type)
 	Q_PROPERTY(qint32 ingredientId READ ingredientId WRITE setIngredientId NOTIFY ingredientIdChanged)
     Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
-    Q_PROPERTY(qreal factor READ factor WRITE setFactor NOTIFY factorChanged)
+    Q_PROPERTY(qreal quantity READ quantity WRITE setQuantity NOTIFY quantityChanged)
 	Q_PROPERTY(qreal calcFat READ calcFat WRITE updateFat NOTIFY fatChanged)
     Q_PROPERTY(qreal fat READ fat WRITE setFat NOTIFY fatChanged)
 	Q_PROPERTY(qreal calcProtein READ calcProtein WRITE updateProtein NOTIFY proteinChanged)
@@ -45,8 +45,8 @@ public:
     QString name() const;
     void setName(const QString &n);
 
-    qreal factor() const;
-    void setFactor(qreal f);
+    qreal quantity() const;
+    void setQuantity(qreal f);
 
     qreal fat() const;
     void setFat(qreal f);
@@ -80,7 +80,7 @@ public:
 
 signals:
 	void nameChanged();
-    void factorChanged();
+    void quantityChanged();
     void fatChanged();
     void proteinChanged();
     void carbsChanged();

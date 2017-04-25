@@ -46,14 +46,14 @@ void MealDbDAO::setDate(QDate d)
     setData("date", d);
 }
 
-qreal MealDbDAO::factor() const
+qreal MealDbDAO::quantity() const
 {
-    return data<qreal>("factor");
+    return data<qreal>("quantity");
 }
 
-void MealDbDAO::setFactor(qreal fac)
+void MealDbDAO::setQuantity(qreal fac)
 {
-    setData("factor", fac);
+    setData("quantity", fac);
 }
 
 qreal MealDbDAO::fat() const

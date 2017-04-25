@@ -63,15 +63,15 @@ Item {
 			}
 
 			DoubleField {
-				id: txtFactor
-				value: factor
+				id: txtQuantity
+				value: quantity
 				font: baseStyle.editorFont
 				style: PlaceholderTextEditStyle {
 					showHovered: row.hovered
 					postfix: "x"
 				}
-				onDoubleFinished: factor = val;
-				onDoubleError: value = factor;
+				onDoubleFinished: quantity = val;
+				onDoubleError: value = quantity;
 			}
 
 			DoubleField {

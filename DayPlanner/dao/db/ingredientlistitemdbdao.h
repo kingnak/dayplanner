@@ -14,8 +14,8 @@ public:
 	QString name() const;
 	void setName(const QString &name);
 
-	qreal factor() const;
-	void setFactor(qreal fac);
+	qreal quantity() const;
+	void setQuantity(qreal fac);
 
 	qreal fat() const;
 	void setFat(qreal f);

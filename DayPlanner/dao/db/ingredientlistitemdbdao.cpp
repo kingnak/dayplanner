@@ -32,14 +32,14 @@ void IngredientListItemDbDAO::setName(const QString &name)
 	setData("name", name);
 }
 
-qreal IngredientListItemDbDAO::factor() const
+qreal IngredientListItemDbDAO::quantity() const
 {
-	return data<qreal>("factor");
+	return data<qreal>("quantity");
 }
 
-void IngredientListItemDbDAO::setFactor(qreal fac)
+void IngredientListItemDbDAO::setQuantity(qreal q)
 {
-	setData("factor", fac);
+	setData("quantity", q);
 }
 
 qreal IngredientListItemDbDAO::fat() const

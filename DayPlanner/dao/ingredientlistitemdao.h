@@ -12,8 +12,8 @@ public:
 	virtual QString name() const = 0;
 	virtual void setName(const QString &name) = 0;
 
-	virtual qreal factor() const = 0;
-	virtual void setFactor(qreal fac) = 0;
+	virtual qreal quantity() const = 0;
+	virtual void setQuantity(qreal q) = 0;
 
 	virtual qreal fat() const = 0;
 	virtual void setFat(qreal f) = 0;

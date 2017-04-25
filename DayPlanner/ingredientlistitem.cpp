@@ -39,17 +39,17 @@ void IngredientListItem::setName(const QString &n)
 	}
 }
 
-qreal IngredientListItem::factor() const
+qreal IngredientListItem::quantity() const
 {
-	qreal f = m_item->factor();
+	qreal f = m_item->quantity();
 	if (qFuzzyIsNull(f)) return 1;
 	return f;
 }
 
-void IngredientListItem::setFactor(qreal f)
+void IngredientListItem::setQuantity(qreal f)
 {
-	if (f != factor()) {
-		m_item->setFactor(f);
+	if (f != quantity()) {
+		m_item->setQuantity(f);
 		if (m_item->save()) {
 			notifyValuesChanged();
 		}
@@ -73,12 +73,12 @@ void IngredientListItem::setFat(qreal f)
 
 qreal IngredientListItem::calcFat() const
 {
-	return fat() * factor();
+	return fat() * quantity();
 }
 
 void IngredientListItem::updateFat(qreal f)
 {
-	setFat(f / factor());
+	setFat(f / quantity());
 }
 
 qreal IngredientListItem::protein() const
@@ -98,12 +98,12 @@ void IngredientListItem::setProtein(qreal p)
 
 qreal IngredientListItem::calcProtein() const
 {
-	return protein() * factor();
+	return protein() * quantity();
 }
 
 void IngredientListItem::updateProtein(qreal p)
 {
-	setProtein(p / factor());
+	setProtein(p / quantity());
 }
 
 qreal IngredientListItem::carbs() const
@@ -123,12 +123,12 @@ void IngredientListItem::setCarbs(qreal c)
 
 qreal IngredientListItem::calcCarbs() const
 {
-	return carbs() * factor();
+	return carbs() * quantity();
 }
 
 void IngredientListItem::updateCarbs(qreal c)
 {
-	setCarbs(c / factor());
+	setCarbs(c / quantity());
 }
 
 qreal IngredientListItem::calories() const
@@ -148,12 +148,12 @@ void IngredientListItem::setCalories(qreal c)
 
 qreal IngredientListItem::calcCalories() const
 {
-	return calories() * factor();
+	return calories() * quantity();
 }
 
 void IngredientListItem::updateCalories(qreal c)
 {
-	setCalories(c / factor());
+	setCalories(c / quantity());
 }
 
 qint32 IngredientListItem::ingredientId() const
@@ -179,7 +179,7 @@ bool IngredientListItem::isConnectedToIngredient() const
 void IngredientListItem::notifyValuesChanged()
 {
 	emit nameChanged();
-	emit factorChanged();
+	emit quantityChanged();
 	emit fatChanged();
 	emit proteinChanged();
 	emit carbsChanged();
