@@ -49,4 +49,5 @@ bool ShiftDbDAO::doReset()
 		setData("d", keyData("d"));
 		return true;
 	}
+	return false;
 }
