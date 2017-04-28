@@ -39,7 +39,6 @@ QString DbDAOBase::escapeValue(QString value)
 bool DbDAOBase::doReset()
 {
     m_record = QSqlRecord();
-	postReset();
     return true;
 }
 

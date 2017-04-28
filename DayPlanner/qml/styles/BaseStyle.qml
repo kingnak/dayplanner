@@ -41,6 +41,7 @@ QtObject {
 	property color trainingColor: "#512DA8"
 	property color trainingFontColor: "#FFFFFF"
 	property color todayHighlightColor: "#FF7F7F"
+	property color ingredientHeaderColor: "#FFE57F"
 
 	property color controlBorderColor: "#60000000"
 

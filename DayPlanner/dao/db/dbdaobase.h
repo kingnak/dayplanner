@@ -33,8 +33,6 @@ protected:
     virtual bool doUpdate();
     virtual bool doRemove();
 
-	virtual void postReset() {}
-
     // Should be overridden by subclass if using custom queries
     virtual QString loadQuery();
     virtual QString insertQuery();
@@ -91,5 +89,7 @@ protected: \
     virtual bool doInsert() { return cls::doInsert(); } \
     virtual bool doUpdate() { return cls::doUpdate(); } \
     virtual bool doRemove() { return cls::doRemove(); }
+
+#pragma warning(disable : 4250)
 
 #endif // DBDAOBASE_H

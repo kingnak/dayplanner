@@ -27,6 +27,9 @@ public:
 	virtual RecipeDAO *createRecipe();
 	virtual RecipeDAO *loadRecipe(qint32 recipeId);
 
+	virtual bool removeRecipe(qint32 recipeId);
+	virtual bool removeIngredientList(qint32 ingredientListId);
+
 	virtual QList<IngredientListItemDAO *> loadIngredientListItems(qint32 listId);
 
 	virtual TrainingDAO *loadTraining(qint32 trainingId);

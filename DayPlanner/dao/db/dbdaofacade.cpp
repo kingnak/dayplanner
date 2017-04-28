@@ -127,6 +127,8 @@ bool DbDAOFacade::removeIngredient(qint32 ingredientId)
 {
 	QString query = QString("UPDATE Meal SET IngredientId = 0 WHERE IngredientId = %1").arg(ingredientId);
 	DataBase::instance().executeNonQuery(query);
+	query = QString("UPDATE IngredientListItem SET ingredientId = 0 WHERE ingredientId = %1").arg(ingredientId);
+	DataBase::instance().executeNonQuery(query);
 	query = QString("DELETE FROM Ingredient WHERE id = %1").arg(ingredientId);
 	return DataBase::instance().executeNonQuery(query);
 }
@@ -157,6 +159,16 @@ IngredientListItemDAO *DbDAOFacade::createIngredientListItem(qint32 listId)
 {
 	IngredientListItemDbDAO *ret = new IngredientListItemDbDAO(DataBase::InvalidId, &DataBase::instance());
 	ret->setListId(listId);
+
+	QString query = QString("SELECT COUNT(*) FROM IngredientListItem WHERE ingredientListId = %1").arg(listId);
+
+	QSqlQuery q = DataBase::instance().executeQuery(query);
+	if (q.next()) {
+		ret->setSort(q.record().value(0).toInt() + 1);
+	} else {
+		ret->setSort(1);
+	}
+
 	return ret;
 }
 
@@ -172,6 +184,30 @@ RecipeDAO *DbDAOFacade::createRecipe()
 RecipeDAO *DbDAOFacade::loadRecipe(qint32 recipeId)
 {
 	return new RecipeDbDAO(recipeId, &DataBase::instance());
+}
+
+
+bool DbDAOFacade::removeRecipe(qint32 recipeId)
+{
+	QScopedPointer<RecipeDAO> r(loadRecipe(recipeId));
+	if (!r || r->state() != DAOBase::State::Existing) {
+		return false;
+	}
+
+	removeIngredientList(r->ingredientListId());
+	return r->remove();
+}
+
+bool DbDAOFacade::removeIngredientList(qint32 ingredientListId)
+{
+	QScopedPointer<IngredientListDAO> l(new IngredientListDbDAO(ingredientListId, &DataBase::instance()));
+	if (l->state() != DAOBase::State::Existing) {
+		return false;
+	}
+
+	QString query = QString("DELETE FROM IngredientListItem WHERE ingredientListId = %1").arg(l->id());
+	DataBase::instance().executeNonQuery(query);
+	return l->remove();
 }
 
 QList<IngredientListItemDAO *> DbDAOFacade::loadIngredientListItems(qint32 listId)

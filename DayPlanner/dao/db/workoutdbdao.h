@@ -24,8 +24,6 @@ public:
 	qint32 sort() const;
 	void setSort(qint32 sort);
 
-	DAO_USE(DbAutoIdDAOBase)
-
 protected:
 	virtual QStringList orderFields();
 	virtual QString tableName();

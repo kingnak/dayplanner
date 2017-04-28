@@ -13,12 +13,15 @@ Item {
 		name = txtName.text
 	}
 
-	property var addMenu
-	property bool addMenuEnabled: false
+	property alias addMenu: addButton.menu
+	property bool addButtonEnabled: false
+	property bool addButtonVisible: false
 	property bool editButtonEnabled: false
+	property bool editButtonVisible: false
 
 	signal removeItem(int idx)
 	signal editItem(int idx)
+	signal addItem(int idx)
 
 	height: rect.height
 	width: parent.width
@@ -38,29 +41,36 @@ Item {
 			property bool hovered: mouseArea.containsMouse || txtName.hovered || txtFat.hovered || txtProtein.hovered || txtCarbs.hovered || txtCalories.hovered
 			width: parent.width
 
+			Row {
+				spacing: 0
 			ToolButton {
-				text: "X"
+				//text: "X"
+				iconSource: "qrc:///icons/delete"
 				tooltip: "Löschen"
 				onClicked: root.removeItem(index)
 				style: SmallButtonStyle {}
 			}
 
 			ToolButton {
-				text: "+"
-				menu: addMenu
+				id: addButton
+				iconSource: menu ? "qrc:///icons/add-padded" : "qrc:///icons/add"
 				style: SmallButtonStyle {}
-				opacity: addMenuEnabled ? 1 : 0
-				enabled: addMenuEnabled
+				width: height // in case there is a menu, this prevents increasing buttons width
+				opacity: addButtonEnabled ? 1 : 0
+				enabled: addButtonEnabled
+				visible: addButtonVisible
+				onClicked: root.addItem(index)
 			}
 
 			ToolButton {
-				text: "E"
+				iconSource: "qrc:///icons/edit"
 				style: SmallButtonStyle {}
 				opacity: editButtonEnabled ? 1 : 0
 				enabled: editButtonEnabled
+				visible: editButtonVisible
 				onClicked: root.editItem(index)
 			}
-
+			}
 			TextField {
 				id: txtName
 				Layout.fillWidth: true

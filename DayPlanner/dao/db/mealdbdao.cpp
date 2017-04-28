@@ -13,9 +13,8 @@ qint32 MealDbDAO::sort() const
 
 void MealDbDAO::setSort(qint32 sort)
 {
-    setData("sort", sort);
+	setData("sort", sort);
 }
-
 QString MealDbDAO::name() const
 {
     return data<QString>("name");

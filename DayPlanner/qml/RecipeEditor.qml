@@ -1,87 +1,127 @@
 import QtQuick 2.5
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.4
+import QtQuick.Controls.Styles 1.4
 import "styles"
 
-ColumnLayout {
+BorderedContainer {
+	property var writeBackMeal
 	property int recipeId
 	property var _data: recipeModel.loadRecipeById(recipeId)
 	property bool dispose: false
 
-	//Component.onCompleted: {
-	//	_data = recipeModel.loadRecipeById(recipeId);
-	//}
-	Component.onDestruction: {
-		if (dispose) {
-			var t = _data;
-			_data = undefined;
-			t.deleteLater();
+	onBack: stack.pop()
+
+	ColumnLayout {
+		anchors.fill: parent
+
+		Component.onCompleted: {
+			_data.writeBackMeal = writeBackMeal;
 		}
-	}
-
-	Row {
-		Text { text: "Name:" }
-		TextField {
-			text: _data.name
-		}
-	}
-
-	Text {
-		text: "Zutaten für <b>" + _data.servings + "</b> Portionen";
-	}
-	Row {
-		Text { text: "Anzeige für " }
-		IntegerField {
-			id: txtServings
-			text: _data.displayServings
-			onIntFinished: _data.displayServings = val
-		}
-		Text { text: " Portionen" }
-	}
-
-	ListView {
-		Layout.fillHeight: true
-		Layout.fillWidth: true
-		model: _data.items.items
-		delegate: recipeItem
-		header: headerBanner
-		headerPositioning: ListView.OverlayHeader
-		footer: footerEditor
-		footerPositioning: _data.isEmpty ? ListView.InlineFooter : ListView.OverlayFooter
-
-		Component {
-			id: recipeItem
-			IngredientEditorDelegate {
-				width: parent.width
-				onRemoveItem: _data.items.removeItem(idx)
-				addMenuEnabled: false
+		Component.onDestruction: {
+			_data.writeBackMeal = null;
+			if (dispose) {
+				var t = _data;
+				_data = undefined;
+				t.deleteLater();
 			}
 		}
 
-		Component {
-			id: footerEditor
-			IngredientEditorListSelector {
-				model: ingredientModel
-				onExistingItemSelected: {
-					_data.items.createItemForIngredient(item.itemId);
-					root.positionViewAtEnd();
+		Row {
+			spacing: 10
+			Text { text: "Name:"; anchors.verticalCenter: parent.verticalCenter; font: baseStyle.headerFont }
+			TextField {
+				text: _data.name
+				style: PlaceholderTextEditStyle { }
+				width: 200
+			}
+		}
+
+		Text {
+			text: "Zutaten für <b>" + _data.servings + "</b> Portionen";
+			font: baseStyle.defaultFont
+		}
+		Row {
+			Text { text: "Anzeige für "; anchors.verticalCenter: parent.verticalCenter; font: baseStyle.defaultFont }
+			IntegerField {
+				id: txtServings
+				text: _data.displayServings
+				onIntFinished: _data.displayServings = val
+				style: PlaceholderTextEditStyle{textWidth: "22"}
+			}
+			Text { text: " Portionen"; anchors.verticalCenter: parent.verticalCenter; font: baseStyle.defaultFont }
+		}
+
+		CheckBox {
+			text: "Werte überschreiben"
+			checked: _data.nutritionValuesOverridden
+			onCheckedChanged: _data.nutritionValuesOverridden = checked
+			style: CheckBoxStyle{ label :Text{text: "Werte überschreiben";font: baseStyle.defaultFont}}
+		}
+
+		Row {
+			visible: _data.nutritionValuesOverridden
+			spacing: 5
+			Label { text: "Fett"; anchors.verticalCenter: parent.verticalCenter }
+			DoubleField { value: _data.fat; id: txtFat; onDoubleFinished: _data.overrideFat(val); style: PlaceholderTextEditStyle {} }
+			Rectangle { visible: true; width: 5; height: parent.height; color: "transparent" }
+			Label { text: "Eiweiß"; anchors.verticalCenter: parent.verticalCenter; }
+			DoubleField { value: _data.protein; id: txtProtein; onDoubleFinished: _data.overrideProtein(val); style: PlaceholderTextEditStyle {} }
+			Rectangle { visible: true; width: 5; height: parent.height; color: "transparent" }
+			Label { text: "Kohlenhydrate"; anchors.verticalCenter: parent.verticalCenter; }
+			DoubleField { value: _data.carbs; id: txtCarbs; onDoubleFinished: _data.overrideCarbs(val); style: PlaceholderTextEditStyle {} }
+			Rectangle { visible: true; width: 5; height: parent.height; color: "transparent" }
+			Label { text: "Kalorien"; anchors.verticalCenter: parent.verticalCenter; }
+			DoubleField { value: _data.calories; id: txtCalories; onDoubleFinished: _data.overrideCalories(val); style: PlaceholderTextEditStyle {} }
+		}
+
+		ListView {
+			Layout.fillHeight: true
+			Layout.fillWidth: true
+			model: _data.items.items
+			delegate: recipeItem
+			header: headerBanner
+			headerPositioning: ListView.OverlayHeader
+			footer: footerEditor
+			footerPositioning: _data.items.isEmpty ? ListView.InlineFooter : ListView.OverlayFooter
+
+			Component {
+				id: recipeItem
+				IngredientEditorDelegate {
+					width: parent.width
+					onRemoveItem: _data.items.removeItem(idx)
+					addButtonVisible: true
+					addButtonEnabled: !isConnectedToIngredient
+					onAddItem: _data.items.createIngredientFromItem(idx)
 				}
-				onNewItemSelected: {
-					_data.items.createItem(name);
-					root.positionViewAtEnd();
+			}
+
+			Component {
+				id: footerEditor
+				IngredientEditorListSelector {
+					model: ingredientModel
+					popupAbove: true
+					onExistingItemSelected: {
+						_data.items.createItemForIngredient(item.itemId);
+						root.positionViewAtEnd();
+					}
+					onNewItemSelected: {
+						_data.items.createItem(name);
+						root.positionViewAtEnd();
+					}
 				}
 			}
-		}
 
-		Component {
-			id: headerBanner
-			IngredientEditorHeader {
-				backgroundColor: "#f0f0f0"
-				title: "Zutaten"
-				itemData: _data.items
+			Component {
+				id: headerBanner
+				IngredientEditorHeader {
+					backgroundColor: baseStyle.ingredientHeaderColor
+					title: "Zutaten"
+					itemData: _data.items
+				}
 			}
+
 		}
 
 	}
-
 }

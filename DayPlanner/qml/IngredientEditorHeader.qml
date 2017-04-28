@@ -12,20 +12,32 @@ Item {
 	property alias backgroundColor: rect.color
 	property alias title: txt.text
 	property var itemData
-
+	property bool expandable: false
+	property bool showExpanded: false
+	signal requestExpand()
+	signal requestCollapse()
 
 	width: parent.width
 	height: rect.height
+	z: 2
 
 	Rectangle {
 		id: rect
-		z: 2
 		width: parent.width
 		height: Math.max(txt.height*1.2, txt.height+6)
 
 		RowLayout {
 			width: parent.width
 			anchors.verticalCenter: parent.verticalCenter
+			ToolButton {
+				id: expandBtn
+				enabled: expandable
+				opacity: expandable ? 1 : 0
+				style: SmallButtonStyle{}
+				iconSource: showExpanded ? "qrc:///icons/collapse" : "qrc:///icons/expand"
+				onClicked: showExpanded ? root.requestCollapse() : root.requestExpand();
+			}
+
 			Text {
 				Layout.fillWidth: true
 				font: baseStyle.headerFont

@@ -14,8 +14,6 @@ public:
 	virtual QString name() const;
 	virtual void setName(const QString &n);
 
-	DAO_USE(DbAutoIdDAOBase)
-
 protected:
 	virtual QStringList orderFields();
 	virtual QString tableName();

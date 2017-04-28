@@ -1,6 +1,6 @@
 #include "recipe.h"
 #include "dao/dao.h"
-#include <functional>
+#include "meal.h"
 
 Recipe::Recipe(QObject *parent)
 	: QObject(parent),
@@ -17,10 +17,10 @@ Recipe::Recipe(RecipeDAO *recipe, QObject *parent)
 {
 	m_items = IngredientItemList::loadList(this, globalDAOFacade(), m_recipe->ingredientListId());
 	connect(m_items, &IngredientItemList::itemsChanged, this, &Recipe::updateItemSums);
-	connect(m_items, &IngredientItemList::sumFatChanged, this, &Recipe::updateFat);
-	connect(m_items, &IngredientItemList::sumProteinChanged, this, &Recipe::updateProtein);
-	connect(m_items, &IngredientItemList::sumCarbsChanged, this, &Recipe::updateCarbs);
-	connect(m_items, &IngredientItemList::sumCaloriesChanged, this, &Recipe::updateCalories);
+	connect(m_items, &IngredientItemList::sumFatChanged, this, &Recipe::updateFatFromSum);
+	connect(m_items, &IngredientItemList::sumProteinChanged, this, &Recipe::updateProteinFromSum);
+	connect(m_items, &IngredientItemList::sumCarbsChanged, this, &Recipe::updateCarbsFromSum);
+	connect(m_items, &IngredientItemList::sumCaloriesChanged, this, &Recipe::updateCaloriesFromSum);
 }
 
 Recipe::~Recipe()
@@ -90,6 +90,16 @@ qint32 Recipe::multiplicator() const
 	return m_items->multiplicator();
 }
 
+bool Recipe::nutritionValuesOverridden() const
+{
+	return m_recipe->nutritionValuesOverridden();
+}
+
+Meal *Recipe::writeBackMeal() const
+{
+	return m_writeBack;
+}
+
 void Recipe::setName(const QString &n)
 {
 	if (n != name()) {
@@ -122,11 +132,13 @@ void Recipe::setDefaultServings(qint32 ds)
 }
 
 template <typename T>
-bool updateHelper(Recipe *r, RecipeDAO *rd, void (RecipeDAO::*setValue)(T), T (Recipe::*getValue)() const, T v) {
-	if (!rd->nutritionValuesOverridden()) {
+bool updateHelper(Recipe *r, RecipeDAO *rd, Meal *wb, void (RecipeDAO::*setValue)(T), T (Recipe::*getValue)() const, void (Meal::*writeBack)(T), T v, bool force) {
+	if (force || rd->nutritionValuesOverridden()) {
 		if (v != (r->*getValue)()) {
-			(rd->*setValue)(v / r->multiplicator());
+			T nv = v / r->multiplicator();
+			(rd->*setValue)(nv);
 			if (rd->save()) {
+				if (wb) (wb->*writeBack)(nv);
 				return true;
 			}
 		}
@@ -138,30 +150,70 @@ bool updateHelper(Recipe *r, RecipeDAO *rd, void (RecipeDAO::*setValue)(T), T (R
 
 void Recipe::setFat(qreal f)
 {
-	if (updateHelper(this, m_recipe, &RecipeDAO::setFat, &Recipe::fat, f)) {
+	setFat(f, false);
+}
+
+void Recipe::setFat(qreal f, bool force)
+{
+	if (updateHelper(this, m_recipe, m_writeBack, &RecipeDAO::setFat, &Recipe::fat, &Meal::setFat, f, force)) {
 		emit fatChanged();
 	}
 }
 
+void Recipe::overrideFat(qreal f)
+{
+	setFat(f, true);
+}
+
 void Recipe::setProtein(qreal p)
 {
-	if (updateHelper(this, m_recipe, &RecipeDAO::setProtein, &Recipe::protein, p)) {
+	setProtein(p, false);
+}
+
+void Recipe::setProtein(qreal p, bool force)
+{
+	if (updateHelper(this, m_recipe, m_writeBack, &RecipeDAO::setProtein, &Recipe::protein, &Meal::setProtein, p, force)) {
 		emit proteinChanged();
 	}
 }
 
+void Recipe::overrideProtein(qreal p)
+{
+	setProtein(p, true);
+}
+
 void Recipe::setCarbs(qreal c)
 {
-	if (updateHelper(this, m_recipe, &RecipeDAO::setCarbs, &Recipe::carbs, c)) {
+	setCarbs(c, false);
+}
+
+void Recipe::setCarbs(qreal c, bool force)
+{
+	if (updateHelper(this, m_recipe, m_writeBack, &RecipeDAO::setCarbs, &Recipe::carbs, &Meal::setCarbs, c, force)) {
 		emit carbsChanged();
 	}
 }
 
+void Recipe::overrideCarbs(qreal c)
+{
+	setCarbs(c, true);
+}
+
 void Recipe::setCalories(qreal c)
 {
-	if (updateHelper(this, m_recipe, &RecipeDAO::setCalories, &Recipe::calories, c)) {
+	setCalories(c, false);
+}
+
+void Recipe::setCalories(qreal c, bool force)
+{
+	if (updateHelper(this, m_recipe, m_writeBack, &RecipeDAO::setCalories, &Recipe::calories, &Meal::setCalories, c, force)) {
 		emit caloriesChanged();
 	}
+}
+
+void Recipe::overrideCalories(qreal c)
+{
+	setCalories(c, true);
 }
 
 void Recipe::setMultiplicator(qint32 m)
@@ -169,44 +221,74 @@ void Recipe::setMultiplicator(qint32 m)
 	if (m != multiplicator()) {
 		m_items->setMultiplicator(m);
 		emit multiplicatorChanged();
+		emit fatChanged();
+		emit proteinChanged();
+		emit carbsChanged();
+		emit caloriesChanged();
 	}
 }
 
-void Recipe::updateFat()
+void Recipe::setNutritionValuesOverridden(bool o)
 {
-	if (!m_recipe->nutritionValuesOverridden()) {
-		setFat(m_items->sumFat());
+	if (o != nutritionValuesOverridden()) {
+		m_recipe->setNutritionValuesOverridden(o);
+		emit nutritionValuesOverriddenChanged();
+		if (!o) {
+			updateFatFromSum();
+			updateProteinFromSum();
+			updateCarbsFromSum();
+			updateCaloriesFromSum();
+		}
+		m_recipe->save();
 	}
 }
 
-void Recipe::updateProtein()
+void Recipe::setWriteBackMeal(Meal *m)
 {
-	if (!m_recipe->nutritionValuesOverridden()) {
-		setProtein(m_items->sumProtein());
+	if (m != m_writeBack) {
+		m_writeBack = m;
+		emit writeBackMealChanged();
+		if (m) {
+			setMultiplicator(m->quantity());
+		}
 	}
 }
 
-void Recipe::updateCarbs()
+void Recipe::updateFatFromSum()
 {
 	if (!m_recipe->nutritionValuesOverridden()) {
-		setCarbs(m_items->sumCarbs());
+		setFat(m_items->sumFat(), true);
 	}
 }
 
-void Recipe::updateCalories()
+void Recipe::updateProteinFromSum()
 {
 	if (!m_recipe->nutritionValuesOverridden()) {
-		setCalories(m_items->sumCalories());
+		setProtein(m_items->sumProtein(), true);
+	}
+}
+
+void Recipe::updateCarbsFromSum()
+{
+	if (!m_recipe->nutritionValuesOverridden()) {
+		setCarbs(m_items->sumCarbs(), true);
+	}
+}
+
+void Recipe::updateCaloriesFromSum()
+{
+	if (!m_recipe->nutritionValuesOverridden()) {
+		setCalories(m_items->sumCalories(), true);
 	}
 }
 
 void Recipe::updateItemSums()
 {
 	if (!m_recipe->nutritionValuesOverridden()) {
-		setFat(m_items->sumFat());
-		setProtein(m_items->sumProtein());
-		setCarbs(m_items->sumCarbs());
-		setCalories(m_items->sumCalories());
+		setFat(m_items->sumFat(), true);
+		setProtein(m_items->sumProtein(), true);
+		setCarbs(m_items->sumCarbs(), true);
+		setCalories(m_items->sumCalories(), true);
 	}
 }
 

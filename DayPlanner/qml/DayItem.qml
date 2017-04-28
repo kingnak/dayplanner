@@ -19,6 +19,8 @@ ColumnLayout {
 		Layout.fillWidth: true
 		Layout.fillHeight: true
 		_data: root._data.breakfast
+		onRequestExpand: doExpand(breakfast);
+		onRequestCollapse: doCollapse(breakfast);
 	}
 
 	MealList {
@@ -26,6 +28,8 @@ ColumnLayout {
 		Layout.fillWidth: true
 		Layout.fillHeight: true
 		_data: root._data.lunch
+		onRequestExpand: doExpand(lunch);
+		onRequestCollapse: doCollapse(lunch);
 	}
 
 	MealList {
@@ -33,6 +37,8 @@ ColumnLayout {
 		Layout.fillWidth: true
 		Layout.fillHeight: true
 		_data: root._data.dinner
+		onRequestExpand: doExpand(dinner);
+		onRequestCollapse: doCollapse(dinner);
 	}
 
 	MealList {
@@ -40,6 +46,8 @@ ColumnLayout {
 		Layout.fillWidth: true
 		Layout.fillHeight: true
 		_data: root._data.snack
+		onRequestExpand: doExpand(snack);
+		onRequestCollapse: doCollapse(snack);
 	}
 
 	WorkoutList {
@@ -47,5 +55,25 @@ ColumnLayout {
 		Layout.fillWidth: true
 		Layout.fillHeight: true
 		_data: root._data.workout
+		popupAbove: true
+	}
+
+	function doExpand(which) {
+		__toggleVisible(which, false);
+		which.showExpanded = true;
+	}
+
+	function doCollapse(which) {
+		which.showExpanded = false;
+		__toggleVisible(null, true);
+	}
+
+	function __toggleVisible(except, vis) {
+		if (except != breakfast) breakfast.visible = vis;
+		if (except != lunch) lunch.visible = vis;
+		if (except != dinner) dinner.visible = vis;
+		if (except != snack) snack.visible = vis;
+		workouts.visible = vis;
+
 	}
 }

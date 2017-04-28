@@ -33,6 +33,9 @@ public:
 	virtual IngredientStatsDAO *loadIngredientStats() = 0;
 	virtual bool removeIngredient(qint32 ingredientId) = 0;
 
+	virtual bool removeRecipe(qint32 recipeId) = 0;
+	virtual bool removeIngredientList(qint32 ingredientListId) = 0;
+
 	virtual QList<RecipeTemplateDAO *> loadRecipeTemplates() = 0;
 
 	virtual QList<IngredientListItemDAO *> loadIngredientListItems(qint32 listId) = 0;

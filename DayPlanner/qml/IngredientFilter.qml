@@ -136,13 +136,13 @@ SplitView {
 					ToolButton {
 						style: SmallButtonStyle{}
 						height: 15
-						text: "X"
+						iconSource: "qrc:///icons/delete-small"
 						onClicked: theList.deleteIngredient(styleData.value)
 					}
 					ToolButton {
 						style: SmallButtonStyle{}
 						height: 15
-						text: "E"
+						iconSource: "qrc:///icons/edit-small"
 						onClicked: theList.editIngredient(styleData.value)
 					}
 				}

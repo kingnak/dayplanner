@@ -2,6 +2,7 @@ import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Styles 1.4
+import QtQuick.Dialogs 1.2
 import SortFilterProxyModel 0.2
 import org.kingnak.dayplanner 1.0
 import "styles"
@@ -12,6 +13,12 @@ ListView {
 	implicitHeight: 100
 
     property var _data
+	property bool popupAbove: false
+	property bool expandable: true
+	property bool showExpanded: false
+
+	signal requestExpand()
+	signal requestCollapse()
 
     model: _data.items
 
@@ -26,10 +33,22 @@ ListView {
         id: mealItem
 		IngredientEditorDelegate {
 			width: parent.width
-			onRemoveItem: _data.removeMeal(idx)
-			onEditItem: stack.push({item: recipeEditor, properties: {recipeId:_data.items[idx].recipeId} })
+
+			onRemoveItem: {
+				if (isConnectedToRecipe) {
+					confirmDelete.recipeName = name;
+					confirmDelete.recipeIndex = idx;
+					confirmDelete.open();
+				} else {
+					_data.removeMeal(idx)
+				}
+			}
+
+			onEditItem: stack.push({item: recipeEditor, properties: {recipeId:_data.items[idx].recipeId, writeBackMeal:_data.items[idx]} })
 			editButtonEnabled: isConnectedToRecipe
-			addMenuEnabled: !isConnected
+			editButtonVisible: isConnectedToRecipe
+			addButtonEnabled: !isConnected
+			addButtonVisible: !isConnected || isConnectedToIngredient // actually !isConnected, but make it a placeholder (disabled buttons are transparent)
 			addMenu: Menu {
 				onAboutToShow: applyName()
 				MenuItem {
@@ -52,6 +71,7 @@ ListView {
     Component {
         id: footerEditor
 		IngredientEditorListSelector {
+			popupAbove: root.popupAbove
 			model: uniformModel
 			onExistingItemSelected: {
 				if (item.objectType === UniformRecipeIngredientModel.Ingredient)
@@ -73,6 +93,10 @@ ListView {
 			backgroundColor: baseStyle.mealColor(_data.type)
 			title: utils.mealName(_data.type)
 			itemData: _data
+			expandable: root.expandable
+			showExpanded: root.showExpanded
+			onRequestExpand: root.requestExpand()
+			onRequestCollapse: root.requestCollapse()
 		}
 	}
 
@@ -80,6 +104,19 @@ ListView {
 		id: recipeEditor
 		RecipeEditor {
 
+		}
+	}
+
+	MessageDialog {
+		id: confirmDelete
+		property string recipeName: ""
+		property int recipeIndex: -1
+		text: "Rezept " + confirmDelete.recipeName + " wirklich löschen?"
+		standardButtons: StandardButton.Yes | StandardButton.No
+		onButtonClicked: {
+			if (clickedButton === StandardButton.Yes) {
+				_data.removeMeal(recipeIndex);
+			}
 		}
 	}
 }

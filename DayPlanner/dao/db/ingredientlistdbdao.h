@@ -11,8 +11,6 @@ public:
 
 	qint32 id() const;
 
-	DAO_USE(DbAutoIdDAOBase)
-
 protected:
 	virtual QString tableName();
 	virtual QString insertQuery();

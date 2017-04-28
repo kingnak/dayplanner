@@ -85,7 +85,8 @@ DISTFILES += \
     qml/IngredientEditorListSelector.qml \
     qml/IngredientEditorHeader.qml \
     qml/IntegerField.qml \
-    qml/RecipeEditor.qml
+    qml/RecipeEditor.qml \
+    qml/BorderedContainer.qml
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

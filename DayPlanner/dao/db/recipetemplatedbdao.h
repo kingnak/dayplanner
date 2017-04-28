@@ -41,8 +41,6 @@ public:
 	virtual qint32 ingredientListId() const;
 	virtual void setIngredientListId(qint32 id);
 
-	DAO_USE(DbAutoIdDAOBase)
-
 protected:
 	virtual QStringList orderFields();
 	virtual QString tableName();

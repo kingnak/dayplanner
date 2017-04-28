@@ -32,8 +32,7 @@ ApplicationWindow {
 				style: SmallButtonStyle{}
 				iconSource: "qrc:///icons/ingredients"
 				onClicked: {
-					stack.pop({item: calendar, immediate:true});
-					stack.push({item: ingredientEditorStackView, replace: true});
+					stack.push(ingredientEditorStackView);
 					gotoCalendar.enabled = true;
 					gotoCalendar.visible = true;
 					gotoIngredients.enabled = false;
@@ -42,13 +41,12 @@ ApplicationWindow {
 			}
 			ToolButton {
 				id: gotoCalendar
-				style: SmallButtonStyle{}
-				iconSource: "qrc:///icons/calendar"
+				style: SmallButtonStyle{square:false}
+				text: "< zurück"
 				enabled: false
 				visible: false
 				onClicked: {
-					stack.pop({item: ingredientEditorStackView, immediate:true});
-					stack.push({item: calendar, replace: true});
+					stack.pop();
 					gotoCalendar.enabled = false;
 					gotoCalendar.visible = false;
 					gotoIngredients.enabled = true;
@@ -103,54 +101,19 @@ ApplicationWindow {
     Component {
 		id: singleDayView
 
-		GridLayout {
+		BorderedContainer {
 			property alias _data: theDay._data
-			columns: 3
-			rowSpacing: 0
-			columnSpacing: 0
-
-			Rectangle { Layout.fillWidth: true; Layout.minimumWidth: 0 }
-
-			ColumnLayout {
-				spacing: 0
-				Layout.minimumWidth: 400
-				Layout.preferredWidth: 450
-				Layout.maximumWidth: 650
-				Layout.minimumHeight: 400
-				Layout.preferredHeight: 600
-
-				RowLayout {
-					anchors.left: parent.left
-					anchors.right: parent.right
-
-					ToolButton {
-						text: "< zurück"
-						onClicked: stack.pop();
-					}
-					Rectangle {
-						Layout.fillWidth: true
-						color: "transparent"
-					}
-				}
-
-				DayItem {
-					anchors.left: parent.left
-					anchors.right: parent.right
-					id: theDay
-					Layout.fillHeight: true
-				}
+			DayItem {
+				anchors.fill: parent
+				id: theDay
 			}
-
-			Rectangle { Layout.fillWidth: true; Layout.minimumWidth: 0 }
-			Rectangle { Layout.fillHeight: true; Layout.columnSpan: 3; Layout.minimumHeight: 5 }
+			onBack: stack.pop();
 		}
 	}
 
 	Component {
 		id: ingredientEditorStackView
 		ColumnLayout {
-			//anchors.fill: parent
-
 			IngredientList {
 				_data: ingredientModel
 				Layout.fillHeight: true

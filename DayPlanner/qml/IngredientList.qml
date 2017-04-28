@@ -25,9 +25,9 @@ Item {
 				model: root._data
 				onEditIngredient: recStack.push({item: recEditor, properties: {ingredient: ingredientModel.loadDataForIngredient(id)}})
 				onDeleteIngredient: {
-					confirmClose.ingredientName = ingredientModel.loadDataForIngredient(id).name;
-					confirmClose.ingredientId = id;
-					confirmClose.open();
+					confirmDelete.ingredientName = ingredientModel.loadDataForIngredient(id).name;
+					confirmDelete.ingredientId = id;
+					confirmDelete.open();
 				}
 			}
 			RowLayout {
@@ -57,13 +57,13 @@ Item {
 	}
 
 	MessageDialog {
-		id: confirmClose
+		id: confirmDelete
 		property string ingredientName: ""
 		property int ingredientId: -1
-		text: "Rezept " + confirmClose.ingredientName + " wirklich löschen?"
+		text: "Zutat " + confirmDelete.ingredientName + " wirklich löschen?"
 		standardButtons: StandardButton.Yes | StandardButton.No
 		onButtonClicked: {
-			if (clickedButton == StandardButton.Yes) {
+			if (clickedButton === StandardButton.Yes) {
 				ingredientModel.removeIngredient(ingredientId);
 			}
 		}

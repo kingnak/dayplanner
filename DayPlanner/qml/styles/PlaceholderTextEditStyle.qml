@@ -5,13 +5,18 @@ TextFieldStyle {
     id: textFieldStyle
     property string postfix
     property bool showHovered: true
+	property alias textWidth: mtrcs.text
 
+	TextMetrics {
+		font: baseStyle.editorFont
+		id: mtrcs
+	}
     background: Rectangle {
         color: "transparent"
         width: control.width
         height: control.height
         implicitHeight: 20
-        implicitWidth: 40 + postFixLabel.implicitWidth
+		implicitWidth: postFixLabel.implicitWidth + (textWidth != "" ? mtrcs.width + 10 : 40)
 
 		property color borderColor: baseStyle.controlBorderColor
 

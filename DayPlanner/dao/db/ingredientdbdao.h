@@ -32,8 +32,6 @@ public:
     virtual qreal calories() const;
     virtual void setCalories(qreal c);
 
-    DAO_USE(DbAutoIdDAOBase)
-
 protected:
     virtual QStringList orderFields();
     virtual QString tableName();

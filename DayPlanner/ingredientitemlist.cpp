@@ -1,6 +1,7 @@
 #include "ingredientitemlist.h"
 #include "dao/dao.h"
 #include "dao/ingredientdao.h"
+#include "ingredientlist.h"
 
 IngredientItemList::IngredientItemList(QObject *parent)
 	: QObject(parent),
@@ -40,10 +41,12 @@ void IngredientItemList::createItem(const QString &name)
 {
 	IngredientListItemDAO *it = m_facade->createIngredientListItem(m_id);
 	it->setName(name);
+	it->setQuantity(100);
 
 	if (it->save()) {
 		IngredientListItem *id = new IngredientListItem(it, this);
 		m_data.append(id);
+		id->setMultiplicator(m_mult);
 		connectSignals(id);
 		emit itemsChanged();
 		notifySumsChanged();
@@ -73,10 +76,48 @@ void IngredientItemList::createItemForIngredient(qint32 ingredientId)
 	if (m->save()) {
 		IngredientListItem *md = new IngredientListItem(m.take(), this);
 		m_data.append(md);
+		md->setMultiplicator(m_mult);
 		connectSignals(md);
 		emit itemsChanged();
 		notifySumsChanged();
 	}
+}
+
+bool IngredientItemList::createIngredientFromItem(qint32 idx)
+{
+	if (idx < 0 || idx >= m_data.count()) {
+		return false;
+	}
+
+	IngredientListItem *m = m_data[idx];
+	if (m->isConnectedToIngredient()) {
+		return false;
+	}
+
+	QScopedPointer<IngredientDAO> r(m_facade->createIngredient(m->name()));
+	if (!r || r->state() != DAOBase::State::New) {
+		if (tryConnectItemToIngredientByName(m)) {
+			m->m_item->save();
+			m->notifyValuesChanged();
+		}
+		return false;
+	}
+
+	r->setDefaultQuantity((m->quantity() == 0) ? 1 : m->quantity());
+	r->setReferenceQuantity(100);
+	qreal f = qreal(r->defaultQuantity()) / r->referenceQuantity();
+	r->setFat(m->calcFat()/f);
+	r->setProtein(m->calcProtein()/f);
+	r->setCarbs(m->calcCarbs()/f);
+	r->setCalories(m->calcCalories()/f);
+
+	if (r->save()) {
+		m->setIngredientId(r->id());
+		IngredientNotifier::instance()->notifyChanges();
+		return true;
+	}
+
+	return false;
 }
 
 void IngredientItemList::removeItem(qint32 idx)

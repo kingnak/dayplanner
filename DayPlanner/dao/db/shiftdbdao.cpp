@@ -43,7 +43,10 @@ QString ShiftDbDAO::tableName()
 	return "Shift";
 }
 
-void ShiftDbDAO::postReset()
+bool ShiftDbDAO::doReset()
 {
-	setData("d", keyData("d"));
+	if (DbDAOBase::doReset()) {
+		setData("d", keyData("d"));
+		return true;
+	}
 }

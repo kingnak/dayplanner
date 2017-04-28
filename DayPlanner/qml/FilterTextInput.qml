@@ -10,6 +10,7 @@ TextField {
     property alias minPopupWidth: popup.minWidth
     property alias minPopupHeight: popup.minHeight
     property alias textRole: popup.modelRole
+	property alias popupAbove: popup.popupAbove
     property var selectedItem: null
 
     id: root
@@ -71,12 +72,13 @@ TextField {
         property alias currentItem: list.currentItem
         property string modelRole: "text"
 
+		property bool popupAbove: false
         property int minWidth: 200
         property int minHeight: 100
 
         width: Math.max(parent.width, minPopupWidth)
         x: parent.x - (parent.style ? parent.stlye.leftPadding : 0)
-        y: parent.y + parent.height
+		y: popupAbove ? parent.y - height : parent.y + parent.height
         padding: 0
         margins: 0
         height: Math.max(minPopupHeight, list.implicitHeight)

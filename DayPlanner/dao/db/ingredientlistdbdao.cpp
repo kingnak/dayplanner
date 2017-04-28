@@ -3,7 +3,7 @@
 IngredientListDbDAO::IngredientListDbDAO(qint32 id, DataBase *db)
 	: DbAutoIdDAOBase(db, id)
 {
-
+	load();
 }
 
 qint32 IngredientListDbDAO::id() const

@@ -1,5 +1,6 @@
 #include "meal.h"
 #include "dao/mealdao.h"
+#include "dao/dao.h"
 #include <QLocale>
 
 Meal::Meal(QObject *parent)
@@ -27,7 +28,9 @@ Meal::Type Meal::type() const
 
 bool Meal::erase()
 {
-	// TODO: Remove recipe if it has one
+	if (isConnectedToRecipe()) {
+		globalDAOFacade()->removeRecipe(m_meal->recipeId());
+	}
     return m_meal->remove();
 }
 

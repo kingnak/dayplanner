@@ -25,6 +25,7 @@
         <file>qml/IngredientEditorHeader.qml</file>
         <file>qml/IntegerField.qml</file>
         <file>qml/RecipeEditor.qml</file>
+        <file>qml/BorderedContainer.qml</file>
     </qresource>
     <qresource prefix="/icons">
         <file alias="delete">images/Action-cancel-icon.png</file>
@@ -34,5 +35,10 @@
         <file>images/Action-viewmag-icon.png</file>
         <file alias="ingredients">images/Action-viewmag-icon-16.png</file>
         <file alias="calendar">images/App-date-icon.png</file>
+        <file alias="delete-small">images/Action-cancel-icon-small.png</file>
+        <file alias="edit-small">images/Action-edit-icon-small.png</file>
+        <file alias="add-padded">images/Action-edit-add-icon-padded.png</file>
+        <file alias="collapse">images/collapse.png</file>
+        <file alias="expand">images/expand.png</file>
     </qresource>
 </RCC>

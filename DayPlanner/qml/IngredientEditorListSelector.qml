@@ -9,16 +9,18 @@ import "styles"
 Item {
 	id: root
 
+	property alias popupAbove: inp.popupAbove
 	property alias model: inp.model
 	height: rect.height
 	width: parent.width
+	z: 2
 
 	signal existingItemSelected(var item)
 	signal newItemSelected(string name)
 
 	Rectangle {
 		id: rect
-		z: 2
+
 		color: "lightGrey";
 		width: parent.width
 		height: inp.height

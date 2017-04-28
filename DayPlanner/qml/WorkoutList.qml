@@ -11,6 +11,7 @@ ListView {
 	implicitHeight: 100
 
 	property var _data
+	property bool popupAbove: false
 
 	model: _data.items
 
@@ -77,6 +78,7 @@ ListView {
 			height: inp.height
 
 			FilterTextInput {
+				popupAbove: root.popupAbove
 				width: parent.width
 				id: inp
 				textRole: "name"
@@ -106,6 +108,12 @@ ListView {
 			RowLayout {
 				width: parent.width
 				anchors.verticalCenter: parent.verticalCenter
+				ToolButton { // Placeholder to make same offset as meal items
+					opacity: 0
+					style: SmallButtonStyle{}
+					text: "^"
+					enabled: false
+				}
 				Text {
 					Layout.fillWidth: true
 					font: baseStyle.headerFont

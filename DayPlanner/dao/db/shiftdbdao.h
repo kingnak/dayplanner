@@ -22,9 +22,7 @@ protected:
     virtual QString keyData(const QString &field);
     virtual QString tableName();
 
-    DAO_USE(DbDAOBase)
-
-	virtual void postReset();
+	virtual bool doReset();
 
 private:
     QDate m_date;
