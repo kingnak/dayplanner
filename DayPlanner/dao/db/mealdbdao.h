@@ -18,8 +18,8 @@ public:
     QDate date() const;
     void setDate(QDate d);
 
-    qreal quantity() const;
-    void setQuantity(qreal fac);
+	qint32 quantity() const;
+	void setQuantity(qint32 q);
 
     qreal fat() const;
     void setFat(qreal f);

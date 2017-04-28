@@ -7,7 +7,7 @@ TextField {
     signal doubleError(string val)
 
     property string value: ""
-	onValueChanged: text = utils.formatNumber(value)
+	onValueChanged: text = utils.formatDouble(value)
 	font: baseStyle.editorFont
 
     validator: DoubleValidator { bottom: 0; decimals: 1 }

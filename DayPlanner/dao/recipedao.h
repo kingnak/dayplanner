@@ -39,6 +39,9 @@ public:
 	virtual qint32 ingredientListId() const = 0;
 	virtual void setIngredientListId(qint32 id) = 0;
 
+	virtual bool nutritionValuesOverridden() const = 0;
+	virtual void setNutritionValuesOverridden(bool o) = 0;
+
 	virtual qint32 templateId() const = 0;
 	virtual void setTemplateId(qint32 id) = 0;
 };

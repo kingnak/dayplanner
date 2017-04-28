@@ -140,7 +140,7 @@ bool Ingredient::reset()
 
 void Ingredient::calcTo100()
 {
-	qreal f = m_ingredient->referenceQuantity() == 0 ? 100 : m_ingredient->referenceQuantity();
+	qint32 f = m_ingredient->referenceQuantity() == 0 ? 100 : m_ingredient->referenceQuantity();
 	setFat(fat()*100.0/f);
 	setProtein(protein()*100.0/f);
 	setCarbs(carbs()*100.0/f);

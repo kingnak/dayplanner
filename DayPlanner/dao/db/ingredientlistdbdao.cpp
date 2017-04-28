@@ -1,6 +1,6 @@
 #include "ingredientlistdbdao.h"
 
-IngredientListDbDAO::IngredientListDbDAO(DataBase *db, qint32 id)
+IngredientListDbDAO::IngredientListDbDAO(qint32 id, DataBase *db)
 	: DbAutoIdDAOBase(db, id)
 {
 

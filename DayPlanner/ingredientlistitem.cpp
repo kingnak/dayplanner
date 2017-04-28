@@ -2,14 +2,16 @@
 
 IngredientListItem::IngredientListItem(QObject *parent)
 	: QObject(parent),
-	  m_item(nullptr)
+	  m_item(nullptr),
+	  m_mult(1)
 {
 	Q_ASSERT(false);
 }
 
 IngredientListItem::IngredientListItem(IngredientListItemDAO *item, QObject *parent)
 	: QObject(parent),
-	  m_item(item)
+	  m_item(item),
+	  m_mult(1)
 {
 }
 
@@ -39,14 +41,14 @@ void IngredientListItem::setName(const QString &n)
 	}
 }
 
-qreal IngredientListItem::quantity() const
+qint32 IngredientListItem::quantity() const
 {
-	qreal f = m_item->quantity();
-	if (qFuzzyIsNull(f)) return 1;
+	qint32 f = m_item->quantity();
+	if (f == 0) return 1;
 	return f;
 }
 
-void IngredientListItem::setQuantity(qreal f)
+void IngredientListItem::setQuantity(qint32 f)
 {
 	if (f != quantity()) {
 		m_item->setQuantity(f);
@@ -54,6 +56,16 @@ void IngredientListItem::setQuantity(qreal f)
 			notifyValuesChanged();
 		}
 	}
+}
+
+qint32 IngredientListItem::calcQuantity() const
+{
+	return quantity() * multiplicator();
+}
+
+void IngredientListItem::updateQuantity(qint32 q)
+{
+	setQuantity(q / multiplicator());
 }
 
 qreal IngredientListItem::fat() const
@@ -73,12 +85,12 @@ void IngredientListItem::setFat(qreal f)
 
 qreal IngredientListItem::calcFat() const
 {
-	return fat() * quantity();
+	return fat() * calcQuantity();
 }
 
 void IngredientListItem::updateFat(qreal f)
 {
-	setFat(f / quantity());
+	setFat(f / calcQuantity());
 }
 
 qreal IngredientListItem::protein() const
@@ -98,12 +110,12 @@ void IngredientListItem::setProtein(qreal p)
 
 qreal IngredientListItem::calcProtein() const
 {
-	return protein() * quantity();
+	return protein() * calcQuantity();
 }
 
 void IngredientListItem::updateProtein(qreal p)
 {
-	setProtein(p / quantity());
+	setProtein(p / calcQuantity());
 }
 
 qreal IngredientListItem::carbs() const
@@ -123,12 +135,12 @@ void IngredientListItem::setCarbs(qreal c)
 
 qreal IngredientListItem::calcCarbs() const
 {
-	return carbs() * quantity();
+	return carbs() * calcQuantity();
 }
 
 void IngredientListItem::updateCarbs(qreal c)
 {
-	setCarbs(c / quantity());
+	setCarbs(c / calcQuantity());
 }
 
 qreal IngredientListItem::calories() const
@@ -148,12 +160,27 @@ void IngredientListItem::setCalories(qreal c)
 
 qreal IngredientListItem::calcCalories() const
 {
-	return calories() * quantity();
+	return calories() * calcQuantity();
 }
 
 void IngredientListItem::updateCalories(qreal c)
 {
-	setCalories(c / quantity());
+	setCalories(c / calcQuantity());
+}
+
+qint32 IngredientListItem::multiplicator() const
+{
+	return m_mult;
+}
+
+void IngredientListItem::setMultiplicator(qint32 m)
+{
+	if (m != m_mult) {
+		if (m != 0)
+			m_mult = m;
+		emit multiplicatorChanged();
+		notifyValuesChanged();
+	}
 }
 
 qint32 IngredientListItem::ingredientId() const

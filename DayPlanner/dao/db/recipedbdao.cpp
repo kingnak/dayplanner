@@ -111,6 +111,16 @@ void RecipeDbDAO::setIngredientListId(qint32 id)
 	setData("ingredientListId", id);
 }
 
+bool RecipeDbDAO::nutritionValuesOverridden() const
+{
+	return data<qint32>("overridden") != 0;
+}
+
+void RecipeDbDAO::setNutritionValuesOverridden(bool o)
+{
+	setData<qint32>("overridden", o ? 1 : 0);
+}
+
 qint32 RecipeDbDAO::templateId() const
 {
 	return data<qint32>("templateId");

@@ -22,11 +22,11 @@ GridLayout {
 	TextField { text: editor.ingredient.name; id: txtName }
 	Label { text: "Menge" }
 	Column {
-		DoubleField { text: editor.ingredient.referenceQuantity; id: txtQuantity; }
+		IntegerField { text: editor.ingredient.referenceQuantity; id: txtQuantity; }
 		Button { text: "Auf 100 umrechnen"; onClicked: { _passThroughValues(); editor.ingredient.calcTo100(); } }
 	}
 	Label { text: "Standard Menge" }
-	DoubleField { text: editor.ingredient.defaultQuantity; id: txtDefQuantity; }
+	IntegerField { text: editor.ingredient.defaultQuantity; id: txtDefQuantity; }
 	Label { text: "Fett" }
 	DoubleField { text: editor.ingredient.fat; id: txtFat; }
 	Label { text: "Eiweiß" }

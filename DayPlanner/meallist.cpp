@@ -116,9 +116,9 @@ bool MealList::createIngredientFromMeal(qint32 idx)
 		return false;
 	}
 
-	r->setDefaultQuantity(qFuzzyIsNull(m->quantity()) ? 1 : m->quantity());
+	r->setDefaultQuantity((m->quantity() == 0) ? 1 : m->quantity());
 	r->setReferenceQuantity(100);
-	qreal f = qreal(r->defaultQuantity())/r->referenceQuantity();
+	qreal f = qreal(r->defaultQuantity()) / r->referenceQuantity();
 	r->setFat(m->calcFat()/f);
 	r->setProtein(m->calcProtein()/f);
 	r->setCarbs(m->calcCarbs()/f);
@@ -233,7 +233,7 @@ void MealList::updateMealFromIngredient(MealDAO *m, IngredientDAO *r, UpdateFiel
 	if (fields.testFlag(UpdateField::Quantity)) m->setQuantity(r->defaultQuantity());
 	if (fields.testFlag(UpdateField::Id)) m->setIngredientId(r->id());
 	if (fields.testFlag(UpdateField::Values)) {
-		qreal f = r->referenceQuantity() == 0 ? 1 : r->referenceQuantity();
+		qint32 f = r->referenceQuantity() == 0 ? 1 : r->referenceQuantity();
 		m->setFat(r->fat() / f);
 		m->setProtein(r->protein() / f);
 		m->setCarbs(r->carbs() / f);

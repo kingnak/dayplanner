@@ -14,6 +14,7 @@
 #include "workoutlist.h"
 #include "recipetemplatelist.h"
 #include "ingrecuniformmodel.h"
+#include "recipe.h"
 
 DayPlannerQMLGlobals::DayPlannerQMLGlobals(QObject *parent) : QObject(parent)
 {
@@ -22,12 +23,16 @@ DayPlannerQMLGlobals::DayPlannerQMLGlobals(QObject *parent) : QObject(parent)
 void DayPlannerQMLGlobals::registerTypes()
 {
     qRegisterMetaType<Meal::Type>("Meal::Type");
+	//qRegisterMetaType<IngredientItemList*>("IngredientItemList");
 	qmlRegisterUncreatableType<DayModel>("org.kingnak.dayplanner", 1, 0, "DayModel", "");
     qmlRegisterType<Meal>("org.kingnak.dayplanner", 1, 0, "Meal");
     qmlRegisterType<MealList>("org.kingnak.dayplanner", 1, 0, "MealList");
 	qmlRegisterUncreatableType<IngredientList>("org.kingnak.dayplanner", 1, 0, "IngredientModel", "");
 	qmlRegisterType<QmlUtils>("org.kingnak.dayplanner", 1, 0, "Utils");
+	qmlRegisterType<IngredientItemList>("org.kingnak.dayplanner", 1, 0, "IngredientItemList");
+	qmlRegisterType<IngredientListItem>("org.kingnak.dayplanner", 1, 0, "IngredientListItem");
 	qmlRegisterUncreatableType<ShiftList>("org.kingnak.dayplanner", 1, 0, "ShiftModel", "");
+	qmlRegisterType<Recipe>("org.kingnak.dayplanner", 1, 0, "Recipe");
 	qmlRegisterUncreatableType<TrainingList>("org.kingnak.dayplanner", 1, 0, "TrainingModel", "");
 	qmlRegisterUncreatableType<RecipeTemplateList>("org.kingnak.dayplanner", 1, 0, "RecipeTemplateModel", "");
 	qmlRegisterUncreatableType<IngRecUniformModel>("org.kingnak.dayplanner", 1, 0, "UniformRecipeIngredientModel", "");

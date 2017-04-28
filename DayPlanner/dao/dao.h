@@ -38,7 +38,10 @@ public:
 	virtual QList<IngredientListItemDAO *> loadIngredientListItems(qint32 listId) = 0;
 
 	virtual IngredientListDAO *createIngredientList() = 0;
+	virtual IngredientListItemDAO * createIngredientListItem(qint32 listId) = 0;
+
 	virtual RecipeDAO *createRecipe() = 0;
+	virtual RecipeDAO *loadRecipe(qint32 recipeId) = 0;
 
 	virtual TrainingDAO *loadTraining(qint32 trainingId) = 0;
 	virtual QList<TrainingDAO *> loadTrainings() = 0;

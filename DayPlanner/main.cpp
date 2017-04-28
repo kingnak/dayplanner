@@ -9,6 +9,7 @@
 #include "daymodel.h"
 #include "recipetemplatelist.h"
 #include "ingrecuniformmodel.h"
+#include "recipe.h"
 
 //#define WITH_VLD
 #ifdef WITH_VLD
@@ -34,6 +35,9 @@ int main(int argc, char *argv[])
 	auto r = new RecipeTemplateList;
 	engine.rootContext()->setContextProperty("recipeTemplateModel", r);
 	engine.rootContext()->setContextProperty("uniformModel", new IngRecUniformModel(r, i));
+	engine.rootContext()->setContextProperty("recipeModel", RecipeLoader::instance());
+
+
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     return app.exec();

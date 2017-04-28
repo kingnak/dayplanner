@@ -32,12 +32,12 @@ void IngredientListItemDbDAO::setName(const QString &name)
 	setData("name", name);
 }
 
-qreal IngredientListItemDbDAO::quantity() const
+qint32 IngredientListItemDbDAO::quantity() const
 {
-	return data<qreal>("quantity");
+	return data<qint32>("quantity");
 }
 
-void IngredientListItemDbDAO::setQuantity(qreal q)
+void IngredientListItemDbDAO::setQuantity(qint32 q)
 {
 	setData("quantity", q);
 }
@@ -90,6 +90,16 @@ qint32 IngredientListItemDbDAO::ingredientId() const
 void IngredientListItemDbDAO::setIngredientId(qint32 id)
 {
 	setData("ingredientId", id);
+}
+
+qint32 IngredientListItemDbDAO::listId() const
+{
+	return data<qint32>("ingredientListId");
+}
+
+void IngredientListItemDbDAO::setListId(qint32 id)
+{
+	setData("ingredientListId", id);
 }
 
 QStringList IngredientListItemDbDAO::orderFields()

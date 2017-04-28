@@ -1,16 +1,15 @@
 #include "qmlutils.h"
-#include <QLocale>
 
 QmlUtils::QmlUtils()
+	: m_locale(QLocale())
 {
 
 }
 
-QString QmlUtils::formatNumber(qreal n)
+QString QmlUtils::formatDouble(qreal n)
 {
-	QLocale l;
-	QString ret = l.toString(n, 'f', 1);
-	int pos = ret.indexOf(l.decimalPoint());
+	QString ret = m_locale.toString(n, 'f', 1);
+	int pos = ret.indexOf(m_locale.decimalPoint());
 	if (pos >= 0) {
 		if (ret.mid(pos+1) == "0") {
 			ret = ret.left(pos);
@@ -22,12 +21,21 @@ QString QmlUtils::formatNumber(qreal n)
 qreal QmlUtils::parseNumber(QString n)
 {
 	bool ok;
-	QLocale l;
-	qreal q = l.toDouble(n, &ok);
+	qreal q = m_locale.toDouble(n, &ok);
 	if (!ok) {
 		// Try removing group separator
-		n.remove(l.groupSeparator());
-		q = l.toDouble(n, &ok);
+		n.remove(m_locale.groupSeparator());
+		q = m_locale.toDouble(n, &ok);
 	}
 	return q;
+}
+
+QString QmlUtils::formatInt(qint32 n)
+{
+	return m_locale.toString(n);
+}
+
+qint32 QmlUtils::parseInt(const QString &n)
+{
+	return m_locale.toInt(n);
 }

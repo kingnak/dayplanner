@@ -12,8 +12,8 @@ public:
 	virtual QString name() const = 0;
 	virtual void setName(const QString &name) = 0;
 
-	virtual qreal quantity() const = 0;
-	virtual void setQuantity(qreal q) = 0;
+	virtual qint32 quantity() const = 0;
+	virtual void setQuantity(qint32 q) = 0;
 
 	virtual qreal fat() const = 0;
 	virtual void setFat(qreal f) = 0;
@@ -26,6 +26,9 @@ public:
 
 	virtual qreal calories() const = 0;
 	virtual void setCalories(qreal c) = 0;
+
+	virtual qint32 listId() const = 0;
+	virtual void setListId(qint32 id) = 0;
 
 	virtual qint32 ingredientId() const = 0;
 	virtual void setIngredientId(qint32 id) = 0;

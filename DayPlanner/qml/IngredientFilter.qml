@@ -150,7 +150,7 @@ SplitView {
 			Component {
 				id: doubleDelegate
 				Text {
-					text: utils.formatNumber(styleData.value)
+					text: utils.formatDouble(styleData.value)
 					color: styleData.textColor
 					elide: styleData.elideMode
 					horizontalAlignment: Text.AlignRight

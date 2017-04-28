@@ -27,6 +27,8 @@ ListView {
 		IngredientEditorDelegate {
 			width: parent.width
 			onRemoveItem: _data.removeMeal(idx)
+			onEditItem: stack.push({item: recipeEditor, properties: {recipeId:_data.items[idx].recipeId} })
+			editButtonEnabled: isConnectedToRecipe
 			addMenuEnabled: !isConnected
 			addMenu: Menu {
 				onAboutToShow: applyName()
@@ -71,6 +73,13 @@ ListView {
 			backgroundColor: baseStyle.mealColor(_data.type)
 			title: utils.mealName(_data.type)
 			itemData: _data
+		}
+	}
+
+	Component {
+		id: recipeEditor
+		RecipeEditor {
+
 		}
 	}
 }

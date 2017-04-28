@@ -37,7 +37,7 @@ RangeSlider {
 			}
 			Text {
 				id: txf
-				text: utils.formatNumber(first.handle.curValue)
+				text: utils.formatDouble(first.handle.curValue)
 				x: 8-width
 			}
 		}
@@ -58,7 +58,7 @@ RangeSlider {
 			}
 			Text {
 				id: txs
-				text: utils.formatNumber(second.handle.curValue)
+				text: utils.formatDouble(second.handle.curValue)
 			}
 		}
 

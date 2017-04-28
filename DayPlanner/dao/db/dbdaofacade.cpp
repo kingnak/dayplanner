@@ -148,8 +148,15 @@ QList<RecipeTemplateDAO *> DbDAOFacade::loadRecipeTemplates()
 
 IngredientListDAO *DbDAOFacade::createIngredientList()
 {
-	IngredientListDbDAO *ret = new IngredientListDbDAO(&DataBase::instance(), -1);
+	IngredientListDbDAO *ret = new IngredientListDbDAO(DataBase::InvalidId, &DataBase::instance());
 	ret->save();
+	return ret;
+}
+
+IngredientListItemDAO *DbDAOFacade::createIngredientListItem(qint32 listId)
+{
+	IngredientListItemDbDAO *ret = new IngredientListItemDbDAO(DataBase::InvalidId, &DataBase::instance());
+	ret->setListId(listId);
 	return ret;
 }
 
@@ -160,6 +167,11 @@ RecipeDAO *DbDAOFacade::createRecipe()
 	ret->setIngredientListId(lst->id());
 	delete lst;
 	return ret;
+}
+
+RecipeDAO *DbDAOFacade::loadRecipe(qint32 recipeId)
+{
+	return new RecipeDbDAO(recipeId, &DataBase::instance());
 }
 
 QList<IngredientListItemDAO *> DbDAOFacade::loadIngredientListItems(qint32 listId)

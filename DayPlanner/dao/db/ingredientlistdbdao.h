@@ -7,7 +7,7 @@
 class IngredientListDbDAO : public IngredientListDAO, private DbAutoIdDAOBase
 {
 public:
-	IngredientListDbDAO(DataBase *db, qint32 id);
+	IngredientListDbDAO(qint32 id, DataBase *db);
 
 	qint32 id() const;
 

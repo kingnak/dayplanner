@@ -15,8 +15,10 @@ Item {
 
 	property var addMenu
 	property bool addMenuEnabled: false
+	property bool editButtonEnabled: false
 
 	signal removeItem(int idx)
+	signal editItem(int idx)
 
 	height: rect.height
 	width: parent.width
@@ -51,6 +53,14 @@ Item {
 				enabled: addMenuEnabled
 			}
 
+			ToolButton {
+				text: "E"
+				style: SmallButtonStyle {}
+				opacity: editButtonEnabled ? 1 : 0
+				enabled: editButtonEnabled
+				onClicked: root.editItem(index)
+			}
+
 			TextField {
 				id: txtName
 				Layout.fillWidth: true
@@ -62,7 +72,7 @@ Item {
 				}
 			}
 
-			DoubleField {
+			IntegerField {
 				id: txtQuantity
 				value: quantity
 				font: baseStyle.editorFont
@@ -70,8 +80,8 @@ Item {
 					showHovered: row.hovered
 					postfix: "x"
 				}
-				onDoubleFinished: quantity = val;
-				onDoubleError: value = quantity;
+				onIntFinished: quantity = val;
+				onIntError: value = quantity;
 			}
 
 			DoubleField {

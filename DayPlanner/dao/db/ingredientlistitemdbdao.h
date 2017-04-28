@@ -14,8 +14,8 @@ public:
 	QString name() const;
 	void setName(const QString &name);
 
-	qreal quantity() const;
-	void setQuantity(qreal fac);
+	qint32 quantity() const;
+	void setQuantity(qint32 q);
 
 	qreal fat() const;
 	void setFat(qreal f);
@@ -31,6 +31,9 @@ public:
 
 	qint32 ingredientId() const;
 	void setIngredientId(qint32 id);
+
+	qint32 listId() const;
+	void setListId(qint32 id);
 
 	qint32 sort() const;
 	void setSort(qint32 sort);

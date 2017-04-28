@@ -79,35 +79,35 @@ Rectangle {
 				spacing: 2
 				id: txt
 				Text {
-					//text: "F: " + utils.formatNumber(dayData.sumFat) + ", "
-					text: baseStyle.formatSummary(utils.formatNumber(dayData.sumFat), "F", ", ");
+					//text: "F: " + utils.formatDouble(dayData.sumFat) + ", "
+					text: baseStyle.formatSummary(utils.formatDouble(dayData.sumFat), "F", ", ");
 					visible: dayData.sumFat > 0
 					font: baseStyle.summaryFont
 					textFormat: Text.RichText
 				}
 				Text {
-					//text: "KH: " + utils.formatNumber(dayData.sumCarbs) + ", "
-					text: baseStyle.formatSummary(utils.formatNumber(dayData.sumCarbs), "KH", ", ");
+					//text: "KH: " + utils.formatDouble(dayData.sumCarbs) + ", "
+					text: baseStyle.formatSummary(utils.formatDouble(dayData.sumCarbs), "KH", ", ");
 					visible: dayData.sumCarbs > 0
 					font: baseStyle.summaryFont
 					textFormat: Text.RichText
 				}
 				Text {
-					//text: "EW: " + utils.formatNumber(dayData.sumProtein) + ", "
-					text: baseStyle.formatSummary(utils.formatNumber(dayData.sumProtein), "EW", ", ");
+					//text: "EW: " + utils.formatDouble(dayData.sumProtein) + ", "
+					text: baseStyle.formatSummary(utils.formatDouble(dayData.sumProtein), "EW", ", ");
 					visible: dayData.sumProtein > 0
 					font: baseStyle.summaryFont
 					textFormat: Text.RichText
 				}
 				Text {
-					//text: "kcal: " + utils.formatNumber(dayData.sumCalories)
-					text: baseStyle.formatSummary(utils.formatNumber(dayData.sumCalories), "kcal", ", ");
+					//text: "kcal: " + utils.formatDouble(dayData.sumCalories)
+					text: baseStyle.formatSummary(utils.formatDouble(dayData.sumCalories), "kcal", ", ");
 					visible: dayData.sumCalories > 0
 					font: baseStyle.summaryFont
 					textFormat: Text.RichText
 				}
 				Text {
-					//text: "kcal: " + utils.formatNumber(dayData.sumCalories)
+					//text: "kcal: " + utils.formatDouble(dayData.sumCalories)
 					text: baseStyle.formatSummary(dayData.workout.count, "T", "");
 					opacity: dayData.workout.count > 0 ? 1 : 0
 					font: baseStyle.summaryFont

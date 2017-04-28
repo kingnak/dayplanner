@@ -19,19 +19,19 @@ Column {
 			}
 			Text {
 				font: baseStyle.defaultFont
-				text: "F: " + utils.formatNumber(mealData.sumFat) + ", "
+				text: "F: " + utils.formatDouble(mealData.sumFat) + ", "
 			}
 			Text {
 				font: baseStyle.defaultFont
-				text: "KH: " + utils.formatNumber(mealData.sumCarbs) + ", "
+				text: "KH: " + utils.formatDouble(mealData.sumCarbs) + ", "
 			}
 			Text {
 				font: baseStyle.defaultFont
-				text: "EW: " + utils.formatNumber(mealData.sumProtein) + ", "
+				text: "EW: " + utils.formatDouble(mealData.sumProtein) + ", "
 			}
 			Text {
 				font: baseStyle.defaultFont
-				text: "kcal: " + utils.formatNumber(mealData.sumCalories)
+				text: "kcal: " + utils.formatDouble(mealData.sumCalories)
 			}
 
 		}

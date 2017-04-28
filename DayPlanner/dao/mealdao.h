@@ -16,8 +16,8 @@ public:
     virtual QDate date() const = 0;
     virtual void setDate(QDate d) = 0;
 
-    virtual qreal quantity() const = 0;
-    virtual void setQuantity(qreal fac) = 0;
+	virtual qint32 quantity() const = 0;
+	virtual void setQuantity(qint32 q) = 0;
 
     virtual qreal fat() const = 0;
     virtual void setFat(qreal f) = 0;

@@ -54,7 +54,8 @@ SOURCES += main.cpp \
     dao/ingredientlistdao.cpp \
     dao/db/ingredientlistdbdao.cpp \
     dao/recipedao.cpp \
-    dao/db/recipedbdao.cpp
+    dao/db/recipedbdao.cpp \
+    recipe.cpp
 
 RESOURCES += qml.qrc
 
@@ -82,7 +83,9 @@ DISTFILES += \
     qml/IngredientFilter.qml \
     qml/IngredientEditorDelegate.qml \
     qml/IngredientEditorListSelector.qml \
-    qml/IngredientEditorHeader.qml
+    qml/IngredientEditorHeader.qml \
+    qml/IntegerField.qml \
+    qml/RecipeEditor.qml
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -133,4 +136,5 @@ HEADERS += \
     dao/ingredientlistdao.h \
     dao/db/ingredientlistdbdao.h \
     dao/recipedao.h \
-    dao/db/recipedbdao.h
+    dao/db/recipedbdao.h \
+    recipe.h

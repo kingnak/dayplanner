@@ -46,14 +46,14 @@ void Meal::setName(const QString &n)
     }
 }
 
-qreal Meal::quantity() const
+qint32 Meal::quantity() const
 {
-    qreal f = m_meal->quantity();
-    if (qFuzzyIsNull(f)) return 1;
+	qint32 f = m_meal->quantity();
+	if (f == 0) return 1;
     return f;
 }
 
-void Meal::setQuantity(qreal f)
+void Meal::setQuantity(qint32 f)
 {
     if (f != quantity()) {
         m_meal->setQuantity(f);

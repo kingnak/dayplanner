@@ -33,22 +33,22 @@ Item {
 			}
 			Text {
 				font: baseStyle.defaultFont
-				text: "\u03A3 " + utils.formatNumber(itemData.sumFat);
+				text: "\u03A3 " + utils.formatDouble(itemData.sumFat);
 				Layout.minimumWidth: 40 + metrics.boundingRect("F").width
 			}
 			Text {
 				font: baseStyle.defaultFont
-				text: "\u03A3 " + utils.formatNumber(itemData.sumCarbs);
+				text: "\u03A3 " + utils.formatDouble(itemData.sumCarbs);
 				Layout.minimumWidth: 40 + metrics.boundingRect("KH").width
 			}
 			Text {
 				font: baseStyle.defaultFont
-				text: "\u03A3 " + utils.formatNumber(itemData.sumProtein);
+				text: "\u03A3 " + utils.formatDouble(itemData.sumProtein);
 				Layout.minimumWidth: 40 + metrics.boundingRect("EW").width
 			}
 			Text {
 				font: baseStyle.defaultFont
-				text: "\u03A3 " + utils.formatNumber(itemData.sumCalories);
+				text: "\u03A3 " + utils.formatDouble(itemData.sumCalories);
 				Layout.minimumWidth: 40 + metrics.boundingRect("kcal \u03A3").width
 			}
 		}

@@ -46,14 +46,14 @@ void MealDbDAO::setDate(QDate d)
     setData("date", d);
 }
 
-qreal MealDbDAO::quantity() const
+qint32 MealDbDAO::quantity() const
 {
-    return data<qreal>("quantity");
+	return data<qint32>("quantity");
 }
 
-void MealDbDAO::setQuantity(qreal fac)
+void MealDbDAO::setQuantity(qint32 q)
 {
-    setData("quantity", fac);
+	setData("quantity", q);
 }
 
 qreal MealDbDAO::fat() const

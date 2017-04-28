@@ -41,6 +41,9 @@ public:
 	virtual qint32 ingredientListId() const;
 	virtual void setIngredientListId(qint32 id);
 
+	virtual bool nutritionValuesOverridden() const;
+	virtual void setNutritionValuesOverridden(bool o);
+
 	virtual qint32 templateId() const;
 	virtual void setTemplateId(qint32 id);
 
