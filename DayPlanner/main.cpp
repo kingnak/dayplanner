@@ -20,6 +20,13 @@ int main(int argc, char *argv[])
 {
 	QGuiApplication app(argc, argv);
 
+	if (DataBase::instance().getStartupError() != DataBase::NoError) {
+		QQmlApplicationEngine engine;
+		engine.rootContext()->setContextProperty("dbErrorCode", (qint32) DataBase::instance().getStartupError());
+		engine.load(QUrl(QStringLiteral("qrc:/error.qml")));
+		return app.exec();
+	}
+
 	if (app.arguments().value(1) == "--fill-default-ingredients") {
 		DataBase::instance().fillDefaultIngredients();
 	}

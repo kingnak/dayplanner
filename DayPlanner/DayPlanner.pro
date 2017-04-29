@@ -61,6 +61,7 @@ RESOURCES += qml.qrc
 
 DISTFILES += \
     main.qml \
+    error.qml \
     qml/DayItem.qml \
     qml/MealList.qml \
     qml/DoubleField.qml \

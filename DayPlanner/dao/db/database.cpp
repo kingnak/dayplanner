@@ -3,10 +3,15 @@
 #include <QDate>
 #include <QDebug>
 
+// Version = 0.3
+#define DB_VERSION 0x0003
+
 DataBase::DataBase()
 {
     createConnection();
 }
+
+DataBase::DbStartupError DataBase::s_startError = DataBase::NoError;
 
 DataBase &DataBase::instance()
 {
@@ -62,6 +67,7 @@ QSqlRecord DataBase::selectOneRecord(const QString &query, bool warnIfNone)
 
 void DataBase::createConnection()
 {
+	s_startError = UnknownError;
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     bool needInit = false;
 
@@ -83,14 +89,14 @@ void DataBase::createConnection()
 #endif
 
     if (!db.open()) {
-        qFatal("Cannot opoen database");
+		s_startError = CannotOpen;
         return;
     }
 
     if (needInit) {
 		QSqlQuery query;
 		bool ok = query.exec("CREATE TABLE ShiftList (id INT NOT NULL PRIMARY KEY, name TEXT)");
-		ok = query.exec("INSERT INTO ShiftList (id, name) VALUES "
+		ok &= query.exec("INSERT INTO ShiftList (id, name) VALUES "
 				   "(0, '0'), "
 				   "(1, 'X'), "
 				   "(2, 'A1'), "
@@ -102,18 +108,18 @@ void DataBase::createConnection()
 				   "(8, 'N2')"
 				   );
 
-		ok = query.exec("CREATE TABLE Shift (d DATE NOT NULL PRIMARY KEY, shiftId INT)");
-		ok = query.exec("CREATE TABLE Meal (id INTEGER PRIMARY KEY, date DATE, type INT, name TEXT, quantity INT, fat REAL, protein REAL, carbs REAL, calories REAL, sort INT, ingredientId INT NULL, recipeId INT NULL)");
-		ok = query.exec("CREATE TABLE Ingredient (id INTEGER PRIMARY KEY, name TEXT, refQuantity INT, defaultQuantity INT, fat REAL, protein REAL, carbs REAL, calories REAL)");
-		ok = query.exec("CREATE TABLE RecipeTemplate (id INTEGER PRIMARY KEY, name TEXT, refServing INT, defaultServing INT, fat REAL, protein REAL, carbs REAl, calories REAL, url TEXT NULL, note TEXT NULL, ingredientListId INT DEFAULT 0, overridden INT DEFAULT 0)");
-		ok = query.exec("CREATE TABLE Recipe (id INTEGER PRIMARY KEY, name TEXT, refServing INT, defaultServing INT, fat REAL, protein REAL, carbs REAl, calories REAL, url TEXT NULL, note TEXT NULL, ingredientListId INT DEFAULT 0, overridden INT DEFAULT 0, templateId INT DEFAULT 0)");
-		ok = query.exec("CREATE TABLE IngredientList (id INTEGER PRIMARY KEY)");
-		ok = query.exec("CREATE TABLE IngredientListItem (id INTEGER PRIMARY KEY, ingredientListId INT, sort INT, name TEXT, quantity INT, fat REAL, protein REAL, carbs REAL, calories REAL, ingredientId INT)");
+		ok &= query.exec("CREATE TABLE Shift (d DATE NOT NULL PRIMARY KEY, shiftId INT)");
+		ok &= query.exec("CREATE TABLE Meal (id INTEGER PRIMARY KEY, date DATE, type INT, name TEXT, quantity INT, fat REAL, protein REAL, carbs REAL, calories REAL, sort INT, ingredientId INT NULL, recipeId INT NULL)");
+		ok &= query.exec("CREATE TABLE Ingredient (id INTEGER PRIMARY KEY, name TEXT, refQuantity INT, defaultQuantity INT, fat REAL, protein REAL, carbs REAL, calories REAL)");
+		ok &= query.exec("CREATE TABLE RecipeTemplate (id INTEGER PRIMARY KEY, name TEXT, refServing INT, defaultServing INT, fat REAL, protein REAL, carbs REAl, calories REAL, url TEXT NULL, note TEXT NULL, ingredientListId INT DEFAULT 0, overridden INT DEFAULT 0)");
+		ok &= query.exec("CREATE TABLE Recipe (id INTEGER PRIMARY KEY, name TEXT, refServing INT, defaultServing INT, fat REAL, protein REAL, carbs REAl, calories REAL, url TEXT NULL, note TEXT NULL, ingredientListId INT DEFAULT 0, overridden INT DEFAULT 0, templateId INT DEFAULT 0)");
+		ok &= query.exec("CREATE TABLE IngredientList (id INTEGER PRIMARY KEY)");
+		ok &= query.exec("CREATE TABLE IngredientListItem (id INTEGER PRIMARY KEY, ingredientListId INT, sort INT, name TEXT, quantity INT, fat REAL, protein REAL, carbs REAL, calories REAL, ingredientId INT)");
 
 		doFillDefaultIngredients();
 
-		ok = query.exec("CREATE TABLE Training (id INTEGER PRIMARY KEY, name TEXT)");
-		ok = query.exec("INSERT INTO Training (name) VALUES "
+		ok &= query.exec("CREATE TABLE Training (id INTEGER PRIMARY KEY, name TEXT)");
+		ok &= query.exec("INSERT INTO Training (name) VALUES "
 				   "('Laufen'),"
 				   "('Crossfit'),"
 				   "('EMS'),"
@@ -121,7 +127,29 @@ void DataBase::createConnection()
 				   "('Sonstiges')"
 				   );
 
-		ok = query.exec("CREATE TABLE Workout (id INTEGER PRIMARY KEY, date DATE, name TEXT, info TEXT, trainingId INT NULL, sort INT)");
+		ok &= query.exec("CREATE TABLE Workout (id INTEGER PRIMARY KEY, date DATE, name TEXT, info TEXT, trainingId INT NULL, sort INT)");
+		ok &= query.exec("CREATE TABLE DbVersion (version INTEGER)");
+		ok &= query.exec(QString("INSERT INTO DbVersion (version) VALUES (%1)").arg(DB_VERSION));
+
+		if (!ok) {
+			s_startError = InitError;
+		} else {
+			s_startError = NoError;
+		}
+	} else {
+		QSqlQuery q("SELECT version FROM DbVersion");
+		int dbVersion = 0;
+		if (q.next()) {
+			dbVersion = q.record().value(0).toInt();
+		}
+
+		if (dbVersion == DB_VERSION) {
+			s_startError = NoError;
+		} else if (dbVersion > DB_VERSION) {
+			s_startError = TooNew;
+		} else {
+			s_startError = TooOld;
+		}
 	}
 }
 
@@ -156,6 +184,11 @@ bool DataBase::fillDefaultIngredients()
 	return DataBase::doFillDefaultIngredients();
 }
 
+DataBase::DbStartupError DataBase::getStartupError() const
+{
+	return s_startError;
+}
+
 bool DataBase::doFillDefaultIngredients()
 {
 	QSqlQuery query;
@@ -170,8 +203,8 @@ bool DataBase::doFillDefaultIngredients()
 		ins.prepare("INSERT INTO Ingredient (name, refQuantity, defaultQuantity, fat, protein, carbs, calories) VALUES (?,?,?,?,?,?,?)");
 
 		/// TEST
-		QSqlQuery insR;
-		insR.prepare("INSERT INTO RecipeTemplate (name, refServing, defaultServing, fat, protein, carbs, calories) VALUES (?,?,?,?,?,?,?)");
+		//QSqlQuery insR;
+		//insR.prepare("INSERT INTO RecipeTemplate (name, refServing, defaultServing, fat, protein, carbs, calories) VALUES (?,?,?,?,?,?,?)");
 
 
 
@@ -193,6 +226,7 @@ bool DataBase::doFillDefaultIngredients()
 				ins.addBindValue(parts[3].toDouble() / 100);
 
 				/// TEST
+				/*
 				insR.addBindValue(parts[0]);
 				insR.addBindValue(1);
 				insR.addBindValue(1);
@@ -201,7 +235,7 @@ bool DataBase::doFillDefaultIngredients()
 				insR.addBindValue(parts[6].toDouble() / 100);
 				insR.addBindValue(parts[3].toDouble() / 100);
 				insR.exec();
-
+				*/
 				if (!ins.exec()) {
 					qWarning() << ins.executedQuery();
 					qWarning() << ins.lastError().text() << ins.lastError();

@@ -26,6 +26,7 @@
         <file>qml/IntegerField.qml</file>
         <file>qml/RecipeEditor.qml</file>
         <file>qml/BorderedContainer.qml</file>
+        <file>error.qml</file>
     </qresource>
     <qresource prefix="/icons">
         <file alias="delete">images/Action-cancel-icon.png</file>

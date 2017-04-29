@@ -27,6 +27,17 @@ public:
 
 	bool fillDefaultIngredients();
 
+	enum DbStartupError {
+		NoError = 0,
+		TooNew = 1,
+		TooOld = 2,
+		CannotOpen = 3,
+		InitError = 4,
+		UnknownError = 5
+	};
+
+	DbStartupError getStartupError() const;
+
 private:
     QSqlRecord selectOneRecord(const QString &query, bool warnIfNone);
 
@@ -34,6 +45,9 @@ private:
     static void createConnection();
 	static QString getDbFile();
 	static bool doFillDefaultIngredients();
+
+private:
+	static DbStartupError s_startError;
 };
 
 #endif // DATABASE_H
