@@ -34,22 +34,46 @@ BorderedContainer {
 				text: _data.name
 				style: PlaceholderTextEditStyle { }
 				width: 200
+				onEditingFinished: _data.name = text
 			}
 		}
 
-		Text {
-			text: "Zutaten für <b>" + _data.servings + "</b> Portionen";
-			font: baseStyle.defaultFont
-		}
 		Row {
-			Text { text: "Anzeige für "; anchors.verticalCenter: parent.verticalCenter; font: baseStyle.defaultFont }
+			Text { text: "Rezept für "; anchors.verticalCenter: parent.verticalCenter; font: baseStyle.defaultFont }
 			IntegerField {
 				id: txtServings
-				text: _data.displayServings
-				onIntFinished: _data.displayServings = val
+				text: _data.servings
+				onIntFinished: {
+					var old = _data.servings;
+					_data.servings = val;
+					if (old === _data.displayServings) {
+						_data.displayServings = val;
+					}
+				}
 				style: PlaceholderTextEditStyle{textWidth: "22"}
 			}
 			Text { text: " Portionen"; anchors.verticalCenter: parent.verticalCenter; font: baseStyle.defaultFont }
+		}
+
+		Row {
+			spacing: 15
+			Row {
+				Text { text: "Anzeige für "; anchors.verticalCenter: parent.verticalCenter; font: baseStyle.defaultFont }
+				IntegerField {
+					id: txtDisplayServings
+					text: _data.displayServings
+					onIntFinished: _data.displayServings = val
+					style: PlaceholderTextEditStyle{textWidth: "22"}
+				}
+				Text { text: " Portionen"; anchors.verticalCenter: parent.verticalCenter; font: baseStyle.defaultFont }
+			}
+			Button {
+				enabled: _data.servings !== _data.displayServings
+				opacity: enabled?1:0
+				style: SmallButtonStyle{square: false; borderAlwaysVisible:true}
+				text: "Angaben für " + _data.displayServings + " Portionen übernehmen"
+				onClicked: _data.adjustForServings(_data.displayServings);
+			}
 		}
 
 		CheckBox {
@@ -65,11 +89,11 @@ BorderedContainer {
 			Label { text: "Fett"; anchors.verticalCenter: parent.verticalCenter }
 			DoubleField { value: _data.fat; id: txtFat; onDoubleFinished: _data.overrideFat(val); style: PlaceholderTextEditStyle {} }
 			Rectangle { visible: true; width: 5; height: parent.height; color: "transparent" }
-			Label { text: "Eiweiß"; anchors.verticalCenter: parent.verticalCenter; }
-			DoubleField { value: _data.protein; id: txtProtein; onDoubleFinished: _data.overrideProtein(val); style: PlaceholderTextEditStyle {} }
-			Rectangle { visible: true; width: 5; height: parent.height; color: "transparent" }
 			Label { text: "Kohlenhydrate"; anchors.verticalCenter: parent.verticalCenter; }
 			DoubleField { value: _data.carbs; id: txtCarbs; onDoubleFinished: _data.overrideCarbs(val); style: PlaceholderTextEditStyle {} }
+			Rectangle { visible: true; width: 5; height: parent.height; color: "transparent" }
+			Label { text: "Eiweiß"; anchors.verticalCenter: parent.verticalCenter; }
+			DoubleField { value: _data.protein; id: txtProtein; onDoubleFinished: _data.overrideProtein(val); style: PlaceholderTextEditStyle {} }
 			Rectangle { visible: true; width: 5; height: parent.height; color: "transparent" }
 			Label { text: "Kalorien"; anchors.verticalCenter: parent.verticalCenter; }
 			DoubleField { value: _data.calories; id: txtCalories; onDoubleFinished: _data.overrideCalories(val); style: PlaceholderTextEditStyle {} }
@@ -84,6 +108,7 @@ BorderedContainer {
 			headerPositioning: ListView.OverlayHeader
 			footer: footerEditor
 			footerPositioning: _data.items.isEmpty ? ListView.InlineFooter : ListView.OverlayFooter
+			clip: true
 
 			Component {
 				id: recipeItem

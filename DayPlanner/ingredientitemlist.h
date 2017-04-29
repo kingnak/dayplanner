@@ -17,7 +17,7 @@ class IngredientItemList : public QObject
 	Q_PROPERTY(qreal sumProtein READ sumProtein NOTIFY sumProteinChanged)
 	Q_PROPERTY(qreal sumCarbs READ sumCarbs NOTIFY sumCarbsChanged)
 	Q_PROPERTY(qreal sumCalories READ sumCalories NOTIFY sumCaloriesChanged)
-	Q_PROPERTY(qint32 multiplicator READ multiplicator WRITE setMultiplicator NOTIFY multiplicatorChanged)
+	Q_PROPERTY(qreal multiplicator READ multiplicator WRITE setMultiplicator NOTIFY multiplicatorChanged)
 	Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY itemsChanged)
 
 public:
@@ -28,6 +28,8 @@ public:
 
 	QQmlListProperty<IngredientListItem> items();
 
+	QList<IngredientListItem *> ingredients();
+
 	Q_INVOKABLE void createItem(const QString &name);
 	Q_INVOKABLE void createItemForIngredient(qint32 ingredientId);
 	Q_INVOKABLE bool createIngredientFromItem(qint32 idx);
@@ -37,11 +39,11 @@ public:
 	qreal sumProtein() const;
 	qreal sumCarbs() const;
 	qreal sumCalories() const;
-	qint32 multiplicator() const;
+	qreal multiplicator() const;
 
 	bool isEmpty() const;
 
-	void setMultiplicator(qint32 m);
+	void setMultiplicator(qreal m);
 
 signals:
 	void itemsChanged();

@@ -112,14 +112,14 @@ SplitView {
 				delegate: doubleDelegate
 			}
 			TableViewColumn {
-				role: "protein"
-				title: "EW"
+				role: "carbs"
+				title: "KH"
 				width: 40
 				delegate: doubleDelegate
 			}
 			TableViewColumn {
-				role: "carbs"
-				title: "KH"
+				role: "protein"
+				title: "EW"
 				width: 40
 				delegate: doubleDelegate
 			}

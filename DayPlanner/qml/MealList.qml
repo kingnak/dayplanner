@@ -44,7 +44,7 @@ ListView {
 				}
 			}
 
-			onEditItem: stack.push({item: recipeEditor, properties: {recipeId:_data.items[idx].recipeId, writeBackMeal:_data.items[idx]} })
+			onEditItem: stack.push({item: recipeEditor, properties: {recipeId:_data.items[idx].recipeId, writeBackMeal:_data.items[idx], dispose:true} })
 			editButtonEnabled: isConnectedToRecipe
 			editButtonVisible: isConnectedToRecipe
 			addButtonEnabled: !isConnected

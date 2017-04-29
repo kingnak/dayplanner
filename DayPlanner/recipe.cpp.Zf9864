@@ -2,6 +2,7 @@
 #include "dao/dao.h"
 #include "meal.h"
 
+#include <QDebug>
 
 Recipe::Recipe(QObject *parent)
 	: QObject(parent),
@@ -52,7 +53,8 @@ void Recipe::adjustForServings(qint32 servings)
 	if (servings == this->servings()) return;
 
 
-	qreal f = qreal(servings) / this->servings();
+	qreal f = this->servings() / qreal(servings);
+	qDebug() << "Adjusting for " << servings << " servings (before " << this->servings() << "). Factor = " << f;
 	for (auto i : m_items->ingredients()) {
 		i->setQuantity(i->quantity()*f);
 	}
@@ -130,7 +132,6 @@ void Recipe::setName(const QString &n)
 	if (n != name()) {
 		m_recipe->setName(n);
 		if (m_recipe->save()) {
-			if (m_writeBack) m_writeBack->setName(n);
 			emit nameChanged();
 		}
 	}
@@ -139,16 +140,11 @@ void Recipe::setName(const QString &n)
 void Recipe::setServings(qint32 s)
 {
 	if (s != servings()) {
+		qDebug() << "Setting servings to " << s;
 		m_recipe->setReferenceServing(s);
 		if (m_recipe->save()) {
 			emit servingsChanged();
 			updateItemMultiplicators();
-			if (m_writeBack) {
-				m_writeBack->setFat(m_recipe->fat()/servings());
-				m_writeBack->setProtein(m_recipe->protein()/servings());
-				m_writeBack->setCarbs(m_recipe->carbs()/servings());
-				m_writeBack->setCalories(m_recipe->calories()/servings());
-			}
 		}
 	}
 }
@@ -167,6 +163,7 @@ void Recipe::setDisplayServings(qint32 ds)
 {
 	if (ds != m_dispServings) {
 		if (ds != 0) {
+			qDebug() << "Updating display servings to " << ds;
 			m_dispServings = ds;
 			emit displayServingsChanged();
 			updateItemMultiplicators();
@@ -175,14 +172,19 @@ void Recipe::setDisplayServings(qint32 ds)
 }
 
 template <typename T>
-bool updateHelper(Recipe *r, RecipeDAO *rd, Meal *wb, void (RecipeDAO::*setValue)(T), T (Recipe::*getValue)() const, void (Meal::*writeBack)(T), T v, bool force) {
+bool updateHelper(Recipe *r, RecipeDAO *rd, Meal *wb, void (RecipeDAO::*setValue)(T), T (Recipe::*getValue)() const, void (Meal::*writeBack)(T), T v, bool force, bool g_dowrite = false) {
 	if (force || rd->nutritionValuesOverridden()) {
-		T oldValue = (r->*getValue)(); // This value is multiplied
-		T newValue = v / r->multiplicator(); // When setting the value, the multpilicator will be applied below
-		if (v != oldValue) {
-			(rd->*setValue)(newValue);
+		T nv = v / r->multiplicator() / r->servings();
+		T cv = (r->*getValue)() / r->servings();
+		if (g_dowrite) qDebug() << "... old value = " << (r->*getValue)();
+		if (g_dowrite) qDebug() << "... check value = " << cv;
+		if (g_dowrite) qDebug() << "... new value = " << nv;
+		if (v != cv) {
+			(rd->*setValue)(nv);
+			if (g_dowrite) qDebug() << "... value was set";
 			if (rd->save()) {
-				if (wb) (wb->*writeBack)(newValue / r->servings()); // Must account for servings in writeback!
+				if (g_dowrite) qDebug() << "... value was written back";
+				if (wb) (wb->*writeBack)(nv);
 				return true;
 			}
 		}
@@ -196,10 +198,13 @@ void Recipe::setFat(qreal f)
 {
 	setFat(f, false);
 }
-
+#include <QMetaMethod>
 void Recipe::setFat(qreal f, bool force)
 {
-	if (updateHelper(this, m_recipe, m_writeBack, &RecipeDAO::setFat, &Recipe::fat, &Meal::setFat, f, force)) {
+	qDebug() << "Setting fat to " << f << ", multiplicator = " << multiplicator() << ", set value = " << f << ", forced: " << force ;
+	if (sender()) qDebug() << " from " << sender() << ": " << sender()->metaObject()->className() << "." << sender()->metaObject()->method(senderSignalIndex()).name();
+	else qDebug() << " from unknown source";
+	if (updateHelper(this, m_recipe, m_writeBack, &RecipeDAO::setFat, &Recipe::fat, &Meal::setFat, f, force, true)) {
 		emit fatChanged();
 	}
 }
@@ -317,6 +322,7 @@ void Recipe::updateCaloriesFromSum()
 void Recipe::updateItemSums()
 {
 	if (!m_recipe->nutritionValuesOverridden()) {
+		qDebug() << "Updating from sums";
 		setFat(m_items->sumFat(), true);
 		setProtein(m_items->sumProtein(), true);
 		setCarbs(m_items->sumCarbs(), true);
@@ -326,6 +332,7 @@ void Recipe::updateItemSums()
 
 void Recipe::updateItemMultiplicators()
 {
+	qDebug() << "Setting item list multiplicator to " << multiplicator();
 	m_items->setMultiplicator(multiplicator());
 	emit multiplicatorChanged();
 	emit fatChanged();

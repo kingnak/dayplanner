@@ -1,7 +1,6 @@
 #include "daymodel.h"
 #include <QDate>
 #include <QVariant>
-#include <QDebug>
 #include <algorithm>
 #include "daydata.h"
 #include "dao/db/dbdaofacade.h"

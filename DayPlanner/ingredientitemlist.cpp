@@ -36,6 +36,10 @@ QQmlListProperty<IngredientListItem> IngredientItemList::items()
 	return QQmlListProperty<IngredientListItem> (this, nullptr, &IngredientItemList::countFunc, &IngredientItemList::atFunc);
 }
 
+QList<IngredientListItem *> IngredientItemList::ingredients()
+{
+	return m_data;
+}
 
 void IngredientItemList::createItem(const QString &name)
 {
@@ -170,7 +174,7 @@ qreal IngredientItemList::sumCalories() const
 	return sum;
 }
 
-qint32 IngredientItemList::multiplicator() const
+qreal IngredientItemList::multiplicator() const
 {
 	return m_mult;
 }
@@ -180,12 +184,14 @@ bool IngredientItemList::isEmpty() const
 	return m_data.isEmpty();
 }
 
-void IngredientItemList::setMultiplicator(qint32 m)
+void IngredientItemList::setMultiplicator(qreal m)
 {
 	if (m != m_mult) {
 		m_mult = m;
 		for (auto i : m_data) {
+			i->disconnect();
 			i->setMultiplicator(m);
+			connectSignals(i);
 		}
 		emit multiplicatorChanged();
 		notifySumsChanged();

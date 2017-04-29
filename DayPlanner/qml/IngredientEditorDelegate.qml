@@ -43,34 +43,35 @@ Item {
 
 			Row {
 				spacing: 0
-			ToolButton {
-				//text: "X"
-				iconSource: "qrc:///icons/delete"
-				tooltip: "Löschen"
-				onClicked: root.removeItem(index)
-				style: SmallButtonStyle {}
+				ToolButton {
+					//text: "X"
+					iconSource: "qrc:///icons/delete"
+					tooltip: "Löschen"
+					onClicked: root.removeItem(index)
+					style: SmallButtonStyle {}
+				}
+
+				ToolButton {
+					id: addButton
+					iconSource: menu ? "qrc:///icons/add-padded" : "qrc:///icons/add"
+					style: SmallButtonStyle {}
+					width: height // in case there is a menu, this prevents increasing buttons width
+					opacity: addButtonEnabled ? 1 : 0
+					enabled: addButtonEnabled
+					visible: addButtonVisible
+					onClicked: root.addItem(index)
+				}
+
+				ToolButton {
+					iconSource: "qrc:///icons/edit"
+					style: SmallButtonStyle {}
+					opacity: editButtonEnabled ? 1 : 0
+					enabled: editButtonEnabled
+					visible: editButtonVisible
+					onClicked: root.editItem(index)
+				}
 			}
 
-			ToolButton {
-				id: addButton
-				iconSource: menu ? "qrc:///icons/add-padded" : "qrc:///icons/add"
-				style: SmallButtonStyle {}
-				width: height // in case there is a menu, this prevents increasing buttons width
-				opacity: addButtonEnabled ? 1 : 0
-				enabled: addButtonEnabled
-				visible: addButtonVisible
-				onClicked: root.addItem(index)
-			}
-
-			ToolButton {
-				iconSource: "qrc:///icons/edit"
-				style: SmallButtonStyle {}
-				opacity: editButtonEnabled ? 1 : 0
-				enabled: editButtonEnabled
-				visible: editButtonVisible
-				onClicked: root.editItem(index)
-			}
-			}
 			TextField {
 				id: txtName
 				Layout.fillWidth: true

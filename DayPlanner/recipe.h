@@ -20,7 +20,7 @@ class Recipe : public QObject
 	Q_PROPERTY(qreal protein READ protein WRITE setProtein NOTIFY proteinChanged)
 	Q_PROPERTY(qreal carbs READ carbs WRITE setCarbs NOTIFY carbsChanged)
 	Q_PROPERTY(qreal calories READ calories WRITE setCalories NOTIFY caloriesChanged)
-	Q_PROPERTY(qint32 displayServings READ multiplicator WRITE setMultiplicator NOTIFY multiplicatorChanged)
+	Q_PROPERTY(qint32 displayServings READ displayServings WRITE setDisplayServings NOTIFY displayServingsChanged)
 	Q_PROPERTY(bool nutritionValuesOverridden READ nutritionValuesOverridden WRITE setNutritionValuesOverridden NOTIFY nutritionValuesOverriddenChanged)
 	Q_PROPERTY(Meal* writeBackMeal READ writeBackMeal WRITE setWriteBackMeal NOTIFY writeBackMealChanged)
 
@@ -31,23 +31,29 @@ public:
 
 	static Recipe *loadRecipeById(qint32 id);
 
+	Q_INVOKABLE void adjustForServings(qint32 servings);
+	Q_INVOKABLE void deleteLater() { QObject::deleteLater(); }
+
 	qint32 id() const;
 
 	IngredientItemList *items() const;
 	QString name() const;
 	qint32 servings() const;
 	qint32 defaultServings() const;
+	qint32 displayServings() const;
 	qreal fat() const;
 	qreal protein() const;
 	qreal carbs() const;
 	qreal calories() const;
-	qint32 multiplicator() const;
 	bool nutritionValuesOverridden() const;
 	Meal *writeBackMeal() const;
+
+	qreal multiplicator() const;
 
 	void setName(const QString &n);
 	void setServings(qint32 s);
 	void setDefaultServings(qint32 ds);
+	void setDisplayServings(qint32 ds);
 	void setFat(qreal f);
 	void setFat(qreal f, bool force);
 	Q_INVOKABLE void overrideFat(qreal f);
@@ -60,7 +66,6 @@ public:
 	void setCalories(qreal c);
 	void setCalories(qreal c, bool force);
 	Q_INVOKABLE void overrideCalories(qreal c);
-	void setMultiplicator(qint32 m);
 	void setNutritionValuesOverridden(bool o);
 	void setWriteBackMeal(Meal *m);
 
@@ -75,6 +80,7 @@ signals:
 	void nameChanged();
 	void servingsChanged();
 	void defaultServingsChanged();
+	void displayServingsChanged();
 	void fatChanged();
 	void proteinChanged();
 	void carbsChanged();
@@ -85,11 +91,13 @@ signals:
 
 private:
 	void updateItemSums();
+	void updateItemMultiplicators();
 
 private:
 	RecipeDAO *m_recipe;
 	IngredientItemList *m_items;
 	Meal *m_writeBack;
+	qint32 m_dispServings;
 };
 
 class RecipeLoader : public QObject

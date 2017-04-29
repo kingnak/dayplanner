@@ -20,7 +20,7 @@ class IngredientListItem : public QObject
 	Q_PROPERTY(qreal carbs READ carbs WRITE setCarbs NOTIFY carbsChanged)
 	Q_PROPERTY(qreal calcCalories READ calcCalories WRITE updateCalories NOTIFY caloriesChanged)
 	Q_PROPERTY(qreal calories READ calories WRITE setCalories NOTIFY caloriesChanged)
-	Q_PROPERTY(qint32 multiplicator READ multiplicator WRITE setMultiplicator NOTIFY multiplicatorChanged)
+	Q_PROPERTY(qreal multiplicator READ multiplicator WRITE setMultiplicator NOTIFY multiplicatorChanged)
 	Q_PROPERTY(bool isConnectedToIngredient READ isConnectedToIngredient NOTIFY ingredientIdChanged)
 
 public:
@@ -58,8 +58,8 @@ public:
 	qreal calcCalories() const;
 	void updateCalories(qreal c);
 
-	qint32 multiplicator() const;
-	void setMultiplicator(qint32 m);
+	qreal multiplicator() const;
+	void setMultiplicator(qreal m);
 
 	qint32 ingredientId() const;
 	void setIngredientId(qint32 id);
@@ -80,7 +80,7 @@ private:
 
 private:
 	IngredientListItemDAO *m_item;
-	qint32 m_mult;
+	qreal m_mult;
 
 	friend class IngredientItemList;
 };

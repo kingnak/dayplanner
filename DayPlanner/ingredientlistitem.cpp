@@ -168,16 +168,17 @@ void IngredientListItem::updateCalories(qreal c)
 	setCalories(c / calcQuantity());
 }
 
-qint32 IngredientListItem::multiplicator() const
+qreal IngredientListItem::multiplicator() const
 {
 	return m_mult;
 }
 
-void IngredientListItem::setMultiplicator(qint32 m)
+void IngredientListItem::setMultiplicator(qreal m)
 {
 	if (m != m_mult) {
-		if (m != 0)
+		if (m != 0) {
 			m_mult = m;
+		}
 		emit multiplicatorChanged();
 		notifyValuesChanged();
 	}
