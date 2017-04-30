@@ -87,7 +87,8 @@ DISTFILES += \
     qml/IngredientEditorHeader.qml \
     qml/IntegerField.qml \
     qml/RecipeEditor.qml \
-    qml/BorderedContainer.qml
+    qml/BorderedContainer.qml \
+    resources.rc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -139,4 +140,7 @@ HEADERS += \
     dao/db/ingredientlistdbdao.h \
     dao/recipedao.h \
     dao/db/recipedbdao.h \
-    recipe.h
+    recipe.h \
+    version.h
+
+RC_FILE = resources.rc

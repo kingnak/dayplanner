@@ -2,8 +2,8 @@
 <Package> 
     <DisplayName>Qt5</DisplayName> 
     <Description>Benötigte Qt5 Libraries</Description> 
-    <Version>0.2.0</Version> 
-    <ReleaseDate>2017-04-18</ReleaseDate> 
+    <Version>0.3.0</Version> 
+    <ReleaseDate>2017-04-30</ReleaseDate> 
   <Name>org.kingnak.dayplanner.qt5</Name> 
   <ForcedInstallation>true</ForcedInstallation> 
   <Virtual>true</Virtual> 
