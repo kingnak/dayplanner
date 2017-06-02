@@ -10,6 +10,7 @@ TextField {
     property alias minPopupWidth: popup.minWidth
     property alias minPopupHeight: popup.minHeight
     property alias textRole: popup.modelRole
+	property alias imageRole: popup.imageRole
 	property alias popupAbove: popup.popupAbove
     property var selectedItem: null
 
@@ -71,6 +72,7 @@ TextField {
         property alias currentIndex: list.currentIndex
         property alias currentItem: list.currentItem
         property string modelRole: "text"
+		property string imageRole: ""
 
 		property bool popupAbove: false
         property int minWidth: 200
@@ -101,7 +103,11 @@ TextField {
                     }
                 }
 
-                Text { id:txt; text: popup.modelRole === '' ? modelData : model[popup.modelRole]; }
+				Row {
+					spacing: 2
+					Image { source: popup.imageRole !== "" ? model[popup.imageRole] : ""; visible: popup.imageRole !== ""; height: txt.height; width:height }
+					Text { id:txt; text: popup.modelRole === '' ? modelData : model[popup.modelRole]; }
+				}
             }
             highlight: Rectangle { color: "#c0c0c0"}
         }

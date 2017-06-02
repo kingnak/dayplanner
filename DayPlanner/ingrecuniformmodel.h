@@ -25,7 +25,8 @@ public:
 	enum {
 		IdRole = Qt::UserRole + 1,
 		NameRole,
-		TypeRole
+		TypeRole,
+		IconUrlRole
 	};
 
 private:

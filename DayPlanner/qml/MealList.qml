@@ -72,6 +72,7 @@ ListView {
         id: footerEditor
 		IngredientEditorListSelector {
 			popupAbove: root.popupAbove || (root.showExpanded && !_data.isEmpty)
+			imageRole: "iconUrl"
 			model: uniformModel
 			onExistingItemSelected: {
 				if (item.objectType === UniformRecipeIngredientModel.Ingredient)

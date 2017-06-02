@@ -41,5 +41,8 @@
         <file alias="add-padded">images/Action-edit-add-icon-padded.png</file>
         <file alias="collapse">images/collapse.png</file>
         <file alias="expand">images/expand.png</file>
+        <file alias="ingredient">images/ingredient.png</file>
+        <file>images/ingredient-2.png</file>
+        <file alias="recipe">images/recipe.png</file>
     </qresource>
 </RCC>

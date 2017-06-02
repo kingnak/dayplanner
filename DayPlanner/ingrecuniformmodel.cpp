@@ -18,12 +18,14 @@ QVariant IngRecUniformModel::data(const QModelIndex &index, int role) const
 		if (role == TypeRole) return Recipe;
 		if (role == NameRole) return m_recTempl->data(m_recTempl->index(index.row()), RecipeTemplateList::NameRole);
 		if (role == IdRole) return m_recTempl->data(m_recTempl->index(index.row()), RecipeTemplateList::IdRole);
+		if (role == IconUrlRole) return "qrc:///icons/recipe";
 	}
 	if (isIngredient(index)) {
 		if (role == TypeRole) return Ingredient;
 		int off = m_recTempl->rowCount(QModelIndex());
 		if (role == NameRole) return m_ingr->data(m_ingr->index(index.row() - off), IngredientList::NameRole);
 		if (role == IdRole) return m_ingr->data(m_ingr->index(index.row() - off), IngredientList::IdRole);
+		if (role == IconUrlRole) return "qrc:///icons/ingredient";
 	}
 	return QVariant();
 }
@@ -41,6 +43,7 @@ QHash<int, QByteArray> IngRecUniformModel::roleNames() const
 	ret[IdRole] = "itemId";
 	ret[NameRole] = "name";
 	ret[TypeRole] = "objectType";
+	ret[IconUrlRole] = "iconUrl";
 	return ret;
 }
 

@@ -10,6 +10,7 @@ Item {
 	id: root
 
 	property alias popupAbove: inp.popupAbove
+	property alias imageRole: inp.imageRole
 	property alias model: inp.model
 	height: rect.height
 	width: parent.width
