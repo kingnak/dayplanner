@@ -28,7 +28,7 @@ BorderedContainer {
 		Label { text: "Menge" }
 		Column {
 			IntegerField { text: editor.ingredient.referenceQuantity; id: txtQuantity; }
-			Button { text: "Auf 100 umrechnen"; onClicked: { _passThroughValues(); editor.ingredient.calcTo100(); } }
+			Button { text: "Auf 100 umrechnen"; onClicked: { editor._passThroughValues(); editor.ingredient.calcTo100(); } }
 		}
 		Label { text: "Standard Menge" }
 		IntegerField { text: editor.ingredient.defaultQuantity; id: txtDefQuantity; }
@@ -50,7 +50,7 @@ BorderedContainer {
 			Button {
 				text: "Speichern"
 				onClicked: {
-					_passThroughValues();
+					editor._passThroughValues();
 					editor.ingredient.save();
 					root.close();
 				}
