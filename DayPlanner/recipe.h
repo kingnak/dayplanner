@@ -3,15 +3,19 @@
 
 #include <QObject>
 #include "dao/recipedao.h"
+#include "dao/recipetemplatedao.h"
 #include "ingredientitemlist.h"
 
 class RecipeLoader;
 class Meal;
 
+class RecipeDAOWrapper;
+
 class Recipe : public QObject
 {
 	Q_OBJECT
 
+	Q_PROPERTY(bool isTemplate READ isTemplate NOTIFY isTemplateChanged)
 	Q_PROPERTY(QObject* items READ items NOTIFY itemsChanged)
 	Q_PROPERTY(QString name READ name WRITE setName NOTIFY nameChanged)
 	Q_PROPERTY(qint32 servings READ servings WRITE setServings NOTIFY servingsChanged)
@@ -27,6 +31,7 @@ class Recipe : public QObject
 public:
 	explicit Recipe(QObject *parent = 0);
 	explicit Recipe(RecipeDAO *recipe, QObject *parent = 0);
+	explicit Recipe(RecipeTemplateDAO *recipe, QObject *parent = 0);
 	~Recipe();
 
 	static Recipe *loadRecipeById(qint32 id);
@@ -36,6 +41,7 @@ public:
 
 	qint32 id() const;
 
+	bool isTemplate() const;
 	IngredientItemList *items() const;
 	QString name() const;
 	qint32 servings() const;
@@ -76,6 +82,7 @@ public slots:
 	void updateCaloriesFromSum();
 
 signals:
+	void isTemplateChanged();
 	void itemsChanged();
 	void nameChanged();
 	void servingsChanged();
@@ -92,9 +99,10 @@ signals:
 private:
 	void updateItemSums();
 	void updateItemMultiplicators();
+	void init();
 
 private:
-	RecipeDAO *m_recipe;
+	RecipeDAOWrapper *m_recipe;
 	IngredientItemList *m_items;
 	Meal *m_writeBack;
 	qint32 m_dispServings;

@@ -2,6 +2,45 @@
 #include "dao/dao.h"
 #include "meal.h"
 
+class RecipeDAOWrapper
+{
+public:
+	inline RecipeDAOWrapper(RecipeDAO *r) : m_r(r), m_t(nullptr) {}
+	inline RecipeDAOWrapper(RecipeTemplateDAO *r) : m_r(nullptr), m_t(r) {}
+	inline ~RecipeDAOWrapper() { delete m_t; delete m_r; }
+
+	inline bool isTempate() const { return m_t != nullptr; }
+	inline qint32 id() const { return m_t ? m_t->id() : m_r->id(); }
+	inline QString name() const { return m_t ? m_t->name() : m_r->name(); }
+	inline void setName(const QString &n) { if (m_t) m_t->setName(n); else m_r->setName(n); }
+	inline qint32 referenceServing() const { return m_t ? m_t->referenceServing() : m_r->referenceServing(); }
+	inline void setReferenceServing(qint32 q) { if (m_t) m_t->setReferenceServing(q); else m_r->setReferenceServing(q); }
+	inline qint32 defaultServing() const { return m_t ? m_t->defaultServing() : m_r->defaultServing(); }
+	inline void setDefaultServing(qint32 q) { if (m_t) m_t->setDefaultServing(q); else m_r->setDefaultServing(q); }
+	inline qreal fat() const { return m_t ? m_t->fat() : m_r->fat(); }
+	inline void setFat(qreal f) { if (m_t) m_t->setFat(f); else m_r->setFat(f); }
+	inline qreal protein() const { return m_t ? m_t->protein() : m_r->protein(); }
+	inline void setProtein(qreal p) { if (m_t) m_t->setProtein(p); else m_r->setProtein(p); }
+	inline qreal carbs() const { return m_t ? m_t->carbs() : m_r->carbs(); }
+	inline void setCarbs(qreal c) { if (m_t) m_t->setCarbs(c); else m_r->setCarbs(c); }
+	inline qreal calories() const { return m_t ? m_t->calories() : m_r->calories(); }
+	inline void setCalories(qreal c) { if (m_t) m_t->setCalories(c); else m_r->setCalories(c); }
+	inline QString url() const { return m_t ? m_t->url() : m_r->url(); }
+	inline void setUrl(const QString &u) { if (m_t) m_t->setUrl(u); else m_r->setUrl(u); }
+	inline QString note() const { return m_t ? m_t->note() : m_r->note(); }
+	inline void setNote(const QString &n) { if (m_t) m_t->setNote(n); else m_r->setNote(n); }
+	inline qint32 ingredientListId() const { return m_t ? m_t->ingredientListId() : m_r->ingredientListId(); }
+	inline void setIngredientListId(qint32 id) { if (m_t) m_t->setIngredientListId(id); else m_r->setIngredientListId(id); }
+	inline bool nutritionValuesOverridden() const { return m_t ? false : m_r->nutritionValuesOverridden(); }
+	inline void setNutritionValuesOverridden(bool o) { if (m_t) ; else m_r->setNutritionValuesOverridden(o); }
+	inline qint32 templateId() const { return m_t ? DAOBase::NoItemIndex : m_r->templateId(); }
+	inline void setTemplateId(qint32 id) { if (m_t) ; else m_r->setTemplateId(id); }
+
+	inline bool save() { return m_t ? m_t->save() : m_r->save(); }
+private:
+	RecipeDAO *m_r;
+	RecipeTemplateDAO *m_t;
+};
 
 Recipe::Recipe(QObject *parent)
 	: QObject(parent),
@@ -14,9 +53,23 @@ Recipe::Recipe(QObject *parent)
 
 Recipe::Recipe(RecipeDAO *recipe, QObject *parent)
 	: QObject(parent),
-	  m_recipe(recipe),
+	  m_recipe(new RecipeDAOWrapper(recipe)),
 	  m_items(nullptr),
 	  m_dispServings(1)
+{
+	init();
+}
+
+Recipe::Recipe(RecipeTemplateDAO *recipe, QObject *parent)
+	: QObject(parent),
+	  m_recipe(new RecipeDAOWrapper(recipe)),
+	  m_items(nullptr),
+	  m_dispServings(1)
+{
+	init();
+}
+
+void Recipe::init()
 {
 	m_items = IngredientItemList::loadList(this, globalDAOFacade(), m_recipe->ingredientListId());
 	// Forces calculation of mutliplicator and update in ingredient list
@@ -70,6 +123,11 @@ void Recipe::adjustForServings(qint32 servings)
 qint32 Recipe::id() const
 {
 	return m_recipe->id();
+}
+
+bool Recipe::isTemplate() const
+{
+	return m_recipe->isTempate();
 }
 
 IngredientItemList *Recipe::items() const
@@ -182,7 +240,7 @@ void Recipe::setDisplayServings(qint32 ds)
 }
 
 template <typename T>
-bool updateHelper(Recipe *r, RecipeDAO *rd, Meal *wb, void (RecipeDAO::*setValue)(T), T (Recipe::*getValue)() const, void (Meal::*writeBack)(T), T v, bool force) {
+bool updateHelper(Recipe *r, RecipeDAOWrapper *rd, Meal *wb, void (RecipeDAOWrapper::*setValue)(T), T (Recipe::*getValue)() const, void (Meal::*writeBack)(T), T v, bool force) {
 	if (force || rd->nutritionValuesOverridden()) {
 		T oldValue = (r->*getValue)(); // This value is multiplied
 		T newValue = v / r->multiplicator(); // When setting the value, the multpilicator will be applied below
@@ -206,7 +264,7 @@ void Recipe::setFat(qreal f)
 
 void Recipe::setFat(qreal f, bool force)
 {
-	if (updateHelper(this, m_recipe, m_writeBack, &RecipeDAO::setFat, &Recipe::fat, &Meal::setFat, f, force)) {
+	if (updateHelper(this, m_recipe, m_writeBack, &RecipeDAOWrapper::setFat, &Recipe::fat, &Meal::setFat, f, force)) {
 		emit fatChanged();
 	}
 }
@@ -223,7 +281,7 @@ void Recipe::setProtein(qreal p)
 
 void Recipe::setProtein(qreal p, bool force)
 {
-	if (updateHelper(this, m_recipe, m_writeBack, &RecipeDAO::setProtein, &Recipe::protein, &Meal::setProtein, p, force)) {
+	if (updateHelper(this, m_recipe, m_writeBack, &RecipeDAOWrapper::setProtein, &Recipe::protein, &Meal::setProtein, p, force)) {
 		emit proteinChanged();
 	}
 }
@@ -240,7 +298,7 @@ void Recipe::setCarbs(qreal c)
 
 void Recipe::setCarbs(qreal c, bool force)
 {
-	if (updateHelper(this, m_recipe, m_writeBack, &RecipeDAO::setCarbs, &Recipe::carbs, &Meal::setCarbs, c, force)) {
+	if (updateHelper(this, m_recipe, m_writeBack, &RecipeDAOWrapper::setCarbs, &Recipe::carbs, &Meal::setCarbs, c, force)) {
 		emit carbsChanged();
 	}
 }
@@ -257,7 +315,7 @@ void Recipe::setCalories(qreal c)
 
 void Recipe::setCalories(qreal c, bool force)
 {
-	if (updateHelper(this, m_recipe, m_writeBack, &RecipeDAO::setCalories, &Recipe::calories, &Meal::setCalories, c, force)) {
+	if (updateHelper(this, m_recipe, m_writeBack, &RecipeDAOWrapper::setCalories, &Recipe::calories, &Meal::setCalories, c, force)) {
 		emit caloriesChanged();
 	}
 }
@@ -284,6 +342,8 @@ void Recipe::setNutritionValuesOverridden(bool o)
 
 void Recipe::setWriteBackMeal(Meal *m)
 {
+	if (m_recipe->isTempate()) return;
+
 	if (m != m_writeBack) {
 		m_writeBack = m;
 		emit writeBackMealChanged();
