@@ -56,6 +56,13 @@ void Recipe::adjustForServings(qint32 servings)
 	for (auto i : m_items->ingredients()) {
 		i->setQuantity(i->quantity()*f);
 	}
+	// Update override values
+	if (m_recipe->nutritionValuesOverridden()) {
+		setFat(fat()*f, true);
+		setProtein(protein()*f, true);
+		setCarbs(carbs()*f, true);
+		setCalories(calories()*f, true);
+	}
 	setServings(servings);
 	setDisplayServings(servings);
 }
