@@ -72,12 +72,12 @@ ListView {
         id: footerEditor
 		IngredientEditorListSelector {
 			popupAbove: root.popupAbove
-			model: ingredientModel //uniformModel
+			model: uniformModel
 			onExistingItemSelected: {
-				//if (item.objectType === UniformRecipeIngredientModel.Ingredient)
+				if (item.objectType === UniformRecipeIngredientModel.Ingredient)
 					_data.createMealForIngredient(item.itemId);
-				//else if (item.objectType === UniformRecipeIngredientModel.Recipe)
-				//	console.log("Selected Recipe " + item.itemId);
+				else if (item.objectType === UniformRecipeIngredientModel.Recipe)
+					console.log("Selected Recipe " + item.itemId); // TODO
 				root.positionViewAtEnd();
 			}
 			onNewItemSelected: {

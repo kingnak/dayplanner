@@ -19,8 +19,8 @@ QVariant IngRecUniformModel::data(const QModelIndex &index, int role) const
 	if (isIngredient(index)) {
 		if (role == TypeRole) return Ingredient;
 		int off = m_recTempl->rowCount(QModelIndex());
-		if (role == NameRole) return m_recTempl->data(m_recTempl->index(index.row() - off), IngredientList::NameRole);
-		if (role == IdRole) return m_recTempl->data(m_recTempl->index(index.row() - off), IngredientList::IdRole);
+		if (role == NameRole) return m_ingr->data(m_ingr->index(index.row() - off), IngredientList::NameRole);
+		if (role == IdRole) return m_ingr->data(m_ingr->index(index.row() - off), IngredientList::IdRole);
 	}
 	return QVariant();
 }
