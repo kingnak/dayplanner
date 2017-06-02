@@ -71,7 +71,7 @@ ListView {
     Component {
         id: footerEditor
 		IngredientEditorListSelector {
-			popupAbove: root.popupAbove
+			popupAbove: root.popupAbove || (root.showExpanded && !_data.isEmpty)
 			model: uniformModel
 			onExistingItemSelected: {
 				if (item.objectType === UniformRecipeIngredientModel.Ingredient)
