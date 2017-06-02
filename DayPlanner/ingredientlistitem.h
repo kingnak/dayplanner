@@ -28,6 +28,8 @@ public:
 	explicit IngredientListItem(IngredientListItemDAO *item, QObject *parent = 0);
 	~IngredientListItem();
 
+	IngredientListItem *copyInto(qint32 listId, bool save = true);
+
 	bool erase();
 
 	QString name() const;

@@ -33,7 +33,7 @@ void RecipeTemplateDbDAO::setReferenceServing(qint32 q)
 
 qint32 RecipeTemplateDbDAO::defaultServing() const
 {
-	return data<qint32>("defaulServing");
+	return data<qint32>("defaultServing");
 }
 
 void RecipeTemplateDbDAO::setDefaultServing(qint32 q)

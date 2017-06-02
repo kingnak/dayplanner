@@ -20,6 +20,8 @@ public:
 	virtual bool removeIngredient(qint32 ingredientId);
 
 	virtual QList<RecipeTemplateDAO *> loadRecipeTemplates();
+	virtual RecipeTemplateDAO *loadRecipeTemplate(qint32 templateId);
+	virtual RecipeTemplateDAO *createRecipeTemplate();
 
 	virtual IngredientListDAO *createIngredientList();
 	virtual IngredientListItemDAO *createIngredientListItem(qint32 listId);

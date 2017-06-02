@@ -6,7 +6,10 @@ IngRecUniformModel::IngRecUniformModel(RecipeTemplateList *recTempl, IngredientL
 	: m_recTempl(recTempl),
 	  m_ingr(ingr)
 {
-
+	connect(m_ingr, &IngredientList::modelAboutToBeReset, this, &IngRecUniformModel::beginResetModel);
+	connect(m_ingr, &IngredientList::modelReset, this, &IngRecUniformModel::endResetModel);
+	connect(m_recTempl, &RecipeTemplateList::modelAboutToBeReset, this, &IngRecUniformModel::beginResetModel);
+	connect(m_recTempl, &RecipeTemplateList::modelReset, this, &IngRecUniformModel::endResetModel);
 }
 
 QVariant IngRecUniformModel::data(const QModelIndex &index, int role) const

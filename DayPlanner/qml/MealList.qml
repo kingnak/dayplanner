@@ -76,8 +76,10 @@ ListView {
 			onExistingItemSelected: {
 				if (item.objectType === UniformRecipeIngredientModel.Ingredient)
 					_data.createMealForIngredient(item.itemId);
-				else if (item.objectType === UniformRecipeIngredientModel.Recipe)
-					console.log("Selected Recipe " + item.itemId); // TODO
+				else if (item.objectType === UniformRecipeIngredientModel.Recipe) {
+					var rec = recipeTemplateModel.instantiateTemplate(item.itemId);
+					if (rec) _data.createMealForRecipe(rec);
+				}
 				root.positionViewAtEnd();
 			}
 			onNewItemSelected: {

@@ -31,6 +31,20 @@ IngredientItemList *IngredientItemList::loadList(QObject *parent, DAOFacade *fac
 	return ret;
 }
 
+void IngredientItemList::copyInto(IngredientItemList *other)
+{
+	Q_ASSERT(this != other);
+
+	for (auto i : m_data) {
+		other->m_data.append(i->copyInto(other->id()));
+	}
+}
+
+qint32 IngredientItemList::id() const
+{
+	return m_id;
+}
+
 QQmlListProperty<IngredientListItem> IngredientItemList::items()
 {
 	return QQmlListProperty<IngredientListItem> (this, nullptr, &IngredientItemList::countFunc, &IngredientItemList::atFunc);

@@ -86,7 +86,7 @@ void IngredientList::clearIngredientCache()
 void IngredientList::removeIngredient(qint32 id)
 {
 	globalDAOFacade()->removeIngredient(id);
-	IngredientNotifier::instance()->ingredientsChanged();
+	IngredientNotifier::instance()->notifyChanges();
 }
 
 QObject *IngredientList::stats()

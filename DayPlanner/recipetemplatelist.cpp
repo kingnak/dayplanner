@@ -1,9 +1,13 @@
 #include "recipetemplatelist.h"
 #include "dao/recipetemplatedao.h"
 #include "dao/dao.h"
+#include "dao/recipedao.h"
+#include "ingredientitemlist.h"
+#include "recipe.h"
 
 RecipeTemplateList::RecipeTemplateList()
 {
+	connect(RecipeTemplateNotifier::instance(), &RecipeTemplateNotifier::recipeTemplatesChanged, this, &RecipeTemplateList::load);
 	load();
 }
 
@@ -48,6 +52,35 @@ int RecipeTemplateList::rowCount(const QModelIndex &parent) const
 	if (parent.isValid())
 		return 0;
 	return m_data.count();
+}
+
+qint32 RecipeTemplateList::instantiateTemplate(qint32 templateId)
+{
+	QScopedPointer<RecipeTemplateDAO> tmpl(globalDAOFacade()->loadRecipeTemplate(templateId));
+	if (tmpl->state() != DAOBase::Existing) {
+		return DAOBase::NoItemIndex;
+	}
+
+	QScopedPointer<IngredientItemList> ingOrig(IngredientItemList::loadList(nullptr, globalDAOFacade(), tmpl->ingredientListId()));
+	QScopedPointer<RecipeDAO> rec(globalDAOFacade()->createRecipe());
+	QScopedPointer<IngredientItemList> ingCopy(IngredientItemList::loadList(nullptr, globalDAOFacade(), rec->ingredientListId()));
+	ingOrig->copyInto(ingCopy.data());
+
+	rec->setName(tmpl->name());
+	rec->setNote(tmpl->note());
+	rec->setUrl(tmpl->url());
+	rec->setFat(tmpl->fat());
+	rec->setProtein(tmpl->protein());
+	rec->setCarbs(tmpl->carbs());
+	rec->setCalories(tmpl->calories());
+	rec->setDefaultServing(tmpl->defaultServing());
+	rec->setReferenceServing(tmpl->referenceServing());
+
+	rec->setTemplateId(tmpl->id());
+	if (rec->save()) {
+		return rec->id();
+	}
+	return DAOBase::NoItemIndex;
 }
 
 QHash<int, QByteArray> RecipeTemplateList::roleNames() const

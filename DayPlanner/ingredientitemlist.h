@@ -25,7 +25,9 @@ public:
 	~IngredientItemList();
 
 	static IngredientItemList *loadList(QObject *parent, DAOFacade *facade, qint32 id);
+	void copyInto(IngredientItemList *other);
 
+	qint32 id() const;
 	QQmlListProperty<IngredientListItem> items();
 
 	QList<IngredientListItem *> ingredients();

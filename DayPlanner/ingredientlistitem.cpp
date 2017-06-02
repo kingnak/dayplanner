@@ -1,4 +1,5 @@
 #include "ingredientlistitem.h"
+#include "dao/dao.h"
 
 IngredientListItem::IngredientListItem(QObject *parent)
 	: QObject(parent),
@@ -20,6 +21,19 @@ IngredientListItem::~IngredientListItem()
 	delete m_item;
 }
 
+IngredientListItem *IngredientListItem::copyInto(qint32 listId, bool save)
+{
+	IngredientListItemDAO *ret = globalDAOFacade()->createIngredientListItem(listId);
+	ret->setName(m_item->name());
+	ret->setFat(m_item->fat());
+	ret->setCarbs(m_item->carbs());
+	ret->setProtein(m_item->protein());
+	ret->setCalories(m_item->calories());
+	ret->setQuantity(m_item->quantity());
+	ret->setIngredientId(m_item->ingredientId());
+	if (save) ret->save();
+	return new IngredientListItem(ret);
+}
 
 bool IngredientListItem::erase()
 {

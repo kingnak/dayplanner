@@ -119,7 +119,7 @@ void Ingredient::setCalories(qreal c)
 bool Ingredient::save()
 {
 	if (m_ingredient->save()) {
-		IngredientNotifier::instance()->ingredientsChanged();
+		IngredientNotifier::instance()->notifyChanges();
 		return true;
 	}
 	return false;

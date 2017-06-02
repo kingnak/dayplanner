@@ -6,6 +6,8 @@
 #include <QList>
 
 class RecipeTemplateDAO;
+class RecipeDAO;
+class Recipe;
 
 class RecipeTemplateList : public QAbstractListModel
 {
@@ -16,6 +18,8 @@ public:
 
 	QVariant data(const QModelIndex &index, int role) const;
 	int rowCount(const QModelIndex &parent) const;
+
+	Q_INVOKABLE qint32 instantiateTemplate(qint32 templateId);
 
 	QHash<int, QByteArray> roleNames() const;
 	enum {
@@ -37,6 +41,28 @@ private:
 
 private:
 	QList<RecipeTemplateDAO*> m_data;
+};
+
+class RecipeTemplateNotifier : public QObject
+{
+	Q_OBJECT
+
+private:
+	RecipeTemplateNotifier() : QObject(nullptr) {}
+
+public:
+	static RecipeTemplateNotifier *instance() {
+		static RecipeTemplateNotifier inst_;
+		return &inst_;
+	}
+
+public slots:
+	void notifyChanges() {
+		emit recipeTemplatesChanged();
+	}
+
+signals:
+	void recipeTemplatesChanged();
 };
 
 #endif // RECIPETEMPLATELIST_H

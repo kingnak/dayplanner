@@ -27,6 +27,7 @@ class Recipe : public QObject
 	Q_PROPERTY(qint32 displayServings READ displayServings WRITE setDisplayServings NOTIFY displayServingsChanged)
 	Q_PROPERTY(bool nutritionValuesOverridden READ nutritionValuesOverridden WRITE setNutritionValuesOverridden NOTIFY nutritionValuesOverriddenChanged)
 	Q_PROPERTY(Meal* writeBackMeal READ writeBackMeal WRITE setWriteBackMeal NOTIFY writeBackMealChanged)
+	Q_PROPERTY(bool isConnectedToTemplate READ isConnectedToTemplate NOTIFY isConnectedToTemplateChanged)
 
 public:
 	explicit Recipe(QObject *parent = 0);
@@ -38,6 +39,7 @@ public:
 
 	Q_INVOKABLE void adjustForServings(qint32 servings);
 	Q_INVOKABLE void deleteLater() { QObject::deleteLater(); }
+	Q_INVOKABLE bool saveAsTemplate();
 
 	qint32 id() const;
 
@@ -53,6 +55,7 @@ public:
 	qreal calories() const;
 	bool nutritionValuesOverridden() const;
 	Meal *writeBackMeal() const;
+	bool isConnectedToTemplate() const;
 
 	qreal multiplicator() const;
 
@@ -95,6 +98,7 @@ signals:
 	void multiplicatorChanged();
 	void writeBackMealChanged();
 	void nutritionValuesOverriddenChanged();
+	void isConnectedToTemplateChanged();
 
 private:
 	void updateItemSums();

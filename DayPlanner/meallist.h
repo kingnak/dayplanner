@@ -9,6 +9,7 @@
 
 class DAOFacade;
 class IngredientDAO;
+class RecipeDAO;
 
 class MealList : public QObject
 {
@@ -33,6 +34,7 @@ public:
 
     Q_INVOKABLE void createMeal(const QString &name);
     Q_INVOKABLE void createMealForIngredient(qint32 ingredientId);
+	Q_INVOKABLE void createMealForRecipe(qint32 recipeId);
     Q_INVOKABLE void removeMeal(qint32 idx);
 	Q_INVOKABLE bool createIngredientFromMeal(qint32 idx);
 	Q_INVOKABLE bool createRecipeFromMeal(qint32 idx);
@@ -67,6 +69,7 @@ private:
 	Q_DECLARE_FLAGS(UpdateFields, UpdateField)
 
 	void updateMealFromIngredient(MealDAO *m, IngredientDAO *r, UpdateFields fields = UpdateField::All);
+	void updateMealFromRecipe(MealDAO *m, RecipeDAO *r, UpdateFields fields = UpdateField::All);
 	bool tryConnectMealToIngredientByName(Meal *m, UpdateFields fields = UpdateField::All);
 
 private:

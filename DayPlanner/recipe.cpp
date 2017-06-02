@@ -1,5 +1,6 @@
 #include "recipe.h"
 #include "dao/dao.h"
+#include "recipetemplatelist.h"
 #include "meal.h"
 
 class RecipeDAOWrapper
@@ -120,6 +121,36 @@ void Recipe::adjustForServings(qint32 servings)
 	setDisplayServings(servings);
 }
 
+bool Recipe::saveAsTemplate()
+{
+	if (m_recipe->isTempate()) return false;
+	if (isConnectedToTemplate()) return false;
+
+	QScopedPointer<IngredientItemList> ingOrig(IngredientItemList::loadList(nullptr, globalDAOFacade(), m_recipe->ingredientListId()));
+	QScopedPointer<RecipeTemplateDAO> tmpl(globalDAOFacade()->createRecipeTemplate());
+	QScopedPointer<IngredientItemList> ingCopy(IngredientItemList::loadList(nullptr, globalDAOFacade(), tmpl->ingredientListId()));
+	ingOrig->copyInto(ingCopy.data());
+
+	tmpl->setName(m_recipe->name());
+	tmpl->setNote(m_recipe->note());
+	tmpl->setUrl(m_recipe->url());
+	tmpl->setFat(m_recipe->fat());
+	tmpl->setProtein(m_recipe->protein());
+	tmpl->setCarbs(m_recipe->carbs());
+	tmpl->setCalories(m_recipe->calories());
+	tmpl->setDefaultServing(m_recipe->defaultServing());
+	tmpl->setReferenceServing(m_recipe->referenceServing());
+
+	if (tmpl->save()) {
+		m_recipe->setTemplateId(tmpl->id());
+		m_recipe->save();
+		emit isConnectedToTemplateChanged();
+		RecipeTemplateNotifier::instance()->notifyChanges();
+		return true;
+	}
+	return false;
+}
+
 qint32 Recipe::id() const
 {
 	return m_recipe->id();
@@ -188,6 +219,12 @@ bool Recipe::nutritionValuesOverridden() const
 Meal *Recipe::writeBackMeal() const
 {
 	return m_writeBack;
+}
+
+bool Recipe::isConnectedToTemplate() const
+{
+	if (m_recipe->isTempate()) return false;
+	return m_recipe->templateId() != DAOBase::NoItemIndex;
 }
 
 void Recipe::setName(const QString &n)

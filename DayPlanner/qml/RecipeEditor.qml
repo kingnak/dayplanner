@@ -16,7 +16,7 @@ BorderedContainer {
 		anchors.fill: parent
 
 		Component.onCompleted: {
-			_data.writeBackMeal = writeBackMeal;
+			if (!_data.isTemplate) _data.writeBackMeal = writeBackMeal;
 		}
 		Component.onDestruction: {
 			_data.writeBackMeal = null;
@@ -35,6 +35,13 @@ BorderedContainer {
 				style: PlaceholderTextEditStyle { }
 				width: 200
 				onEditingFinished: _data.name = text
+			}
+			Button {
+				visible: !_data.isTempalte && !_data.isConnectedToTemplate
+				text: "Als Vorlage speichern"
+				onClicked: {
+					_data.saveAsTemplate();
+				}
 			}
 		}
 

@@ -79,7 +79,34 @@ void MealList::createMealForIngredient(qint32 ingredientId)
 		connectSignals(md);
         emit itemsChanged();
 		notifySumsChanged();
-    }
+	}
+}
+
+void MealList::createMealForRecipe(qint32 recipeId)
+{
+	if (recipeId < 0) {
+		return;
+	}
+
+	QScopedPointer<MealDAO> m(m_facade->createMeal(m_date, m_type));
+	if (!m) {
+		return;
+	}
+
+	QScopedPointer<RecipeDAO> r(m_facade->loadRecipe(recipeId));
+	if (!r || r->state() == DAOBase::State::New) {
+		return;
+	}
+
+	updateMealFromRecipe(m.data(), r.data());
+
+	if (m->save()) {
+		Meal *md = new Meal(m.take(), this);
+		m_data.append(md);
+		connectSignals(md);
+		emit itemsChanged();
+		notifySumsChanged();
+	}
 }
 
 void MealList::removeMeal(qint32 idx)
@@ -234,6 +261,20 @@ void MealList::updateMealFromIngredient(MealDAO *m, IngredientDAO *r, UpdateFiel
 	if (fields.testFlag(UpdateField::Id)) m->setIngredientId(r->id());
 	if (fields.testFlag(UpdateField::Values)) {
 		qint32 f = r->referenceQuantity() == 0 ? 1 : r->referenceQuantity();
+		m->setFat(r->fat() / f);
+		m->setProtein(r->protein() / f);
+		m->setCarbs(r->carbs() / f);
+		m->setCalories(r->calories() / f);
+	}
+}
+
+void MealList::updateMealFromRecipe(MealDAO *m, RecipeDAO *r, UpdateFields fields)
+{
+	if (fields.testFlag(UpdateField::Name)) m->setName(r->name());
+	if (fields.testFlag(UpdateField::Quantity)) m->setQuantity(r->defaultServing());
+	if (fields.testFlag(UpdateField::Id)) m->setRecipeId(r->id());
+	if (fields.testFlag(UpdateField::Values)) {
+		qint32 f = r->referenceServing() == 0 ? 1 : r->referenceServing();
 		m->setFat(r->fat() / f);
 		m->setProtein(r->protein() / f);
 		m->setCarbs(r->carbs() / f);
