@@ -16,10 +16,10 @@ BorderedContainer {
 			editor.ingredient.name = txtName.text;
 			editor.ingredient.referenceQuantity = txtQuantity.text;
 			editor.ingredient.defaultQuantity = txtDefQuantity.text;
-			editor.ingredient.fat = txtFat.text;
-			editor.ingredient.protein = txtProtein.text;
-			editor.ingredient.carbs = txtCarbs.text;
-			editor.ingredient.calories = txtCalories.text;
+			editor.ingredient.fat = txtFat.value;
+			editor.ingredient.protein = txtProtein.value;
+			editor.ingredient.carbs = txtCarbs.value;
+			editor.ingredient.calories = txtCalories.value;
 		}
 
 		columns: 2
@@ -33,13 +33,13 @@ BorderedContainer {
 		Label { text: "Standard Menge" }
 		IntegerField { text: editor.ingredient.defaultQuantity; id: txtDefQuantity; }
 		Label { text: "Fett" }
-		DoubleField { text: editor.ingredient.fat; id: txtFat; }
-		Label { text: "Eiweiß" }
-		DoubleField { text: editor.ingredient.protein; id: txtProtein; }
+		DoubleField { value: editor.ingredient.fat; id: txtFat; onDoubleFinished: editor.ingredient.fat = val; onDoubleError: value = editor.ingredient.fat; }
 		Label { text: "Kohlenhydrate" }
-		DoubleField { text: editor.ingredient.carbs; id: txtCarbs; }
+		DoubleField { value: editor.ingredient.carbs; id: txtCarbs; onDoubleFinished: editor.ingredient.carbs = val; onDoubleError: value = editor.ingredient.carbs; }
+		Label { text: "Eiweiß" }
+		DoubleField { value: editor.ingredient.protein; id: txtProtein; onDoubleFinished: editor.ingredient.protein = val; onDoubleError: value = editor.ingredient.protein; }
 		Label { text: "Kalorien" }
-		DoubleField { text: editor.ingredient.calories; id: txtCalories; }
+		DoubleField { value: editor.ingredient.calories; id: txtCalories; onDoubleFinished: editor.ingredient.calories = val; onDoubleError: value = editor.ingredient.calories; }
 		Column {
 			Button {
 				text: "Zurück"
