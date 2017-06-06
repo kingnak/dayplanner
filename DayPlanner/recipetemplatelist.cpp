@@ -103,7 +103,9 @@ bool RecipeTemplateList::removeTemplateById(qint32 templateId)
 
 Recipe *RecipeTemplateList::createTemplate()
 {
-	return new Recipe(globalDAOFacade()->createRecipeTemplate(), this);
+	Recipe * r = new Recipe(globalDAOFacade()->createRecipeTemplate(), this);
+	if (r) r->setServings(1);
+	return r;
 }
 
 QHash<int, QByteArray> RecipeTemplateList::roleNames() const
