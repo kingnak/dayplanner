@@ -41,7 +41,8 @@ ListView {
 				width: parent.width
 
 				ToolButton {
-					text: "X"
+					iconSource: "qrc:///icons/delete"
+					tooltip: "Löschen"
 					onClicked: _data.removeWorkout(index)
 					style: SmallButtonStyle {}
 				}
@@ -51,6 +52,7 @@ ListView {
 					Layout.fillWidth: true
 					text: name
 					font: baseStyle.editorFont
+					onEditingFinished: name = text
 					style: PlaceholderTextEditStyle {
 						showHovered: row.hovered
 					}
@@ -60,6 +62,7 @@ ListView {
 					id: txtInfo
 					Layout.fillWidth: true
 					text: info
+					onEditingFinished: info = text
 					font: baseStyle.editorFont
 					style: PlaceholderTextEditStyle {
 						showHovered: row.hovered
