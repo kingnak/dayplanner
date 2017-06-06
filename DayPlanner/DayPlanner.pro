@@ -88,6 +88,8 @@ DISTFILES += \
     qml/IntegerField.qml \
     qml/RecipeEditor.qml \
     qml/BorderedContainer.qml \
+    qml/RecipeTemplateFilter.qml \
+    qml/RecipeTemplateList.qml \
     resources.rc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model

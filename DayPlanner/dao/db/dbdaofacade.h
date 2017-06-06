@@ -22,6 +22,7 @@ public:
 	virtual QList<RecipeTemplateDAO *> loadRecipeTemplates();
 	virtual RecipeTemplateDAO *loadRecipeTemplate(qint32 templateId);
 	virtual RecipeTemplateDAO *createRecipeTemplate();
+	virtual bool removeRecipeTemplate(qint32 recipeTemplateId);
 
 	virtual IngredientListDAO *createIngredientList();
 	virtual IngredientListItemDAO *createIngredientListItem(qint32 listId);

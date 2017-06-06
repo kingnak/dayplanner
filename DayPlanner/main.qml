@@ -30,12 +30,31 @@ ApplicationWindow {
 			ToolButton {
 				id: gotoIngredients
 				style: SmallButtonStyle{}
-				iconSource: "qrc:///icons/ingredients"
+				implicitWidth: 24; implicitHeight: 24
+				Image {
+					source: "qrc:///icons/ingredient"
+					anchors.fill: parent
+				}
+
 				onClicked: {
 					stack.push(ingredientEditorStackView);
-					gotoCalendar.enabled = true;
 					gotoCalendar.visible = true;
-					gotoIngredients.enabled = false;
+					gotoTemplates.visible = false;
+					gotoIngredients.visible = false;
+				}
+			}
+			ToolButton {
+				id: gotoTemplates
+				style: SmallButtonStyle{}
+				implicitWidth: 24; implicitHeight: 24
+				Image {
+					source: "qrc:///icons/recipe"
+					anchors.fill: parent
+				}
+				onClicked: {
+					stack.push(templateEditorStackView);
+					gotoCalendar.visible = true;
+					gotoTemplates.visible = false;
 					gotoIngredients.visible = false;
 				}
 			}
@@ -43,13 +62,11 @@ ApplicationWindow {
 				id: gotoCalendar
 				style: SmallButtonStyle{square:false}
 				text: "< zurück"
-				enabled: false
 				visible: false
 				onClicked: {
 					stack.pop();
-					gotoCalendar.enabled = false;
 					gotoCalendar.visible = false;
-					gotoIngredients.enabled = true;
+					gotoTemplates.visible = true;
 					gotoIngredients.visible = true;
 				}
 			}
@@ -116,6 +133,17 @@ ApplicationWindow {
 		ColumnLayout {
 			IngredientList {
 				_data: ingredientModel
+				Layout.fillHeight: true
+				Layout.fillWidth: true
+			}
+		}
+	}
+
+	Component {
+		id: templateEditorStackView
+		ColumnLayout {
+			RecipeTemplateList {
+				_data: recipeTemplateModel
 				Layout.fillHeight: true
 				Layout.fillWidth: true
 			}

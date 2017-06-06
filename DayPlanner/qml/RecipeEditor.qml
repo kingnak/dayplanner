@@ -9,8 +9,11 @@ BorderedContainer {
 	property int recipeId
 	property var _data: recipeModel.loadRecipeById(recipeId)
 	property bool dispose: false
+	property bool popOnBack: true
 
-	onBack: stack.pop()
+	signal close()
+
+	onBack: if (popOnBack) { stack.pop() } else { close(); }
 
 	ColumnLayout {
 		anchors.fill: parent
@@ -37,7 +40,7 @@ BorderedContainer {
 				onEditingFinished: _data.name = text
 			}
 			Button {
-				visible: !_data.isTempalte && !_data.isConnectedToTemplate
+				visible: !_data.isTemplate && !_data.isConnectedToTemplate
 				text: "Als Vorlage speichern"
 				onClicked: {
 					_data.saveAsTemplate();

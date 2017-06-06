@@ -20,6 +20,9 @@ public:
 	int rowCount(const QModelIndex &parent) const;
 
 	Q_INVOKABLE qint32 instantiateTemplate(qint32 templateId);
+	Q_INVOKABLE Recipe *loadTemplateById(qint32 templateId);
+	Q_INVOKABLE bool removeTemplateById(qint32 templateId);
+	Q_INVOKABLE Recipe *createTemplate();
 
 	QHash<int, QByteArray> roleNames() const;
 	enum {

@@ -212,6 +212,20 @@ bool DbDAOFacade::removeRecipe(qint32 recipeId)
 	return r->remove();
 }
 
+bool DbDAOFacade::removeRecipeTemplate(qint32 recipeTemplateId)
+{
+	QScopedPointer<RecipeTemplateDAO> r(loadRecipeTemplate(recipeTemplateId));
+	if (!r || r->state() != DAOBase::State::Existing) {
+		return false;
+	}
+
+	removeIngredientList(r->ingredientListId());
+	QString query = QString("UPDATE Recipe SET TemplateId = 0 WHERE TemplateId = %1").arg(recipeTemplateId);
+	DataBase::instance().executeNonQuery(query);
+
+	return r->remove();
+}
+
 bool DbDAOFacade::removeIngredientList(qint32 ingredientListId)
 {
 	QScopedPointer<IngredientListDAO> l(new IngredientListDbDAO(ingredientListId, &DataBase::instance()));

@@ -10,7 +10,7 @@ public:
 	inline RecipeDAOWrapper(RecipeTemplateDAO *r) : m_r(nullptr), m_t(r) {}
 	inline ~RecipeDAOWrapper() { delete m_t; delete m_r; }
 
-	inline bool isTempate() const { return m_t != nullptr; }
+	inline bool isTemplate() const { return m_t != nullptr; }
 	inline qint32 id() const { return m_t ? m_t->id() : m_r->id(); }
 	inline QString name() const { return m_t ? m_t->name() : m_r->name(); }
 	inline void setName(const QString &n) { if (m_t) m_t->setName(n); else m_r->setName(n); }
@@ -47,7 +47,8 @@ Recipe::Recipe(QObject *parent)
 	: QObject(parent),
 	  m_recipe(nullptr),
 	  m_items(nullptr),
-	  m_dispServings(1)
+	  m_dispServings(1),
+	  m_writeBack(nullptr)
 {
 	Q_ASSERT(false);
 }
@@ -56,7 +57,8 @@ Recipe::Recipe(RecipeDAO *recipe, QObject *parent)
 	: QObject(parent),
 	  m_recipe(new RecipeDAOWrapper(recipe)),
 	  m_items(nullptr),
-	  m_dispServings(1)
+	  m_dispServings(1),
+	  m_writeBack(nullptr)
 {
 	init();
 }
@@ -65,7 +67,8 @@ Recipe::Recipe(RecipeTemplateDAO *recipe, QObject *parent)
 	: QObject(parent),
 	  m_recipe(new RecipeDAOWrapper(recipe)),
 	  m_items(nullptr),
-	  m_dispServings(1)
+	  m_dispServings(1),
+	  m_writeBack(nullptr)
 {
 	init();
 }
@@ -123,7 +126,7 @@ void Recipe::adjustForServings(qint32 servings)
 
 bool Recipe::saveAsTemplate()
 {
-	if (m_recipe->isTempate()) return false;
+	if (m_recipe->isTemplate()) return false;
 	if (isConnectedToTemplate()) return false;
 
 	QScopedPointer<IngredientItemList> ingOrig(IngredientItemList::loadList(nullptr, globalDAOFacade(), m_recipe->ingredientListId()));
@@ -158,7 +161,7 @@ qint32 Recipe::id() const
 
 bool Recipe::isTemplate() const
 {
-	return m_recipe->isTempate();
+	return m_recipe->isTemplate();
 }
 
 IngredientItemList *Recipe::items() const
@@ -223,7 +226,7 @@ Meal *Recipe::writeBackMeal() const
 
 bool Recipe::isConnectedToTemplate() const
 {
-	if (m_recipe->isTempate()) return false;
+	if (m_recipe->isTemplate()) return false;
 	return m_recipe->templateId() != DAOBase::NoItemIndex;
 }
 
@@ -233,6 +236,7 @@ void Recipe::setName(const QString &n)
 		m_recipe->setName(n);
 		if (m_recipe->save()) {
 			if (m_writeBack) m_writeBack->setName(n);
+			if (m_recipe->isTemplate()) RecipeTemplateNotifier::instance()->notifyChanges();
 			emit nameChanged();
 		}
 	}
@@ -379,7 +383,7 @@ void Recipe::setNutritionValuesOverridden(bool o)
 
 void Recipe::setWriteBackMeal(Meal *m)
 {
-	if (m_recipe->isTempate()) return;
+	if (m_recipe->isTemplate()) return;
 
 	if (m != m_writeBack) {
 		m_writeBack = m;

@@ -83,6 +83,29 @@ qint32 RecipeTemplateList::instantiateTemplate(qint32 templateId)
 	return DAOBase::NoItemIndex;
 }
 
+Recipe *RecipeTemplateList::loadTemplateById(qint32 templateId)
+{
+	RecipeTemplateDAO *r = globalDAOFacade()->loadRecipeTemplate(templateId);
+	if (r && r->state() == DAOBase::Existing) {
+		return new Recipe(r, this);
+	}
+	return nullptr;
+}
+
+bool RecipeTemplateList::removeTemplateById(qint32 templateId)
+{
+	if (globalDAOFacade()->removeRecipeTemplate(templateId)) {
+		RecipeTemplateNotifier::instance()->notifyChanges();
+		return true;
+	}
+	return false;
+}
+
+Recipe *RecipeTemplateList::createTemplate()
+{
+	return new Recipe(globalDAOFacade()->createRecipeTemplate(), this);
+}
+
 QHash<int, QByteArray> RecipeTemplateList::roleNames() const
 {
 	QHash<int, QByteArray> ret;
