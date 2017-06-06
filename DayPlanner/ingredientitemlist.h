@@ -77,7 +77,7 @@ private:
 	qint32 m_id;
 	QList<IngredientListItem *> m_data;
 	DAOFacade *m_facade;
-	qint32 m_mult;
+	qreal m_mult;
 };
 
 #endif // INGREDIENTITEMLIST_H
