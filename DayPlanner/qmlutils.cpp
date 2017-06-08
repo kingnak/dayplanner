@@ -1,4 +1,5 @@
 #include "qmlutils.h"
+#include "nutritionmath.h"
 
 QmlUtils::QmlUtils()
 	: m_locale(QLocale())
@@ -38,4 +39,9 @@ QString QmlUtils::formatInt(qint32 n)
 qint32 QmlUtils::parseInt(const QString &n)
 {
 	return m_locale.toInt(n);
+}
+
+qreal QmlUtils::scaldemanRatio(qreal fat, qreal carbs, qreal protein)
+{
+	return NutritionMath::scaldemanRatio(fat, carbs, protein);
 }

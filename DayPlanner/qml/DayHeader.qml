@@ -78,6 +78,12 @@ Rectangle {
 			Row {
 				spacing: 2
 				id: txt
+				Rectangle { width: 2; color: "transparent"; height: 1  }
+				Text {
+					text: baseStyle.formatSummary(utils.formatDouble(utils.scaldemanRatio(dayData.sumFat, dayData.sumCarbs, dayData.sumProtein)), "$", ", ")
+					font: baseStyle.summaryFont
+					textFormat: Text.RichText
+				}
 				Text {
 					//text: "F: " + utils.formatDouble(dayData.sumFat) + ", "
 					text: baseStyle.formatSummary(utils.formatDouble(dayData.sumFat), "F", ", ");

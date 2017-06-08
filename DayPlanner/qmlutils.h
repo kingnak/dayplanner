@@ -16,6 +16,8 @@ public:
 	Q_INVOKABLE QString formatInt(qint32 n);
 	Q_INVOKABLE qint32 parseInt(const QString &n);
 
+	Q_INVOKABLE qreal scaldemanRatio(qreal fat, qreal carbs, qreal protein);
+
 
 private:
 	QLocale m_locale;

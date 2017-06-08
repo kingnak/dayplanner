@@ -45,6 +45,11 @@ Item {
 			}
 			Text {
 				font: baseStyle.defaultFont
+				text: "$ " + utils.formatDouble(utils.scaldemanRatio(itemData.sumFat, itemData.sumCarbs, itemData.sumProtein));
+				Layout.minimumWidth: 40 + metrics.boundingRect("$").width
+			}
+			Text {
+				font: baseStyle.defaultFont
 				text: "\u03A3 " + utils.formatDouble(itemData.sumFat);
 				Layout.minimumWidth: 40 + metrics.boundingRect("F").width
 			}

@@ -55,7 +55,8 @@ SOURCES += main.cpp \
     dao/db/ingredientlistdbdao.cpp \
     dao/recipedao.cpp \
     dao/db/recipedbdao.cpp \
-    recipe.cpp
+    recipe.cpp \
+    nutritionmath.cpp
 
 RESOURCES += qml.qrc
 
@@ -143,6 +144,7 @@ HEADERS += \
     dao/recipedao.h \
     dao/db/recipedbdao.h \
     recipe.h \
-    version.h
+    version.h \
+    nutritionmath.h
 
 RC_FILE = resources.rc
