@@ -2,6 +2,7 @@ import QtQuick 2.5
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.4
 import QtQuick.Controls.Styles 1.4
+import QtQuick.Dialogs 1.2
 import "styles"
 
 BorderedContainer {
@@ -40,8 +41,27 @@ BorderedContainer {
 				onEditingFinished: _data.name = text
 			}
 			Button {
+				text: "Kopieren"
+				style: SmallButtonStyle{square: false; borderAlwaysVisible:true}
+				onClicked: {
+					if (!_data.copyToClipboard()) {
+						showError("Fehler beim Kopieren");
+					}
+				}
+			}
+			Button {
+				text: "Importieren"
+				style: SmallButtonStyle{square: false; borderAlwaysVisible:true}
+				onClicked: {
+					if (!_data.pasteFromClipboard()) {
+						showError("Fehler beim Importieren.\nSind die Daten im richtigen Format?");
+					}
+				}
+			}
+			Button {
 				visible: !_data.isTemplate && !_data.isConnectedToTemplate
 				text: "Als Vorlage speichern"
+				style: SmallButtonStyle{square: false; borderAlwaysVisible:true}
 				onClicked: {
 					_data.saveAsTemplate();
 				}
@@ -158,5 +178,15 @@ BorderedContainer {
 
 		}
 
+	}
+
+	function showError(txt) {
+		errorMsg.text = txt;
+		errorMsg.open();
+	}
+
+	MessageDialog {
+		id: errorMsg
+		standardButtons: StandardButton.Ok
 	}
 }

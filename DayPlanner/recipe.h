@@ -40,6 +40,8 @@ public:
 	Q_INVOKABLE void adjustForServings(qint32 servings);
 	Q_INVOKABLE void deleteLater() { QObject::deleteLater(); }
 	Q_INVOKABLE bool saveAsTemplate();
+	Q_INVOKABLE bool copyToClipboard();
+	Q_INVOKABLE bool pasteFromClipboard();
 
 	qint32 id() const;
 

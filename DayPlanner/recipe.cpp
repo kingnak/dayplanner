@@ -2,6 +2,9 @@
 #include "dao/dao.h"
 #include "recipetemplatelist.h"
 #include "meal.h"
+#include <QTextStream>
+#include <QClipboard>
+#include <QGuiApplication>
 
 class RecipeDAOWrapper
 {
@@ -132,7 +135,7 @@ bool Recipe::saveAsTemplate()
 	QScopedPointer<IngredientItemList> ingOrig(IngredientItemList::loadList(nullptr, globalDAOFacade(), m_recipe->ingredientListId()));
 	QScopedPointer<RecipeTemplateDAO> tmpl(globalDAOFacade()->createRecipeTemplate());
 	QScopedPointer<IngredientItemList> ingCopy(IngredientItemList::loadList(nullptr, globalDAOFacade(), tmpl->ingredientListId()));
-	ingOrig->copyInto(ingCopy.data());
+	ingOrig->copyInto(ingCopy.data(), true);
 
 	tmpl->setName(m_recipe->name());
 	tmpl->setNote(m_recipe->note());
@@ -151,6 +154,77 @@ bool Recipe::saveAsTemplate()
 		RecipeTemplateNotifier::instance()->notifyChanges();
 		return true;
 	}
+	return false;
+}
+
+bool Recipe::copyToClipboard()
+{
+	QString s;
+	{
+		QTextStream ts(&s);
+		ts.setCodec("utf-8");
+		ts << name() << ';' << servings();
+		if (nutritionValuesOverridden()) {
+			ts << ";1;" << m_recipe->fat() << ';' << m_recipe->carbs() << ';' << m_recipe->protein() << ';' << m_recipe->calories() << '\n';
+		} else {
+			ts << ";0\n";
+		}
+
+		m_items->toText(ts);
+	}
+	QGuiApplication::clipboard()->setText(s);
+	return true;
+}
+
+bool Recipe::pasteFromClipboard()
+{
+	QString s = QGuiApplication::clipboard()->text().trimmed();
+	if (s.isEmpty()) return false;
+
+	QStringList lines = s.split('\n');
+	QString header = lines.takeAt(0);
+
+	QStringList headerParts = header.split(';');
+	if (headerParts.length() < 2) return false;
+
+	bool ok;
+	qint32 serv = headerParts[1].toInt(&ok);
+	if (!ok || serv < 1) return false;
+
+	bool overridden = headerParts.length() > 2 ? headerParts[2].toInt(&ok) != 0 : false;
+	if (!ok) return false;
+
+	QString n = headerParts[0];
+
+	s = lines.join("\n");
+
+	if (m_items->fromText(s)) {
+		m_recipe->setName(n);
+		m_recipe->setReferenceServing(serv);
+		m_recipe->setDefaultServing(serv);
+		setDisplayServings(1);
+		m_recipe->setNutritionValuesOverridden(overridden);
+		if (overridden) {
+			overrideFat(headerParts.value(3).toDouble());
+			overrideCarbs(headerParts.value(4).toDouble());
+			overrideProtein(headerParts.value(5).toDouble());
+			overrideCalories(headerParts.value(6).toDouble());
+		} else {
+			updateFatFromSum();
+			updateCarbsFromSum();
+			updateProteinFromSum();
+			updateCaloriesFromSum();
+		}
+		m_recipe->save();
+		emit itemsChanged();
+		emit nameChanged();
+		emit servingsChanged();
+		emit nutritionValuesOverriddenChanged();
+		setDisplayServings(serv);
+		updateItemMultiplicators();
+		return true;
+	}
+
 	return false;
 }
 

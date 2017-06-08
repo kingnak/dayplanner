@@ -64,7 +64,7 @@ qint32 RecipeTemplateList::instantiateTemplate(qint32 templateId)
 	QScopedPointer<IngredientItemList> ingOrig(IngredientItemList::loadList(nullptr, globalDAOFacade(), tmpl->ingredientListId()));
 	QScopedPointer<RecipeDAO> rec(globalDAOFacade()->createRecipe());
 	QScopedPointer<IngredientItemList> ingCopy(IngredientItemList::loadList(nullptr, globalDAOFacade(), rec->ingredientListId()));
-	ingOrig->copyInto(ingCopy.data());
+	ingOrig->copyInto(ingCopy.data(), true);
 
 	rec->setName(tmpl->name());
 	rec->setNote(tmpl->note());

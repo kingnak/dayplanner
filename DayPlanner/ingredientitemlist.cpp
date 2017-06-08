@@ -2,6 +2,7 @@
 #include "dao/dao.h"
 #include "dao/ingredientdao.h"
 #include "ingredientlist.h"
+#include <QTextStream>
 
 IngredientItemList::IngredientItemList(QObject *parent)
 	: QObject(parent),
@@ -31,13 +32,83 @@ IngredientItemList *IngredientItemList::loadList(QObject *parent, DAOFacade *fac
 	return ret;
 }
 
-void IngredientItemList::copyInto(IngredientItemList *other)
+void IngredientItemList::copyInto(IngredientItemList *other, bool save)
 {
 	Q_ASSERT(this != other);
 
 	for (auto i : m_data) {
-		other->m_data.append(i->copyInto(other->id()));
+		other->m_data.append(i->copyInto(other->id(), save));
 	}
+}
+
+QString IngredientItemList::toText() const
+{
+	QString ret;
+	{
+		QTextStream ts(&ret);
+		ts.setCodec("utf-8");
+		toText(ts);
+	}
+	return ret;
+}
+
+void IngredientItemList::toText(QTextStream &ts) const
+{
+	for (IngredientListItem *i : m_data) {
+		ts << i->name() << ';' << i->quantity() << ';' << i->fat() << ';' << i->carbs() << ';' << i->protein() << ';' << i->calories() << '\n';
+	}
+}
+
+bool IngredientItemList::fromText(const QString &text)
+{
+	bool success = true;
+	QList<IngredientListItem *> items;
+
+	do {
+		QStringList lines = text.trimmed().split('\n');
+		for (QString l : lines) {
+			l = l.trimmed();
+			if (l.isEmpty()) continue;
+
+			QStringList parts = l.split(';');
+			if (parts.length() < 2) {
+				success = false;
+				break;
+			}
+
+			auto item = m_facade->createIngredientListItem(m_id);
+			item->setName(parts[0]);
+			IngredientListItem *ili = new IngredientListItem(item, this);
+			tryConnectItemToIngredientByName(ili, UpdateField::None);
+
+			bool ok;
+			item->setQuantity(parts[1].toInt(&ok));
+			item->setFat(parts.value(2).toDouble());
+			item->setCarbs(parts.value(3).toDouble());
+			item->setProtein(parts.value(4).toDouble());
+			item->setCalories(parts.value(5).toDouble());
+
+			items << ili;
+			m_data.append(ili);
+			if (!ok) {
+				success = false;
+				break;
+			}
+			if (!item->save()) {
+				success = false;
+				break;
+			}
+		}
+	} while (false);
+
+	if (!success) {
+		for (auto i : items) {
+			this->removeItem(m_data.indexOf(i));
+		}
+		qDeleteAll(items);
+	}
+
+	return success;
 }
 
 qint32 IngredientItemList::id() const

@@ -7,6 +7,7 @@
 
 class DAOFacade;
 class IngredientDAO;
+class QTextStream;
 
 class IngredientItemList : public QObject
 {
@@ -25,7 +26,12 @@ public:
 	~IngredientItemList();
 
 	static IngredientItemList *loadList(QObject *parent, DAOFacade *facade, qint32 id);
-	void copyInto(IngredientItemList *other);
+	void copyInto(IngredientItemList *other, bool save);
+
+	QString toText() const;
+	void toText(QTextStream &ts) const;
+
+	bool fromText(const QString &text);
 
 	qint32 id() const;
 	QQmlListProperty<IngredientListItem> items();
@@ -62,6 +68,7 @@ private:
 	void notifySumsChanged();
 
 	enum UpdateField {
+		None = 0x00,
 		Name = 0x01,
 		Id = 0x02,
 		Quantity = 0x04,
