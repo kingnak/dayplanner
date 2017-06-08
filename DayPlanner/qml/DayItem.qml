@@ -72,8 +72,8 @@ ColumnLayout {
 
 	function __toggleCollapsed(except, collapsed) {
 		if (except != breakfast) { breakfast.showCollapsed = collapsed; breakfast.showExpanded = false; }
-		if (except != lunch) { lunch.showCollapsed = collapsed; breakfast.showExpanded = false; }
-		if (except != dinner){ dinner.showCollapsed = collapsed; breakfast.showExpanded = false; }
-		if (except != snack) { snack.showCollapsed = collapsed; breakfast.showExpanded = false; }
+		if (except != lunch) { lunch.showCollapsed = collapsed; lunch.showExpanded = false; }
+		if (except != dinner){ dinner.showCollapsed = collapsed; dinner.showExpanded = false; }
+		if (except != snack) { snack.showCollapsed = collapsed; snack.showExpanded = false; }
 	}
 }
