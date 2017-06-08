@@ -12,6 +12,7 @@ ColumnLayout {
 		dayData: _data
 		anchors.left: parent.left
 		anchors.right: parent.right
+		showSeparator: false
 	}
 
 	MealList {
@@ -53,27 +54,26 @@ ColumnLayout {
 	WorkoutList {
 		id: workouts
 		Layout.fillWidth: true
-		Layout.fillHeight: true
+		Layout.fillHeight: false
 		_data: root._data.workout
 		popupAbove: true
 	}
 
 	function doExpand(which) {
-		__toggleVisible(which, false);
+		__toggleCollapsed(which, true);
 		which.showExpanded = true;
+		which.showCollapsed = false;
 	}
 
 	function doCollapse(which) {
 		which.showExpanded = false;
-		__toggleVisible(null, true);
+		__toggleCollapsed(null, false);
 	}
 
-	function __toggleVisible(except, vis) {
-		if (except != breakfast) breakfast.visible = vis;
-		if (except != lunch) lunch.visible = vis;
-		if (except != dinner) dinner.visible = vis;
-		if (except != snack) snack.visible = vis;
-		workouts.visible = vis;
-
+	function __toggleCollapsed(except, collapsed) {
+		if (except != breakfast) { breakfast.showCollapsed = collapsed; breakfast.showExpanded = false; }
+		if (except != lunch) { lunch.showCollapsed = collapsed; breakfast.showExpanded = false; }
+		if (except != dinner){ dinner.showCollapsed = collapsed; breakfast.showExpanded = false; }
+		if (except != snack) { snack.showCollapsed = collapsed; breakfast.showExpanded = false; }
 	}
 }

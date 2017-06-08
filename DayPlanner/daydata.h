@@ -27,6 +27,7 @@ class DayData : public QObject
 	Q_PROPERTY(qreal sumProtein READ sumProtein NOTIFY sumsChanged)
 	Q_PROPERTY(qreal sumCarbs READ sumCarbs NOTIFY sumsChanged)
 	Q_PROPERTY(qreal sumCalories READ sumCalories NOTIFY sumsChanged)
+	Q_PROPERTY(bool hasData READ hasDisplayData NOTIFY sumsChanged)
 
 public:
     explicit DayData(const QDate &d, DAOFacade *facade, QObject *parent = 0);
@@ -47,6 +48,8 @@ public:
 	qreal sumProtein() const;
 	qreal sumCarbs() const;
 	qreal sumCalories() const;
+
+	bool hasDisplayData() const;
 
 signals:
     void shiftIndexChanged(int idx);

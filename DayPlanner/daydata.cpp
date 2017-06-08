@@ -111,3 +111,11 @@ qreal DayData::sumCalories() const
 	}
 	return s;
 }
+
+bool DayData::hasDisplayData() const
+{
+	for (MealList *m : m_meals) {
+		if (!m->isEmpty()) return true;
+	}
+	return false;
+}

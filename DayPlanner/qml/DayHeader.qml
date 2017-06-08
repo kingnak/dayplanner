@@ -6,6 +6,7 @@ import "styles"
 Rectangle {
 	property var dayData
 	property bool highlight: false
+	property bool showSeparator: true
 
 	height: cols.height
 	color: baseStyle.shiftColor(shiftsModel.shiftList[dayData.shiftIndex])
@@ -74,7 +75,7 @@ Rectangle {
 			anchors.right: parent.right
 			height: txt.height
 			clip: true
-			opacity: (dayData.sumFat > 0 || dayData.sumProtein > 0 || dayData.sumCarbs > 0 || dayData.sumCalories > 0 || dayData.workout.count > 0) ? 1 : 0
+			opacity: dayData.hasData ? 1 : 0
 			Row {
 				spacing: 2
 				id: txt
@@ -120,6 +121,13 @@ Rectangle {
 					textFormat: Text.RichText
 				}
 			}
+		}
+
+		Rectangle {
+			color: baseStyle.separatorColor
+			visible: showSeparator
+			height: 2
+			Layout.fillWidth: true
 		}
 	}
 }

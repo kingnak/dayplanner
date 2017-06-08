@@ -7,27 +7,45 @@ import SortFilterProxyModel 0.2
 import org.kingnak.dayplanner 1.0
 import "styles"
 
-ListView {
+ColumnLayout {
     id: root
-    clip: true
 	implicitHeight: 100
+	spacing: 0
 
     property var _data
 	property bool popupAbove: false
 	property bool expandable: true
 	property bool showExpanded: false
+	property bool showCollapsed: false
 
 	signal requestExpand()
 	signal requestCollapse()
 
-    model: _data.items
+	IngredientEditorHeader {
+		backgroundColor: baseStyle.mealColor(_data.type)
+		title: utils.mealName(_data.type)
+		itemData: _data
+		expandable: root.expandable
+		showExpanded: root.showExpanded
+		onRequestExpand: root.requestExpand()
+		onRequestCollapse: root.requestCollapse()
+		Layout.fillWidth: true
+	}
 
-    delegate: mealItem
+	ListView {
+		id: list
+		clip: true
+		implicitHeight: 100
+		Layout.fillHeight: true
+		Layout.fillWidth: true
+		model: _data.items
+		visible: !showCollapsed
 
-    header: headerBanner
-    headerPositioning: ListView.OverlayHeader
-	footer: footerEditor
-	footerPositioning: _data.isEmpty ? ListView.InlineFooter : ListView.OverlayFooter
+		delegate: mealItem
+
+		footer: footerEditor
+		footerPositioning: _data.isEmpty ? ListView.InlineFooter : ListView.OverlayFooter
+	}
 
     Component {
         id: mealItem
@@ -81,27 +99,14 @@ ListView {
 					var rec = recipeTemplateModel.instantiateTemplate(item.itemId);
 					if (rec) _data.createMealForRecipe(rec);
 				}
-				root.positionViewAtEnd();
+				list.positionViewAtEnd();
 			}
 			onNewItemSelected: {
 				_data.createMeal(name);
-				root.positionViewAtEnd();
+				list.positionViewAtEnd();
 			}
 		}
     }
-
-    Component {
-		id: headerBanner
-		IngredientEditorHeader {
-			backgroundColor: baseStyle.mealColor(_data.type)
-			title: utils.mealName(_data.type)
-			itemData: _data
-			expandable: root.expandable
-			showExpanded: root.showExpanded
-			onRequestExpand: root.requestExpand()
-			onRequestCollapse: root.requestCollapse()
-		}
-	}
 
 	Component {
 		id: recipeEditor

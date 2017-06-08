@@ -44,6 +44,7 @@ QtObject {
 	property color ingredientHeaderColor: "#FFE57F"
 
 	property color controlBorderColor: "#60000000"
+	property color separatorColor: "#20000000"
 
 	property font headerFont: Qt.font({
 		weight: Font.Bold,
@@ -63,11 +64,11 @@ QtObject {
 	})
 	property font summaryFont: Qt.font({
 		weight: Font.Normal,
-		pointSize: 9
+		pointSize: 10
 	})
 
 	function formatSummary(value, type, postfix) {
-		var ret = value + '&nbsp;<span style="color:\'#80000000\';font-size:8pt;">'+type+postfix+'</span>';
+		var ret = value + '&nbsp;<span style="color:\'#A0000000\';font-size:8pt;">'+type+postfix+'</span>';
 		return ret;
 	}
 }

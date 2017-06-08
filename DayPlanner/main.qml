@@ -102,6 +102,7 @@ ApplicationWindow {
         Calendar {
             onVisibleMonthChanged: dayModel.clearCache(new Date(calendar.visibleYear, calendar.visibleMonth, 1))
             style: CalendarStyle {
+				gridColor: baseStyle.separatorColor
 				dayDelegate: DaySummary {
 					highlight: styleData.today
                     _data: dayModel.dataForDate(styleData.date)
