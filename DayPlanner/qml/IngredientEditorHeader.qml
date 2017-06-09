@@ -21,6 +21,29 @@ Item {
 	height: rect.height
 	z: 2
 
+	MouseArea {
+		anchors.fill: parent
+		acceptedButtons: Qt.RightButton
+		onClicked: {
+			itemData.updateCanImport();
+			importMenu.popup()
+		}
+	}
+
+	Menu {
+		id: importMenu
+		MenuItem {
+			text: "Als Rezept importieren"
+			onTriggered: itemData.importAsRecipe();
+			enabled: itemData.canImport
+		}
+		MenuItem {
+			text: "Als Zutaten importieren"
+			onTriggered: itemData.importAsIngredients();
+			enabled: itemData.canImport
+		}
+	}
+
 	Rectangle {
 		id: rect
 		width: parent.width

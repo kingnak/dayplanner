@@ -6,6 +6,7 @@
 #include "ingredientitemlist.h"
 #include "ingredientlistitem.h"
 #include "dao/recipedao.h"
+#include "recipe.h"
 
 #include <QGuiApplication>
 #include <QClipboard>
@@ -302,6 +303,52 @@ bool MealList::recipeToIngredients(qint32 recipeIdx)
 	return true;
 }
 
+bool MealList::importAsRecipe()
+{
+	QScopedPointer<RecipeDAO> r(m_facade->createRecipe());
+	if (!r->save()) return false;
+
+	QScopedPointer<Recipe> rec(new Recipe(r.take(), this));
+	if (!rec->pasteFromClipboard()) {
+		m_facade->removeRecipe(r->id());
+		return false;
+	}
+
+	createMealForRecipe(rec->id());
+	return true;
+}
+
+bool MealList::importAsIngredients()
+{
+	ImportExportHelper::Header header;
+	QList<ImportExportHelper::Item> itms;
+	if (!ImportExportHelper::importData(QGuiApplication::clipboard()->text(), header, itms)) return false;
+
+	for (auto i : itms) {
+		MealDAO *m = m_facade->createMeal(m_date, m_type);
+		m->setName(i.name);
+		m->setQuantity(i.quantity);
+		m->setFat(i.fat);
+		m->setCarbs(i.carbs);
+		m->setProtein(i.protein);
+		m->setCalories(i.calories);
+
+		if (m->save()) {
+			Meal *md = new Meal(m, this);
+			tryConnectMealToIngredientByName(md, UpdateField::None);
+			m_data.append(md);
+			connectSignals(md);
+		} else {
+			delete m;
+		}
+	}
+
+	emit itemsChanged();
+	notifySumsChanged();
+
+	return true;
+}
+
 QString MealList::processSelection(QList<Meal*> &sels, QList<int> &idxs, qint32 nameIdx, bool clear)
 {
 	QString name;
@@ -372,6 +419,19 @@ bool MealList::selectionEmpty() const
 		if (i->isSelected()) return false;
 	}
 	return true;
+}
+
+bool MealList::canImport(bool recheck)
+{
+	static bool s_canImport = ImportExportHelper::canImport(QGuiApplication::clipboard()->text());
+	if (recheck) {
+		bool newVal = ImportExportHelper::canImport(QGuiApplication::clipboard()->text());
+		if (newVal != s_canImport) {
+			s_canImport = newVal;
+			emit canImportChanged();
+		}
+	}
+	return s_canImport;
 }
 
 Meal *MealList::atFunc(QQmlListProperty<Meal> *p, int i)

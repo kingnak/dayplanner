@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QQmlListProperty>
+#include "importexporthelper.h"
 #include "ingredientlistitem.h"
 
 class DAOFacade;
@@ -33,7 +34,7 @@ public:
 	QString toText() const;
 	void toText(QTextStream &ts) const;
 
-	bool fromText(const QString &text);
+	bool appendFromImport(QList<ImportExportHelper::Item> items);
 
 	qint32 id() const;
 	QQmlListProperty<IngredientListItem> items();

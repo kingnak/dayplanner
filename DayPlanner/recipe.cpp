@@ -2,6 +2,7 @@
 #include "dao/dao.h"
 #include "recipetemplatelist.h"
 #include "meal.h"
+#include "importexporthelper.h"
 #include <QTextStream>
 #include <QClipboard>
 #include <QGuiApplication>
@@ -41,6 +42,9 @@ public:
 	inline void setTemplateId(qint32 id) { if (m_t) ; else m_r->setTemplateId(id); }
 
 	inline bool save() { return m_t ? m_t->save() : m_r->save(); }
+
+	inline RecipeDAO *recipe() { return m_r; }
+	inline RecipeTemplateDAO *recipeTemplate() { return m_t; }
 private:
 	RecipeDAO *m_r;
 	RecipeTemplateDAO *m_t;
@@ -178,54 +182,43 @@ bool Recipe::copyToClipboard()
 
 bool Recipe::pasteFromClipboard()
 {
+	if (m_recipe->isTemplate()) return false;
+
 	QString s = QGuiApplication::clipboard()->text().trimmed();
-	if (s.isEmpty()) return false;
+	if (!ImportExportHelper::canImport(s)) return false;
 
-	QStringList lines = s.split('\n');
-	QString header = lines.takeAt(0);
+	ImportExportHelper::Header h;
+	QList<ImportExportHelper::Item> itms;
+	if (!ImportExportHelper::importData(s, h, itms)) return false;
 
-	QStringList headerParts = header.split(';');
-	if (headerParts.length() < 2) return false;
+	if (!m_items->appendFromImport(itms)) return false;
 
-	bool ok;
-	qint32 serv = headerParts[1].toInt(&ok);
-	if (!ok || serv < 1) return false;
+	m_recipe->setName(h.name);
+	m_recipe->setReferenceServing(h.servings);
+	m_recipe->setDefaultServing(h.servings);
+	m_recipe->setNutritionValuesOverridden(h.isOverridden);
 
-	bool overridden = headerParts.length() > 2 ? headerParts[2].toInt(&ok) != 0 : false;
-	if (!ok) return false;
-
-	QString n = headerParts[0];
-
-	s = lines.join("\n");
-
-	if (m_items->fromText(s)) {
-		m_recipe->setName(n);
-		m_recipe->setReferenceServing(serv);
-		m_recipe->setDefaultServing(serv);
-		setDisplayServings(1);
-		m_recipe->setNutritionValuesOverridden(overridden);
-		if (overridden) {
-			overrideFat(headerParts.value(3).toDouble());
-			overrideCarbs(headerParts.value(4).toDouble());
-			overrideProtein(headerParts.value(5).toDouble());
-			overrideCalories(headerParts.value(6).toDouble());
-		} else {
-			updateFatFromSum();
-			updateCarbsFromSum();
-			updateProteinFromSum();
-			updateCaloriesFromSum();
-		}
-		m_recipe->save();
-		emit itemsChanged();
-		emit nameChanged();
-		emit servingsChanged();
-		emit nutritionValuesOverriddenChanged();
-		setDisplayServings(serv);
-		updateItemMultiplicators();
-		return true;
+	setDisplayServings(1);
+	if (h.isOverridden) {
+		overrideFat(h.fat);
+		overrideCarbs(h.carbs);
+		overrideProtein(h.protein);
+		overrideCalories(h.calories);
+	} else {
+		updateFatFromSum();
+		updateCarbsFromSum();
+		updateProteinFromSum();
+		updateCaloriesFromSum();
 	}
 
-	return false;
+	m_recipe->save();
+	emit itemsChanged();
+	emit nameChanged();
+	emit servingsChanged();
+	emit nutritionValuesOverriddenChanged();
+	setDisplayServings(h.servings);
+	updateItemMultiplicators();
+	return true;
 }
 
 qint32 Recipe::id() const

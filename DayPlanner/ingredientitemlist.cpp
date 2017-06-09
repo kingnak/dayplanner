@@ -60,56 +60,26 @@ void IngredientItemList::toText(QTextStream &ts) const
 	}
 }
 
-bool IngredientItemList::fromText(const QString &text)
+bool IngredientItemList::appendFromImport(QList<ImportExportHelper::Item> items)
 {
-	bool success = true;
-	QList<IngredientListItem *> items;
+	for (auto i : items) {
+		auto item = m_facade->createIngredientListItem(m_id);
+		item->setName(i.name);
+		auto ili = new IngredientListItem(item, this);
 
-	do {
-		QStringList lines = text.trimmed().split('\n');
-		for (QString l : lines) {
-			l = l.trimmed();
-			if (l.isEmpty()) continue;
+		tryConnectItemToIngredientByName(ili, UpdateField::None);
 
-			QStringList parts = l.split(';');
-			if (parts.length() < 2) {
-				success = false;
-				break;
-			}
+		item->setQuantity(i.quantity);
+		item->setFat(i.fat);
+		item->setCarbs(i.carbs);
+		item->setProtein(i.protein);
+		item->setCalories(i.calories);
 
-			auto item = m_facade->createIngredientListItem(m_id);
-			item->setName(parts[0]);
-			IngredientListItem *ili = new IngredientListItem(item, this);
-			tryConnectItemToIngredientByName(ili, UpdateField::None);
-
-			bool ok;
-			item->setQuantity(parts[1].toInt(&ok));
-			item->setFat(parts.value(2).toDouble());
-			item->setCarbs(parts.value(3).toDouble());
-			item->setProtein(parts.value(4).toDouble());
-			item->setCalories(parts.value(5).toDouble());
-
-			items << ili;
-			m_data.append(ili);
-			if (!ok) {
-				success = false;
-				break;
-			}
-			if (!item->save()) {
-				success = false;
-				break;
-			}
-		}
-	} while (false);
-
-	if (!success) {
-		for (auto i : items) {
-			this->removeItem(m_data.indexOf(i));
-		}
-		qDeleteAll(items);
+		m_data.append(ili);
+		item->save();
 	}
 
-	return success;
+	return true;
 }
 
 qint32 IngredientItemList::id() const

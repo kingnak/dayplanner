@@ -24,6 +24,7 @@ class MealList : public QObject
 	Q_PROPERTY(qreal sumCalories READ sumCalories NOTIFY sumCaloriesChanged)
 	Q_PROPERTY(bool isEmpty READ isEmpty NOTIFY itemsChanged)
 	Q_PROPERTY(bool selectionEmpty READ selectionEmpty NOTIFY selectionEmptyChanged)
+	Q_PROPERTY(bool canImport READ canImport NOTIFY canImportChanged)
 
 public:
 	explicit MealList(QObject *parent = nullptr);
@@ -47,6 +48,8 @@ public:
 	Q_INVOKABLE bool selectionToRecipe(qint32 nameIdx = -1);
 	Q_INVOKABLE bool copySelection(qint32 nameIdx = -1);
 	Q_INVOKABLE bool recipeToIngredients(qint32 recipeIdx);
+	Q_INVOKABLE bool importAsRecipe();
+	Q_INVOKABLE bool importAsIngredients();
 
 	qreal sumFat() const;
 	qreal sumProtein() const;
@@ -56,6 +59,11 @@ public:
 	bool isEmpty() const;
 	bool selectionEmpty() const;
 
+	bool canImport(bool recheck = false);
+	Q_INVOKABLE void updateCanImport() {
+		canImport(true);
+	}
+
 signals:
     void itemsChanged();
     void neverNotify();
@@ -64,6 +72,7 @@ signals:
 	void sumCarbsChanged();
 	void sumCaloriesChanged();
 	void selectionEmptyChanged();
+	void canImportChanged();
 
 private:
     static Meal *atFunc(QQmlListProperty<Meal> *p, int i);
@@ -71,6 +80,7 @@ private:
 	void connectSignals(Meal *m);
 	void notifySumsChanged();
 	enum UpdateField {
+		None = 0x00,
 		Name = 0x01,
 		Id = 0x02,
 		Quantity = 0x04,
