@@ -50,6 +50,8 @@ copy /Y "%QT5SRC%\qml\QtQuick.2\plugins.qmltypes" "%QT5DEST%\QtQuick.2\"
 copy /Y "%QT5SRC%\qml\QtQuick.2\qmldir" "%QT5DEST%\QtQuick.2\"
 copy /Y "%QT5SRC%\qml\QtQuick.2\qtquick2plugin.dll" "%QT5DEST%\QtQuick.2\"
 
+xcopy /E /C /Y /I /Q "%QT5SRC%\qml\QtGraphicalEffects" "%QT5DEST%\QtGraphicalEffects"
+
 :Exit
 popd
 
