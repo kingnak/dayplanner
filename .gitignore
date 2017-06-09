@@ -2,3 +2,5 @@
 *.user
 
 *.db
+
+build/setup/*.exe
