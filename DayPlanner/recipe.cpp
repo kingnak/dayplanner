@@ -173,7 +173,7 @@ bool Recipe::updateTemplate()
 	if (tmpl->save()) {
 		m_recipe->setTemplateId(tmpl->id());
 		m_recipe->save();
-		emit isConnectedToTemplateChanged();
+		emit templateIdChanged();
 		RecipeTemplateNotifier::instance()->notifyChanges();
 		return true;
 	}
@@ -250,6 +250,12 @@ bool Recipe::isTemplate() const
 	return m_recipe->isTemplate();
 }
 
+qint32 Recipe::templateId() const
+{
+	if (m_recipe->isTemplate()) return DAOBase::NoItemIndex;
+	return m_recipe->templateId();
+}
+
 IngredientItemList *Recipe::items() const
 {
 	return m_items;
@@ -312,8 +318,7 @@ Meal *Recipe::writeBackMeal() const
 
 bool Recipe::isConnectedToTemplate() const
 {
-	if (m_recipe->isTemplate()) return false;
-	return m_recipe->templateId() != DAOBase::NoItemIndex;
+	return templateId() != DAOBase::NoItemIndex;
 }
 
 void Recipe::setName(const QString &n)

@@ -123,6 +123,15 @@ ColumnLayout {
 	Component {
 		id: recipeEditor
 		RecipeEditor {
+			onOpenTemplate: {
+				stack.push({item: templateEditor, properties: {_data: recipeTemplateModel.loadTemplateById(id), dispose:true} })
+			}
+		}
+	}
+
+	Component {
+		id: templateEditor
+		RecipeEditor {
 
 		}
 	}

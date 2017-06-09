@@ -6,12 +6,14 @@ import QtQuick.Dialogs 1.2
 import "styles"
 
 BorderedContainer {
+	id: root
 	property var writeBackMeal
 	property int recipeId
 	property var _data: recipeModel.loadRecipeById(recipeId)
 	property bool dispose: false
 	property bool popOnBack: true
 
+	signal openTemplate(int id)
 	signal close()
 
 	onBack: if (popOnBack) { stack.pop() } else { close(); }
@@ -72,6 +74,14 @@ BorderedContainer {
 				style: SmallButtonStyle{square: false; borderAlwaysVisible:true}
 				onClicked: {
 					_data.updateTemplate();
+				}
+			}
+			Button {
+				visible: !_data.isTemplate && _data.isConnectedToTemplate
+				text: "Vorlage öffnen"
+				style: SmallButtonStyle{square: false; borderAlwaysVisible:true}
+				onClicked: {
+					root.openTemplate(_data.templateId)
 				}
 			}
 		}
@@ -180,7 +190,7 @@ BorderedContainer {
 				id: headerBanner
 				IngredientEditorHeader {
 					hasImportMenu: false
-					backgroundColor: baseStyle.ingredientHeaderColor
+					backgroundColor: _data.isTemplate ? baseStyle.templateHeaderColor : baseStyle.ingredientHeaderColor
 					title: "Zutaten"
 					itemData: _data.items
 				}

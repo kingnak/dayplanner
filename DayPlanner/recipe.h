@@ -27,7 +27,8 @@ class Recipe : public QObject
 	Q_PROPERTY(qint32 displayServings READ displayServings WRITE setDisplayServings NOTIFY displayServingsChanged)
 	Q_PROPERTY(bool nutritionValuesOverridden READ nutritionValuesOverridden WRITE setNutritionValuesOverridden NOTIFY nutritionValuesOverriddenChanged)
 	Q_PROPERTY(Meal* writeBackMeal READ writeBackMeal WRITE setWriteBackMeal NOTIFY writeBackMealChanged)
-	Q_PROPERTY(bool isConnectedToTemplate READ isConnectedToTemplate NOTIFY isConnectedToTemplateChanged)
+	Q_PROPERTY(bool isConnectedToTemplate READ isConnectedToTemplate NOTIFY templateIdChanged)
+	Q_PROPERTY(qint32 templateId READ templateId NOTIFY templateIdChanged)
 
 public:
 	explicit Recipe(QObject *parent = 0);
@@ -47,6 +48,7 @@ public:
 	qint32 id() const;
 
 	bool isTemplate() const;
+	qint32 templateId() const;
 	IngredientItemList *items() const;
 	QString name() const;
 	qint32 servings() const;
@@ -101,7 +103,7 @@ signals:
 	void multiplicatorChanged();
 	void writeBackMealChanged();
 	void nutritionValuesOverriddenChanged();
-	void isConnectedToTemplateChanged();
+	void templateIdChanged();
 
 private:
 	void updateItemSums();
