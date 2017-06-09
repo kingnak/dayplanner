@@ -109,7 +109,7 @@ TextField {
 					Text { id:txt; text: popup.modelRole === '' ? modelData : model[popup.modelRole]; }
 				}
             }
-            highlight: Rectangle { color: "#c0c0c0"}
+			highlight: Rectangle { color: baseStyle.itemSelectionColor }
         }
 
         Rectangle {

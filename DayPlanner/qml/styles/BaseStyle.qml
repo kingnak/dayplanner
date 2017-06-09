@@ -42,10 +42,12 @@ QtObject {
 	property color trainingFontColor: "#FFFFFF"
 	property color todayHighlightColor: "#FF7F7F"
 	property color ingredientHeaderColor: "#FFE57F"
+	property color templateHeaderColor: "#81D4FA"
 
 	property color controlBorderColor: "#60000000"
 	property color separatorColor: "#20000000"
 	property color itemSelectionColor: "#C0C0C0"
+	property color disabledColor: "#808080"
 
 	property font headerFont: Qt.font({
 		weight: Font.Bold,

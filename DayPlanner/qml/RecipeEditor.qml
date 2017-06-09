@@ -43,8 +43,9 @@ BorderedContainer {
 				onEditingFinished: _data.name = text
 			}
 			Button {
-				text: "Kopieren"
-				style: SmallButtonStyle{square: false; borderAlwaysVisible:true}
+				tooltip: "Kopieren"
+				iconSource: "qrc:///icons/copy"
+				style: SmallButtonStyle{ iconSize: 16; borderAlwaysVisible:true}
 				onClicked: {
 					if (!_data.copyToClipboard()) {
 						showError("Fehler beim Kopieren");
@@ -52,8 +53,9 @@ BorderedContainer {
 				}
 			}
 			Button {
-				text: "Importieren"
-				style: SmallButtonStyle{square: false; borderAlwaysVisible:true}
+				tooltip: "Importieren"
+				iconSource: "qrc:///icons/paste"
+				style: SmallButtonStyle{ iconSize: 16; borderAlwaysVisible:true}
 				onClicked: {
 					if (!_data.pasteFromClipboard()) {
 						showError("Fehler beim Importieren.\nSind die Daten im richtigen Format?");
