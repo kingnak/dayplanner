@@ -150,16 +150,19 @@ ColumnLayout {
 	}
 
 	Menu {
+		style: IconMenuStyle {}
 		id: selectionPopup
 		property int currentItemIndex: -1
 		MenuItem {
 			text: "Zu Rezept konvertieren"
+			iconSource: "qrc:///icons/recipe"
 			onTriggered: {
 				_data.selectionToRecipe(selectionPopup.currentItemIndex);
 			}
 		}
 		MenuItem {
 			text: "Als Rezept kopieren"
+			iconSource: "qrc:///icons/copy"
 			onTriggered: {
 				_data.copySelection(selectionPopup.currentItemIndex);
 			}
@@ -167,10 +170,12 @@ ColumnLayout {
 	}
 
 	Menu {
+		style: IconMenuStyle {}
 		id: recipePopup
 		property int recipeIndex: -1
 		MenuItem {
 			text: "In Zutaten auflösen"
+			iconSource: "qrc:///icons/ingredient"
 			onTriggered: {
 				_data.recipeToIngredients(recipePopup.recipeIndex)
 			}

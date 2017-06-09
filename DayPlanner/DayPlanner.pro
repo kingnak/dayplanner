@@ -92,7 +92,8 @@ DISTFILES += \
     qml/BorderedContainer.qml \
     qml/RecipeTemplateFilter.qml \
     qml/RecipeTemplateList.qml \
-    resources.rc
+    resources.rc \
+    qml/styles/IconMenuStyle.qml
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

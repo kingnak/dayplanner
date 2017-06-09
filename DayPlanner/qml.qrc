@@ -29,6 +29,7 @@
         <file>error.qml</file>
         <file>qml/RecipeTemplateFilter.qml</file>
         <file>qml/RecipeTemplateList.qml</file>
+        <file>qml/styles/IconMenuStyle.qml</file>
     </qresource>
     <qresource prefix="/icons">
         <file alias="delete">images/Action-cancel-icon.png</file>
@@ -46,5 +47,7 @@
         <file alias="ingredient">images/ingredient.png</file>
         <file>images/ingredient-2.png</file>
         <file alias="recipe">images/recipe.png</file>
+        <file alias="copy">images/copy_orig.png</file>
+        <file alias="paste">images/paste_orig.png</file>
     </qresource>
 </RCC>

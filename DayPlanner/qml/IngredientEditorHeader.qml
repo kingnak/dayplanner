@@ -34,18 +34,22 @@ Item {
 
 	Menu {
 		id: importMenu
+		style: IconMenuStyle {}
 		MenuItem {
 			text: "Als Rezept importieren"
+			iconSource: "qrc:///icons/recipe"
 			onTriggered: itemData.importAsRecipe();
 			enabled: hasImportMenu && itemData.canImport
 		}
 		MenuItem {
 			text: "Als Zutatenliste importieren"
+			iconSource: "qrc:///icons/paste"
 			onTriggered: itemData.importAsIngredientList();
 			enabled: hasImportMenu && itemData.canImport
 		}
 		MenuItem {
 			text: "Als einzelne Zutat importieren"
+			iconSource: "qrc:///icons/ingredient"
 			onTriggered: itemData.importAsSingleIngredient();
 			enabled: hasImportMenu && itemData.canImport
 		}
