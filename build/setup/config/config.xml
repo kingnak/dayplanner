@@ -8,4 +8,6 @@
     <TargetDir>C:/Program Files/DayPlanner</TargetDir> 
   <AllowSpaceInPath>true</AllowSpaceInPath> 
   <MaintenanceToolName>DayPlannerUninstaller</MaintenanceToolName> 
+	<InstallerWindowIcon>installericon</InstallerWindowIcon>
+	<InstallerApplicationIcon>installericon</InstallerApplicationIcon>
 </Installer>
