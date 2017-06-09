@@ -49,7 +49,8 @@ public:
 	Q_INVOKABLE bool copySelection(qint32 nameIdx = -1);
 	Q_INVOKABLE bool recipeToIngredients(qint32 recipeIdx);
 	Q_INVOKABLE bool importAsRecipe();
-	Q_INVOKABLE bool importAsIngredients();
+	Q_INVOKABLE bool importAsIngredientList();
+	Q_INVOKABLE bool importAsSingleIngredient();
 
 	qreal sumFat() const;
 	qreal sumProtein() const;

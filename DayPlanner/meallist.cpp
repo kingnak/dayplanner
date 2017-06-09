@@ -318,7 +318,7 @@ bool MealList::importAsRecipe()
 	return true;
 }
 
-bool MealList::importAsIngredients()
+bool MealList::importAsIngredientList()
 {
 	ImportExportHelper::Header header;
 	QList<ImportExportHelper::Item> itms;
@@ -341,6 +341,48 @@ bool MealList::importAsIngredients()
 		} else {
 			delete m;
 		}
+	}
+
+	emit itemsChanged();
+	notifySumsChanged();
+
+	return true;
+}
+
+bool MealList::importAsSingleIngredient()
+{
+	ImportExportHelper::Header h;
+	QList<ImportExportHelper::Item> itms;
+	if (!ImportExportHelper::importData(QGuiApplication::clipboard()->text(), h, itms)) return false;
+
+	// Might be overriden, or summed values
+	// Just override the header's info if summed
+	if (h.servings < 1) h.servings = 1;
+	if (!h.isOverridden) {
+		h.fat = h.carbs = h.protein = h.calories = 0.;
+		for (auto i : itms) {
+			h.fat += i.fat * i.quantity / h.servings;
+			h.carbs += i.carbs * i.quantity / h.servings;
+			h.protein += i.protein * i.quantity / h.servings;
+			h.calories += i.calories * i.quantity / h.servings;
+		}
+	}
+
+	MealDAO *m = m_facade->createMeal(m_date, m_type);
+	m->setName(h.name);
+	m->setQuantity(1);
+	m->setFat(h.fat);
+	m->setCarbs(h.carbs);
+	m->setProtein(h.protein);
+	m->setCalories(h.calories);
+
+	if (m->save()) {
+		Meal *md = new Meal(m, this);
+		tryConnectMealToIngredientByName(md, UpdateField::None);
+		m_data.append(md);
+		connectSignals(md);
+	} else {
+		delete m;
 	}
 
 	emit itemsChanged();

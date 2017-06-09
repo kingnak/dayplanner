@@ -40,8 +40,13 @@ Item {
 			enabled: hasImportMenu && itemData.canImport
 		}
 		MenuItem {
-			text: "Als Zutaten importieren"
-			onTriggered: itemData.importAsIngredients();
+			text: "Als Zutatenliste importieren"
+			onTriggered: itemData.importAsIngredientList();
+			enabled: hasImportMenu && itemData.canImport
+		}
+		MenuItem {
+			text: "Als einzelne Zutat importieren"
+			onTriggered: itemData.importAsSingleIngredient();
 			enabled: hasImportMenu && itemData.canImport
 		}
 	}
