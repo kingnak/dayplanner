@@ -136,9 +136,28 @@ bool Recipe::saveAsTemplate()
 	if (m_recipe->isTemplate()) return false;
 	if (isConnectedToTemplate()) return false;
 
-	QScopedPointer<IngredientItemList> ingOrig(IngredientItemList::loadList(nullptr, globalDAOFacade(), m_recipe->ingredientListId()));
 	QScopedPointer<RecipeTemplateDAO> tmpl(globalDAOFacade()->createRecipeTemplate());
+	if (!tmpl->save()) return false;
+	m_recipe->setTemplateId(tmpl->id());
+	if (!m_recipe->save()) return false;
+
+	return updateTemplate();
+}
+
+bool Recipe::updateTemplate()
+{
+	if (m_recipe->isTemplate()) return false;
+	if (!isConnectedToTemplate()) return false;
+
+	QScopedPointer<IngredientItemList> ingOrig(IngredientItemList::loadList(nullptr, globalDAOFacade(), m_recipe->ingredientListId()));
+	QScopedPointer<RecipeTemplateDAO> tmpl(globalDAOFacade()->loadRecipeTemplate(m_recipe->templateId()));
 	QScopedPointer<IngredientItemList> ingCopy(IngredientItemList::loadList(nullptr, globalDAOFacade(), tmpl->ingredientListId()));
+
+	if (tmpl->state() != DAOBase::State::Existing) {
+		return false;
+	}
+
+	ingCopy->clear();
 	ingOrig->copyInto(ingCopy.data(), true);
 
 	tmpl->setName(m_recipe->name());

@@ -215,6 +215,18 @@ void IngredientItemList::removeItem(qint32 idx)
 	notifySumsChanged();
 }
 
+void IngredientItemList::clear()
+{
+	for (auto i : m_data) {
+		i->deleteLater();
+		i->disconnect();
+		i->erase();
+	}
+
+	emit itemsChanged();
+	notifySumsChanged();
+}
+
 qreal IngredientItemList::sumFat() const
 {
 	qreal sum = 0;

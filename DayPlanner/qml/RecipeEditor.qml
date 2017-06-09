@@ -66,6 +66,14 @@ BorderedContainer {
 					_data.saveAsTemplate();
 				}
 			}
+			Button {
+				visible: !_data.isTemplate && _data.isConnectedToTemplate
+				text: "Vorlage aktualisieren"
+				style: SmallButtonStyle{square: false; borderAlwaysVisible:true}
+				onClicked: {
+					_data.updateTemplate();
+				}
+			}
 		}
 
 		Row {
