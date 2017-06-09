@@ -1,6 +1,7 @@
 #include "ingredientitemlist.h"
 #include "dao/dao.h"
 #include "dao/ingredientdao.h"
+#include "dao/mealdao.h"
 #include "ingredientlist.h"
 #include <QTextStream>
 
@@ -209,6 +210,27 @@ bool IngredientItemList::createIngredientFromItem(qint32 idx)
 	return false;
 }
 
+void IngredientItemList::createItemFromMeal(const MealDAO *meal)
+{
+	if (!meal) return;
+
+	QScopedPointer<IngredientListItemDAO> m(m_facade->createIngredientListItem(m_id));
+	if (!m) {
+		return;
+	}
+
+	updateItemFromMeal(m.data(), meal);
+
+	if (m->save()) {
+		IngredientListItem *md = new IngredientListItem(m.take(), this);
+		m_data.append(md);
+		md->setMultiplicator(m_mult);
+		connectSignals(md);
+		emit itemsChanged();
+		notifySumsChanged();
+	}
+}
+
 void IngredientItemList::removeItem(qint32 idx)
 {
 	if (idx < 0 || idx >= m_data.count()) {
@@ -322,6 +344,20 @@ void IngredientItemList::updateItemFromIngredient(IngredientListItemDAO *il, Ing
 		il->setProtein(i->protein() / f);
 		il->setCarbs(i->carbs() / f);
 		il->setCalories(i->calories() / f);
+	}
+}
+
+void IngredientItemList::updateItemFromMeal(IngredientListItemDAO *il, const MealDAO *m, UpdateFields fields)
+{
+	if (fields.testFlag(UpdateField::Name)) il->setName(m->name());
+	if (fields.testFlag(UpdateField::Quantity)) il->setQuantity(m->quantity());
+	if (fields.testFlag(UpdateField::Id)) il->setIngredientId(m->ingredientId());
+	if (fields.testFlag(UpdateField::Values)) {
+		// These values are already scaled to 1, no need for quantity factor
+		il->setFat(m->fat());
+		il->setProtein(m->protein());
+		il->setCarbs(m->carbs());
+		il->setCalories(m->calories());
 	}
 }
 

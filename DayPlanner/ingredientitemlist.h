@@ -7,6 +7,8 @@
 
 class DAOFacade;
 class IngredientDAO;
+class MealDAO;
+
 class QTextStream;
 
 class IngredientItemList : public QObject
@@ -41,6 +43,7 @@ public:
 	Q_INVOKABLE void createItem(const QString &name);
 	Q_INVOKABLE void createItemForIngredient(qint32 ingredientId);
 	Q_INVOKABLE bool createIngredientFromItem(qint32 idx);
+	void createItemFromMeal(const MealDAO *meal);
 	Q_INVOKABLE void removeItem(qint32 idx);
 
 	qreal sumFat() const;
@@ -78,6 +81,7 @@ private:
 	Q_DECLARE_FLAGS(UpdateFields, UpdateField)
 
 	void updateItemFromIngredient(IngredientListItemDAO *il, IngredientDAO *i, UpdateFields fields = UpdateField::All);
+	void updateItemFromMeal(IngredientListItemDAO *il, const MealDAO *m, UpdateFields fields = UpdateField::All);
 	bool tryConnectItemToIngredientByName(IngredientListItem *i, UpdateFields fields = UpdateField::All);
 
 private:

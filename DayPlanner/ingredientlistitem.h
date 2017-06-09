@@ -30,6 +30,8 @@ public:
 
 	IngredientListItem *copyInto(qint32 listId, bool save = true);
 
+	const IngredientListItemDAO *data() const { return m_item; }
+
 	bool erase();
 
 	QString name() const;

@@ -5,14 +5,16 @@
 
 Meal::Meal(QObject *parent)
     : QObject(parent),
-      m_meal(nullptr)
+	  m_meal(nullptr),
+	  m_selected(false)
 {
     Q_ASSERT(false);
 }
 
 Meal::Meal(MealDAO *meal, QObject *parent)
     : QObject(parent),
-      m_meal(meal)
+	  m_meal(meal),
+	  m_selected(false)
 {
 }
 

@@ -45,6 +45,7 @@ QtObject {
 
 	property color controlBorderColor: "#60000000"
 	property color separatorColor: "#20000000"
+	property color itemSelectionColor: "#C0C0C0"
 
 	property font headerFont: Qt.font({
 		weight: Font.Bold,

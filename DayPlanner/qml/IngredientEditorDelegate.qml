@@ -18,10 +18,13 @@ Item {
 	property bool addButtonVisible: false
 	property bool editButtonEnabled: false
 	property bool editButtonVisible: false
+	property bool selectable: true
+	property bool menuAvailable: false
 
 	signal removeItem(int idx)
 	signal editItem(int idx)
 	signal addItem(int idx)
+	signal selectionMenu(int idx)
 
 	height: rect.height
 	width: parent.width
@@ -29,11 +32,21 @@ Item {
 		id: rect
 		width: parent.width
 		height: row.height
+		color: (selectable && selected) ? baseStyle.itemSelectionColor : "transparent"
 
 		MouseArea {
 			anchors.fill: parent
 			hoverEnabled: true
 			id: mouseArea
+			acceptedButtons: Qt.LeftButton | Qt.RightButton
+			onClicked: {
+				if (selectable && (mouse.button == Qt.LeftButton) && (mouse.modifiers & Qt.ControlModifier)) {
+					selected = !selected
+				}
+				if (mouse.button == Qt.RightButton && menuAvailable) {
+					root.selectionMenu(index)
+				}
+			}
 		}
 
 		RowLayout {

@@ -3,7 +3,12 @@
 #include "meal.h"
 #include "dao/ingredientdao.h"
 #include "ingredientlist.h"
+#include "ingredientitemlist.h"
+#include "ingredientlistitem.h"
 #include "dao/recipedao.h"
+
+#include <QGuiApplication>
+#include <QClipboard>
 #include <QtSql>
 
 MealList::MealList(QObject *parent)
@@ -187,6 +192,139 @@ bool MealList::createRecipeFromMeal(qint32 idx)
 	return false;
 }
 
+bool MealList::createIngredientFromListItem(const IngredientListItemDAO *item)
+{
+	if (!item) {
+		return false;
+	}
+
+	QScopedPointer<MealDAO> m(m_facade->createMeal(m_date, m_type));
+	if (!m) {
+		return false;
+	}
+
+	updateMealFromIngredientItem(m.data(), item);
+
+	if (m->save()) {
+		Meal *md = new Meal(m.take(), this);
+		m_data.append(md);
+		connectSignals(md);
+		emit itemsChanged();
+		notifySumsChanged();
+		return true;
+	}
+	return false;
+}
+
+void MealList::clearSelection()
+{
+	for (auto i : m_data) {
+		i->setSelected(false);
+	}
+}
+
+bool MealList::selectionToRecipe(qint32 nameIdx)
+{
+	QList<Meal *> sels;
+	QList<int> idxs;
+
+	QString name = "Rezept: " + processSelection(sels, idxs, nameIdx, true);
+
+	if (sels.empty()) return false;
+
+	QScopedPointer<RecipeDAO> r(m_facade->createRecipe());
+	r->setName("Rezept: " + name);
+	QScopedPointer<IngredientItemList> lst(IngredientItemList::loadList(this, m_facade, r->ingredientListId()));
+
+	for (auto m : sels) {
+		lst->createItemFromMeal(m->data());
+	}
+
+	r->setReferenceServing(1);
+	r->setDefaultServing(1);
+	r->setFat(lst->sumFat());
+	r->setProtein(lst->sumProtein());
+	r->setCarbs(lst->sumCarbs());
+	r->setCalories(lst->sumCalories());
+	r->save();
+
+	createMealForRecipe(r->id());
+
+	// Back to front!
+	for (auto i = idxs.rbegin(); i != idxs.rend(); ++i) {
+		removeMeal(*i);
+	}
+
+	return true;
+}
+
+bool MealList::copySelection(qint32 nameIdx)
+{
+	QList<Meal *> sels;
+	QList<int> idxs;
+
+	QString name = "Rezept: " + processSelection(sels, idxs, nameIdx, true);
+
+	if (sels.isEmpty()) return false;
+
+	QString data;
+	{
+		QTextStream ts(&data);
+
+		ts << name << ";1\n";
+		for (auto *m : sels) {
+			ts << m->name() << ';' << m->quantity() << ';' << m->fat() << ';' << m->carbs() << ';' << m->protein() << ';' << m->calories() << '\n';
+		}
+	}
+
+	QGuiApplication::clipboard()->setText(data);
+	return true;
+}
+
+bool MealList::recipeToIngredients(qint32 recipeIdx)
+{
+	clearSelection();
+	if (recipeIdx < 0 || recipeIdx >= m_data.count())
+		return false;
+
+	if (!m_data[recipeIdx]->isConnectedToRecipe())
+		return false;
+
+	QScopedPointer<RecipeDAO> rec(m_facade->loadRecipe(m_data[recipeIdx]->recipeId()));
+	QScopedPointer<IngredientItemList> lst(IngredientItemList::loadList(this, m_facade, rec->ingredientListId()));
+
+	for (IngredientListItem *i : lst->ingredients()) {
+		createIngredientFromListItem(i->data());
+	}
+
+	removeMeal(recipeIdx);
+
+	return true;
+}
+
+QString MealList::processSelection(QList<Meal*> &sels, QList<int> &idxs, qint32 nameIdx, bool clear)
+{
+	QString name;
+	for (int i = 0; i < m_data.count(); ++i) {
+		if (m_data[i]->isSelected()) {
+			sels << m_data[i];
+			idxs << i;
+			if (i == nameIdx) {
+				name = m_data[i]->name();
+			}
+		}
+	}
+
+	if (clear)
+		clearSelection();
+
+	if (name.isEmpty() && !sels.empty()) {
+		name = sels[0]->name();
+	}
+
+	return name;
+}
+
 qreal MealList::sumFat() const
 {
 	qreal sum = 0;
@@ -228,6 +366,14 @@ bool MealList::isEmpty() const
 	return m_data.isEmpty();
 }
 
+bool MealList::selectionEmpty() const
+{
+	for (auto i : m_data) {
+		if (i->isSelected()) return false;
+	}
+	return true;
+}
+
 Meal *MealList::atFunc(QQmlListProperty<Meal> *p, int i)
 {
     return static_cast<MealList *> (p->object)->m_data.at(i);
@@ -244,6 +390,7 @@ void MealList::connectSignals(Meal *m)
 	connect(m, &Meal::proteinChanged, this, &MealList::sumProteinChanged);
 	connect(m, &Meal::carbsChanged, this, &MealList::sumCarbsChanged);
 	connect(m, &Meal::caloriesChanged, this, &MealList::sumCaloriesChanged);
+	connect(m, &Meal::isSelectedChanged, this, &MealList::selectionEmptyChanged);
 }
 
 void MealList::notifySumsChanged()
@@ -265,6 +412,19 @@ void MealList::updateMealFromIngredient(MealDAO *m, IngredientDAO *r, UpdateFiel
 		m->setProtein(r->protein() / f);
 		m->setCarbs(r->carbs() / f);
 		m->setCalories(r->calories() / f);
+	}
+}
+
+void MealList::updateMealFromIngredientItem(MealDAO *m, const IngredientListItemDAO *r, UpdateFields fields)
+{
+	if (fields.testFlag(UpdateField::Name)) m->setName(r->name());
+	if (fields.testFlag(UpdateField::Quantity)) m->setQuantity(r->quantity());
+	if (fields.testFlag(UpdateField::Id)) m->setIngredientId(r->ingredientId());
+	if (fields.testFlag(UpdateField::Values)) {
+		m->setFat(r->fat());
+		m->setProtein(r->protein());
+		m->setCarbs(r->carbs());
+		m->setCalories(r->calories());
 	}
 }
 

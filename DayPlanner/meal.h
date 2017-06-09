@@ -24,6 +24,7 @@ class Meal : public QObject
 	Q_PROPERTY(bool isConnectedToIngredient READ isConnectedToIngredient NOTIFY ingredientIdChanged)
 	Q_PROPERTY(bool isConnectedToRecipe READ isConnectedToRecipe NOTIFY recipeIdChanged)
 	Q_PROPERTY(bool isConnected READ isConnected NOTIFY connectedChanged)
+	Q_PROPERTY(bool selected READ isSelected WRITE setSelected NOTIFY isSelectedChanged)
 
 public:
     explicit Meal(QObject *parent = 0);
@@ -79,6 +80,21 @@ public:
 
 	bool isConnected() const;
 
+	bool isSelected() const { return m_selected; }
+	void setSelected(bool s) {
+		if (s != m_selected) {
+			m_selected = s;
+			emit isSelectedChanged();
+		}
+	}
+
+	const MealDAO *data() const { return m_meal; }
+
+public slots:
+	void toggleSelected() {
+		setSelected(!isSelected());
+	}
+
 signals:
 	void nameChanged();
     void quantityChanged();
@@ -89,12 +105,14 @@ signals:
 	void ingredientIdChanged();
 	void recipeIdChanged();
 	void connectedChanged();
+	void isSelectedChanged();
 
 private:
 	void notifyValuesChanged();
 
 private:
     MealDAO *m_meal;
+	bool m_selected;
 
 	friend class MealList;
 };

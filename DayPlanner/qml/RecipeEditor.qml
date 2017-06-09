@@ -143,6 +143,7 @@ BorderedContainer {
 			Component {
 				id: recipeItem
 				IngredientEditorDelegate {
+					selectable: false
 					width: parent.width
 					onRemoveItem: _data.items.removeItem(idx)
 					addButtonVisible: true

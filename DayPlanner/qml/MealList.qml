@@ -51,6 +51,8 @@ ColumnLayout {
         id: mealItem
 		IngredientEditorDelegate {
 			width: parent.width
+			selectable: !isConnectedToRecipe
+			menuAvailable: isConnectedToRecipe || selected
 
 			onRemoveItem: {
 				if (isConnectedToRecipe) {
@@ -59,6 +61,16 @@ ColumnLayout {
 					confirmDelete.open();
 				} else {
 					_data.removeMeal(idx)
+				}
+			}
+
+			onSelectionMenu: {
+				if (isConnectedToRecipe) {
+					recipePopup.recipeIndex = idx;
+					recipePopup.popup();
+				} else {
+					selectionPopup.currentItemIndex = idx;
+					selectionPopup.popup();
 				}
 			}
 
@@ -127,4 +139,33 @@ ColumnLayout {
 			}
 		}
 	}
+
+	Menu {
+		id: selectionPopup
+		property int currentItemIndex: -1
+		MenuItem {
+			text: "Zu Rezept konvertieren"
+			onTriggered: {
+				_data.selectionToRecipe(selectionPopup.currentItemIndex);
+			}
+		}
+		MenuItem {
+			text: "Als Rezept kopieren"
+			onTriggered: {
+				_data.copySelection(selectionPopup.currentItemIndex);
+			}
+		}
+	}
+
+	Menu {
+		id: recipePopup
+		property int recipeIndex: -1
+		MenuItem {
+			text: "In Zutaten auflösen"
+			onTriggered: {
+				_data.recipeToIngredients(recipePopup.recipeIndex)
+			}
+		}
+	}
+
 }
