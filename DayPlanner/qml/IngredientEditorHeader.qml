@@ -14,6 +14,7 @@ Item {
 	property var itemData
 	property bool expandable: false
 	property bool showExpanded: false
+	property bool hasImportMenu: true
 	signal requestExpand()
 	signal requestCollapse()
 
@@ -22,6 +23,7 @@ Item {
 	z: 2
 
 	MouseArea {
+		enabled: hasImportMenu
 		anchors.fill: parent
 		acceptedButtons: Qt.RightButton
 		onClicked: {
@@ -35,12 +37,12 @@ Item {
 		MenuItem {
 			text: "Als Rezept importieren"
 			onTriggered: itemData.importAsRecipe();
-			enabled: itemData.canImport
+			enabled: hasImportMenu && itemData.canImport
 		}
 		MenuItem {
 			text: "Als Zutaten importieren"
 			onTriggered: itemData.importAsIngredients();
-			enabled: itemData.canImport
+			enabled: hasImportMenu && itemData.canImport
 		}
 	}
 

@@ -171,6 +171,7 @@ BorderedContainer {
 			Component {
 				id: headerBanner
 				IngredientEditorHeader {
+					hasImportMenu: false
 					backgroundColor: baseStyle.ingredientHeaderColor
 					title: "Zutaten"
 					itemData: _data.items
