@@ -47,6 +47,7 @@ public:
 	Q_INVOKABLE void clearSelection();
 	Q_INVOKABLE bool selectionToRecipe(qint32 nameIdx = -1);
 	Q_INVOKABLE bool copySelection(qint32 nameIdx = -1);
+	Q_INVOKABLE bool copyRecipe(qint32 recipeIdx);
 	Q_INVOKABLE bool recipeToIngredients(qint32 recipeIdx);
 	Q_INVOKABLE bool importAsRecipe();
 	Q_INVOKABLE bool importAsIngredientList();

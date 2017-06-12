@@ -291,6 +291,23 @@ bool MealList::copySelection(qint32 nameIdx)
 	return true;
 }
 
+bool MealList::copyRecipe(qint32 recipeIdx)
+{
+	clearSelection();
+	if (recipeIdx < 0 || recipeIdx >= m_data.count())
+		return false;
+
+	if (!m_data[recipeIdx]->isConnectedToRecipe())
+		return false;
+
+	RecipeDAO *rec(m_facade->loadRecipe(m_data[recipeIdx]->recipeId()));
+	QScopedPointer<Recipe> r(new Recipe(rec));
+
+	r->copyToClipboard();
+
+	return true;
+}
+
 bool MealList::recipeToIngredients(qint32 recipeIdx)
 {
 	clearSelection();

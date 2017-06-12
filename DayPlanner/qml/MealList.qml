@@ -174,6 +174,13 @@ ColumnLayout {
 		id: recipePopup
 		property int recipeIndex: -1
 		MenuItem {
+			text: "Kopieren"
+			iconSource: "qrc:///icons/copy"
+			onTriggered: {
+				_data.copyRecipe(recipePopup.recipeIndex)
+			}
+		}
+		MenuItem {
 			text: "In Zutaten auflösen"
 			iconSource: "qrc:///icons/ingredient"
 			onTriggered: {
