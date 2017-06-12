@@ -42,24 +42,6 @@ void IngredientItemList::copyInto(IngredientItemList *other, bool save)
 	}
 }
 
-QString IngredientItemList::toText() const
-{
-	QString ret;
-	{
-		QTextStream ts(&ret);
-		ts.setCodec("utf-8");
-		toText(ts);
-	}
-	return ret;
-}
-
-void IngredientItemList::toText(QTextStream &ts) const
-{
-	for (IngredientListItem *i : m_data) {
-		ts << i->name() << ';' << i->quantity() << ';' << i->fat() << ';' << i->carbs() << ';' << i->protein() << ';' << i->calories() << '\n';
-	}
-}
-
 bool IngredientItemList::appendFromImport(QList<ImportExportHelper::Item> items)
 {
 	for (auto i : items) {
@@ -80,6 +62,22 @@ bool IngredientItemList::appendFromImport(QList<ImportExportHelper::Item> items)
 	}
 
 	return true;
+}
+
+QList<ImportExportHelper::Item> IngredientItemList::toExportData() const
+{
+	QList<ImportExportHelper::Item> itms;
+	for (IngredientListItem *i : m_data) {
+		ImportExportHelper::Item itm;
+		itm.name = i->name();
+		itm.quantity = i->quantity();
+		itm.fat = i->fat();
+		itm.carbs = i->carbs();
+		itm.protein = i->protein();
+		itm.calories = i->calories();
+		itms << itm;
+	}
+	return itms;
 }
 
 qint32 IngredientItemList::id() const

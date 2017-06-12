@@ -268,16 +268,25 @@ bool MealList::copySelection(qint32 nameIdx)
 
 	if (sels.isEmpty()) return false;
 
-	QString data;
-	{
-		QTextStream ts(&data);
+	ImportExportHelper::Header h;
+	h.name = name;
+	h.servings = 1;
+	h.isOverridden = false;
 
-		ts << name << ";1\n";
-		for (auto *m : sels) {
-			ts << m->name() << ';' << m->quantity() << ';' << m->fat() << ';' << m->carbs() << ';' << m->protein() << ';' << m->calories() << '\n';
-		}
+	QList<ImportExportHelper::Item> itms;
+
+	for (auto *m : sels) {
+		ImportExportHelper::Item itm;
+		itm.name = m->name();
+		itm.quantity = m->quantity();
+		itm.fat = m->fat();
+		itm.carbs = m->carbs();
+		itm.protein = m->protein();
+		itm.calories = m->calories();
+		itms << itm;
 	}
 
+	QString data = ImportExportHelper::exportData(h, itms);
 	QGuiApplication::clipboard()->setText(data);
 	return true;
 }

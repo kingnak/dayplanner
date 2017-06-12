@@ -36,6 +36,7 @@ public:
 
 	static bool canImport(QString s);
 	static bool importData(QString data, Header &header, QList<Item> &items);
+	static QString exportData(const Header &header, const QList<Item> &items);
 };
 
 #endif // IMPORTEXPORTHELPER_H

@@ -3,7 +3,6 @@
 #include "recipetemplatelist.h"
 #include "meal.h"
 #include "importexporthelper.h"
-#include <QTextStream>
 #include <QClipboard>
 #include <QGuiApplication>
 
@@ -182,19 +181,19 @@ bool Recipe::updateTemplate()
 
 bool Recipe::copyToClipboard()
 {
-	QString s;
-	{
-		QTextStream ts(&s);
-		ts.setCodec("utf-8");
-		ts << name() << ';' << servings();
-		if (nutritionValuesOverridden()) {
-			ts << ";1;" << m_recipe->fat() << ';' << m_recipe->carbs() << ';' << m_recipe->protein() << ';' << m_recipe->calories() << '\n';
-		} else {
-			ts << ";0\n";
-		}
-
-		m_items->toText(ts);
+	ImportExportHelper::Header h;
+	h.name = name();
+	h.servings = servings();
+	h.isOverridden = nutritionValuesOverridden();
+	if (h.isOverridden) {
+		h.fat = m_recipe->fat();
+		h.carbs = m_recipe->carbs();
+		h.protein = m_recipe->protein();
+		h.calories = m_recipe->calories();
 	}
+
+	QList<ImportExportHelper::Item> itms = m_items->toExportData();
+	QString s = ImportExportHelper::exportData(h, itms);
 	QGuiApplication::clipboard()->setText(s);
 	return true;
 }

@@ -1,5 +1,6 @@
 #include "importexporthelper.h"
 #include "dao/recipedao.h"
+#include <QTextStream>
 
 bool ImportExportHelper::canImport(QString s)
 {
@@ -84,4 +85,34 @@ bool ImportExportHelper::importData(QString data, ImportExportHelper::Header &he
 	}
 
 	return true;
+}
+
+QString ImportExportHelper::exportData(const ImportExportHelper::Header &header, const QList<ImportExportHelper::Item> &items)
+{
+	QString ret;
+	{
+		QTextStream s(&ret);
+		s.setCodec("utf-8");
+		s << header.name << ';' << header.servings;
+		if (header.isOverridden) {
+			s << ";1;"
+			  << header.fat << ';'
+			  << header.carbs << ';'
+			  << header.protein << ';'
+			  << header.calories << '\n';
+		} else {
+			s << ";0\n";
+		}
+
+		for (auto i : items) {
+			s << i.name  << ';'
+			  << i.quantity << ';'
+			  << i.fat << ';'
+			  << i.carbs << ';'
+			  << i.protein << ';'
+			  << i.calories << '\n';
+		}
+	}
+
+	return ret;
 }

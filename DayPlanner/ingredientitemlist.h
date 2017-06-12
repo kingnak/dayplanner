@@ -10,8 +10,6 @@ class DAOFacade;
 class IngredientDAO;
 class MealDAO;
 
-class QTextStream;
-
 class IngredientItemList : public QObject
 {
 	Q_OBJECT
@@ -31,10 +29,8 @@ public:
 	static IngredientItemList *loadList(QObject *parent, DAOFacade *facade, qint32 id);
 	void copyInto(IngredientItemList *other, bool save);
 
-	QString toText() const;
-	void toText(QTextStream &ts) const;
-
 	bool appendFromImport(QList<ImportExportHelper::Item> items);
+	QList<ImportExportHelper::Item> toExportData() const;
 
 	qint32 id() const;
 	QQmlListProperty<IngredientListItem> items();
