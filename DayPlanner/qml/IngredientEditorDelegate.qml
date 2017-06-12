@@ -57,7 +57,6 @@ Item {
 			Row {
 				spacing: 0
 				ToolButton {
-					//text: "X"
 					iconSource: "qrc:///icons/delete"
 					tooltip: "Löschen"
 					onClicked: root.removeItem(index)
@@ -66,7 +65,7 @@ Item {
 
 				ToolButton {
 					id: addButton
-					iconSource: menu ? "qrc:///icons/add-padded" : "qrc:///icons/add"
+					iconSource: "qrc:///icons/add"
 					style: SmallButtonStyle {}
 					width: height // in case there is a menu, this prevents increasing buttons width
 					opacity: addButtonEnabled ? 1 : 0

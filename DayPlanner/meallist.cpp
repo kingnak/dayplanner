@@ -234,7 +234,7 @@ bool MealList::selectionToRecipe(qint32 nameIdx)
 	if (sels.empty()) return false;
 
 	QScopedPointer<RecipeDAO> r(m_facade->createRecipe());
-	r->setName("Rezept: " + name);
+	r->setName(name);
 	QScopedPointer<IngredientItemList> lst(IngredientItemList::loadList(this, m_facade, r->ingredientListId()));
 
 	for (auto m : sels) {

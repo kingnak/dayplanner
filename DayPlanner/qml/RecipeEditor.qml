@@ -179,11 +179,11 @@ BorderedContainer {
 					popupAbove: true
 					onExistingItemSelected: {
 						_data.items.createItemForIngredient(item.itemId);
-						root.positionViewAtEnd();
+						list.positionViewAtEnd();
 					}
 					onNewItemSelected: {
 						_data.items.createItem(name);
-						root.positionViewAtEnd();
+						list.positionViewAtEnd();
 					}
 				}
 			}
