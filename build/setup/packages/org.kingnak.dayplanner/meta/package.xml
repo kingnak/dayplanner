@@ -2,8 +2,8 @@
 <Package> 
     <DisplayName>DayPlanner</DisplayName> 
     <Description>DayPlanner Programm</Description> 
-    <Version>0.5.0</Version>
-    <ReleaseDate>2017-06-09</ReleaseDate> 
+    <Version>0.5.1</Version>
+    <ReleaseDate>2017-06-24</ReleaseDate> 
   <Name>org.kingnak.dayplanner</Name> 
   <Dependencies>org.kingnak.dayplanner.qt5</Dependencies> 
   <ForcedInstallation>true</ForcedInstallation> 
